@@ -1,11 +1,5 @@
-FROM python:3
+FROM nginx
 
-RUN pip3 install flask
+EXPOSE 8080
 
-COPY ./docs/ /app/docs/
-
-ENV FLASK_APP=/app/docs/server.py
-
-EXPOSE 5000
-
-CMD ["flask", "run", "--host=0.0.0.0"]
+COPY ./docs/ /usr/share/nginx/html/
