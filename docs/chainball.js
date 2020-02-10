@@ -3,7 +3,14 @@ let balls = [];
 let frameRates = [];
 let displayFrameRate = 0;
 
-let ballCount = 5;
+const Modes = {
+    STATIC: 1,
+    DYNAMIC: 2
+};
+
+let currentMode = Modes.STATIC;
+
+let ballCount = 2;
 let environmentFriction = 0.9995;
 
 let drawLines = true;
@@ -151,6 +158,9 @@ function draw() {
     textSize(32);
     fill(color(0, 0, 100));
     text(`follow dist: ${defaultFollowDistance}`, 5, 95);
+    textSize(32);
+    fill(color(0, 0, 100));
+    text(`mode: ${currentMode}`, 5, 125);
 
     /* UPDATING */
 
@@ -180,8 +190,12 @@ function draw() {
 
         let toParent = p5.Vector.sub(parentBall.position, thisBall.position);
         toParent.setMag(toParent.mag() - thisBall.followDistance);
-        thisBall.velocity.mult(environmentFriction);
-        thisBall.position.add(toParent);
+        if (currentMode === Modes.STATIC) {
+            thisBall.velocity.mult(environmentFriction);
+            thisBall.position.add(toParent);
+        } else {
+
+        }
 
         rebound(thisBall);
 
@@ -218,6 +232,12 @@ function keyTyped() {
         modifyFollowDistance(50);
     } else if (key === 'o') {
         modifyFollowDistance(-50);
+    } else if (key === 'm') {
+        if (currentMode === Modes.STATIC) {
+            currentMode = Modes.DYNAMIC;
+        } else {
+            currentMode = Modes.STATIC;
+        }
     }
 }
 
