@@ -34,7 +34,7 @@ function setup() {
 
     for (let i=0; i<ballCount; i++) {
         let followDist;
-        if (i === ballCount-1) {
+        if (i === 0) {
             followDist = defaultFollowDistance + (core.radius - defaultBallRadius);
         } else {
             followDist = defaultFollowDistance;
@@ -71,10 +71,10 @@ function draw() {
         for (let i=0; i<balls.length; i++) {
             let thisBall = balls[i];
             let parentBall;
-            if (i === balls.length-1) {
+            if (i === 0) {
                 parentBall = core;
             } else {
-                parentBall = balls[i+1];
+                parentBall = balls[i-1];
             }
             push();
             strokeWeight(5);
@@ -150,7 +150,7 @@ function draw() {
     text(`ball count: ${balls.length}`, 5, 65);
     textSize(32);
     fill(color(0, 0, 100));
-    text(`follow dist: ${balls[0].followDistance}`, 5, 95);
+    text(`follow dist: ${defaultFollowDistance}`, 5, 95);
 
     /* UPDATING */
 
@@ -172,10 +172,10 @@ function draw() {
     for (let i=0; i<balls.length; i++) {
         let thisBall = balls[i];
         let parentBall;
-        if (i === balls.length-1) {
+        if (i === 0) {
             parentBall = core;
         } else {
-            parentBall = balls[i+1];
+            parentBall = balls[i-1];
         }
 
         let toParent = p5.Vector.sub(parentBall.position, thisBall.position);
@@ -223,11 +223,11 @@ function keyTyped() {
 
 function addBall(count) {
     for (let i=0; i<count; i++) {
-        balls.unshift({
+        balls.push({
             radius: defaultBallRadius,
             position: balls[0].position.copy(),
             velocity: createVector(0, 0),
-            followDistance: balls[0].followDistance,
+            followDistance: defaultFollowDistance,
             minColor: color(0, 0, 100),
             maxColor: color(0, 100, 100)
         }); 
@@ -236,15 +236,16 @@ function addBall(count) {
 
 function removeBall(count) {
     for (let i=0; i<count && balls.length>1; i++) {
-        balls.shift(); 
+        balls.pop(); 
     }
 }
 
 function modifyFollowDistance(delta) {
-    if (balls[0].followDistance + delta >= 0) {
+    if (defaultFollowDistance + delta >= 0) {
         balls.forEach(ball => {
                 ball.followDistance += delta;
         });
+        defaultFollowDistance += delta;
     }
 }
 
