@@ -144,10 +144,16 @@ function draw() {
     }
     textSize(32);
     fill(color(0, 0, 100));
-    text(`${displayFrameRate.toFixed(0)}`, 5, 35);
-
+    text(`framerate: ${displayFrameRate.toFixed(0)}`, 5, 35);
+    textSize(32);
+    fill(color(0, 0, 100));
+    text(`ball count: ${balls.length}`, 5, 65);
+    textSize(32);
+    fill(color(0, 0, 100));
+    text(`follow dist: ${balls[0].followDistance}`, 5, 95);
 
     /* UPDATING */
+
     // update core
     if (core.forceIsBeingApplied && mouseVector.dist(core.position) > core.radius){
         core.acceleration = p5.Vector.mult(accelerationArrow.vector, 0.0005);
@@ -220,15 +226,15 @@ function addBall() {
 
 function removeBall() {
     if (balls.length > 1) {
-    balls.shift();  
+        balls.shift();  
     }
 }
 
 function modifyFollowDistance(delta) {
-    if (delta > 0 || balls[0].followDistance > balls[0].radius*2) {
+    if (delta > 0 || balls[0].followDistance > 0) {
         balls.forEach(ball => {
                 ball.followDistance += delta;
-        })
+        });
     }
 }
 
@@ -263,4 +269,4 @@ function drawArrow(fromVector, toVector, arrowColor) {
     translate(toVector.mag() - arrowSize, 0);
     triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
     pop();
-  }
+}
