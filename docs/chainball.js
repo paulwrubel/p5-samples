@@ -203,35 +203,45 @@ function mouseReleased(event) {
 
 function keyTyped() {
     if (key === '=') {
-        addBall();
+        addBall(1);
     } else if (key === '-') {
-        removeBall();
+        removeBall(1);
+    } else if (key === '0') {
+        addBall(10);
+    } else if (key === '9') {
+        removeBall(10);
     } else if (key === ']') {
         modifyFollowDistance(5);
     } else if (key === '[') {
         modifyFollowDistance(-5);
+    } else if (key === 'p') {
+        modifyFollowDistance(50);
+    } else if (key === 'o') {
+        modifyFollowDistance(-50);
     }
 }
 
-function addBall() {
-    balls.unshift({
-        radius: defaultBallRadius,
-        position: balls[0].position.copy(),
-        velocity: createVector(0, 0),
-        followDistance: balls[0].followDistance,
-        minColor: color(0, 0, 100),
-        maxColor: color(0, 100, 100)
-    }); 
+function addBall(count) {
+    for (let i=0; i<count; i++) {
+        balls.unshift({
+            radius: defaultBallRadius,
+            position: balls[0].position.copy(),
+            velocity: createVector(0, 0),
+            followDistance: balls[0].followDistance,
+            minColor: color(0, 0, 100),
+            maxColor: color(0, 100, 100)
+        }); 
+    }
 }
 
-function removeBall() {
-    if (balls.length > 1) {
-        balls.shift();  
+function removeBall(count) {
+    for (let i=0; i<count && balls.length>1; i++) {
+        balls.shift(); 
     }
 }
 
 function modifyFollowDistance(delta) {
-    if (delta > 0 || balls[0].followDistance > 0) {
+    if (balls[0].followDistance + delta >= 0) {
         balls.forEach(ball => {
                 ball.followDistance += delta;
         });
