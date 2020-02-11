@@ -127,7 +127,6 @@ function draw() {
 
     // draw the balls
     balls.forEach(ball => {
-        ball.followDistance = $('#testslider').slider("value")
         fill(ball.minColor);
         circle(ball.position.x, ball.position.y, ball.radius*2);
     })
