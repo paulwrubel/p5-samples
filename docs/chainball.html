@@ -1,14 +1,49 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ChainBall</title>
 
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <div class="sketch">
-      <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
-      <script src="chainball.js"></script>
+<head>
+  <title>ChainBall</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="jquery-ui.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <!-- jQuery UI -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+    integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+
+  <!-- p5.js -->
+  <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
+  <!-- the sketch -->
+  <script src="chainball.js"></script>
+  <script src="chainball-sidebar.js"></script>
+</head>
+
+<body>
+  <div id="main-container">
+    <div class="sidebar">
+      <p id="intro">
+        Welcome to ChainBall:
+      </p>
+      <div id="debug-info">
+        <p id="framerate"></p>
+        <p id="mode"></p>
+      </div>
+      <!-- <div id="ball-count-slider-container" class="slider-container">
+        <input type="range" min="1" max="500" value="5" 
+        class="slider" id="ball-count-slider">
+      </div> -->
+      <div id="testslider"></div>
+      <div>
+        <p>Ball Count: </p>
+        <p id="testtest"></p>
+      </div>
     </div>
-  </body>
+    <div id="sketch-chainball"></div>
+  </div>
+</body>
+
 </html>

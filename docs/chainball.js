@@ -4,8 +4,8 @@ let frameRates = [];
 let displayFrameRate = 0;
 
 const Modes = {
-    STATIC: 1,
-    DYNAMIC: 2
+    STATIC: "Static",
+    DYNAMIC: "Dynamic"
 };
 
 let currentMode = Modes.STATIC;
@@ -20,9 +20,12 @@ let defaultBallRadius = 10;
 
 let velocityArrow;
 let accelerationArrow;
+let linkingLine;
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    let canvas = createCanvas(windowWidth-250, windowHeight);
+    canvas.parent('sketch-chainball');
+    canvas.style('display', 'block');
 
     colorMode(HSB);
     angleMode(DEGREES);
@@ -65,11 +68,22 @@ function setup() {
         minColor: color(0, 25, 100),
         maxColor: color(0, 100, 100),
     };
+
+    linkingLine = {
+        minCompressionColor: color(240, 0, 100, 0.5),
+        maxCompressionColor: color(240, 100, 100, 0.5),
+        minTensionColor: color(0, 0, 100, 0.5),
+        maxTensionColor: color(0, 100, 100, 0.5),
+        staticColor: color(0, 0, 100, 0.5)
+    };
 }
 
 function draw() {
     background(0);
     let mouseVector = createVector(mouseX, mouseY);
+    let mouseIsOverCanvas = 
+        mouseX > 0 && mouseX < width &&
+        mouseY > 0 && mouseY < height;
 
     /* DRAWING */
 
@@ -85,7 +99,27 @@ function draw() {
             }
             push();
             strokeWeight(5);
-            stroke(color(0, 0, 100, 0.5));
+            if (currentMode === Modes.STATIC) {
+                stroke(linkingLine.staticColor);
+            } else {
+                let targetDistance = thisBall.followDistance;
+                let realDistance = p5.Vector.sub(
+                    parentBall.position,
+                    thisBall.position).mag();
+                colorMode(RGB);
+                if (targetDistance > realDistance) {
+                    stroke(lerpColor(
+                        linkingLine.minCompressionColor, 
+                        linkingLine.maxCompressionColor,
+                        reRange(realDistance/targetDistance, 1, 0.5, 0, 1)));
+                } else {
+                    stroke(lerpColor(
+                        linkingLine.minTensionColor, 
+                        linkingLine.maxTensionColor,
+                        reRange(realDistance/targetDistance, 1, 4, 0, 1)));
+                }
+                colorMode(HSB);
+            }
             line(thisBall.position.x, thisBall.position.y, parentBall.position.x, parentBall.position.y);
             pop();
         }
@@ -93,6 +127,7 @@ function draw() {
 
     // draw the balls
     balls.forEach(ball => {
+        ball.followDistance = $('#testslider').slider("value")
         fill(ball.minColor);
         circle(ball.position.x, ball.position.y, ball.radius*2);
     })
@@ -108,7 +143,7 @@ function draw() {
     accelerationArrow.vector = p5.Vector.sub(mouseVector, accelerationArrow.startPosition);
     accelerationArrow.vector.limit(200);
 
-    if (core.forceIsBeingApplied){
+    if (mouseIsOverCanvas && core.forceIsBeingApplied){
         if (mouseVector.dist(core.position) > core.radius) {
             colorMode(RGB);
             let accelerationArrowColor = lerpColor(
@@ -149,23 +184,19 @@ function draw() {
             return sum + num;
         }) / frameRates.length;
     }
-    textSize(32);
-    fill(color(0, 0, 100));
-    text(`framerate: ${displayFrameRate.toFixed(0)}`, 5, 35);
+    $('#framerate').text(`FPS: ${displayFrameRate.toFixed(0)}`);
     textSize(32);
     fill(color(0, 0, 100));
     text(`ball count: ${balls.length}`, 5, 65);
     textSize(32);
     fill(color(0, 0, 100));
     text(`follow dist: ${defaultFollowDistance}`, 5, 95);
-    textSize(32);
-    fill(color(0, 0, 100));
-    text(`mode: ${currentMode}`, 5, 125);
+    $('#mode').text(`mode: ${currentMode}`);
 
     /* UPDATING */
 
     // update core
-    if (core.forceIsBeingApplied && mouseVector.dist(core.position) > core.radius){
+    if (mouseIsOverCanvas && core.forceIsBeingApplied && mouseVector.dist(core.position) > core.radius){
         core.acceleration = p5.Vector.mult(accelerationArrow.vector, 0.0005);
     } else {
         core.acceleration = createVector(0, 0);
@@ -194,7 +225,11 @@ function draw() {
             thisBall.velocity.mult(environmentFriction);
             thisBall.position.add(toParent);
         } else {
-
+            let goalPosition = p5.Vector.add(thisBall.position, toParent);
+            thisBall.acceleration = toParent.mult(0.05);
+            thisBall.velocity.add(thisBall.acceleration);
+            thisBall.velocity.mult(0.6);
+            thisBall.position.add(thisBall.velocity);
         }
 
         rebound(thisBall);
@@ -204,7 +239,7 @@ function draw() {
 }
 
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+    resizeCanvas(windowWidth-250, windowHeight);
 }
 
 function mousePressed(event) {
@@ -300,4 +335,8 @@ function drawArrow(fromVector, toVector, arrowColor) {
     translate(toVector.mag() - arrowSize, 0);
     triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
     pop();
+}
+
+function reRange(num, in_min, in_max, out_min, out_max) {
+    return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
