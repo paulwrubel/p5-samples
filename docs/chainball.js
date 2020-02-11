@@ -24,7 +24,7 @@ let linkingLine;
 
 function setup() {
     let canvas = createCanvas(windowWidth-250, windowHeight);
-    canvas.parent('sketch-chainball');
+    canvas.parent('sketchChainball');
     canvas.style('display', 'block');
 
     colorMode(HSB);

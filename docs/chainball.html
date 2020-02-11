@@ -19,30 +19,26 @@
   <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
   <!-- the sketch -->
   <script src="chainball.js"></script>
-  <script src="chainball-sidebar.js"></script>
+  <script src="chainballSidebar.js"></script>
 </head>
 
 <body>
-  <div id="main-container">
+  <div id="mainContainer">
     <div class="sidebar">
       <p id="intro">
         Welcome to ChainBall:
       </p>
-      <div id="debug-info">
+      <div id="debugInfo">
         <p id="framerate"></p>
         <p id="mode"></p>
       </div>
-      <!-- <div id="ball-count-slider-container" class="slider-container">
-        <input type="range" min="1" max="500" value="5" 
-        class="slider" id="ball-count-slider">
-      </div> -->
-      <div id="testslider"></div>
+      <div id="ballCountSlider"></div>
       <div>
-        <p>Ball Count: </p>
-        <p id="testtest"></p>
+        <label>Ball Count: </label>
+        <input type="number" min="1" max="500" id="ballCount" name="ballCount"></p>
       </div>
     </div>
-    <div id="sketch-chainball"></div>
+    <div id="sketchChainball"></div>
   </div>
 </body>
 
