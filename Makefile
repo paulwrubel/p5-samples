@@ -6,7 +6,7 @@ NODE_PORT=3000
 
 CONTAINER_ID=$(shell docker ps | grep $(IMAGE_NAME) | cut -d " " -f1)
 
-INTERNAL_PORT=$(NODE_PORT)
+INTERNAL_PORT=$(NGINX_PORT)
 
 all: build run
 
