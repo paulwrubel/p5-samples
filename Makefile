@@ -10,14 +10,14 @@ INTERNAL_PORT=$(NGINX_PORT)
 
 all: build run
 
-run:
+run: kill
 	docker run -d -p $(EXTERNAL_PORT):$(INTERNAL_PORT) $(IMAGE_NAME)
 
-build:
+build: kill
 	docker build -t $(IMAGE_NAME):latest .
 
 kill:
-	docker kill $(CONTAINER_ID)
+	-docker kill $(CONTAINER_ID)
 
 logs:
 	docker logs $(CONTAINER_ID)
