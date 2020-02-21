@@ -27,7 +27,10 @@ let chainball = (p) => {
     let linkingLine;
 
     p.setup = function() {
-        p.createCanvas(p.windowWidth - 250, p.windowHeight);
+        let w = p.select(".App").width - p.select(".Sidebar").width;
+        let h = p.select(".App").height;
+        p.createCanvas(w, h);
+        // p.createCanvas(p.windowWidth, p.windowHeight);
         // canvas.parent('Sketch');
         // canvas.style('display', 'block');
 
@@ -197,6 +200,9 @@ let chainball = (p) => {
         p.textSize(32);
         p.fill(p.color(0, 0, 100));
         p.text(`follow dist: ${defaultFollowDistance}`, 5, 95);
+        p.textSize(32);
+        p.fill(p.color(0, 0, 100));
+        p.text(`size: ${p.windowWidth}x${p.windowHeight}`, 5, 125);
         // $('#mode').text(`mode: ${currentMode}`);
 
         /* UPDATING */
@@ -245,7 +251,9 @@ let chainball = (p) => {
     };
 
     p.windowResized = function() {
-        p.resizeCanvas(p.windowWidth - 250, p.windowHeight);
+        let w = p.select(".App").width - p.select(".Sidebar").width;
+        let h = p.select(".App").height;
+        p.resizeCanvas(w, h);
     };
 
     p.mousePressed = function(event) {
