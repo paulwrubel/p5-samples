@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from './Sidebar'
+import Sidebar from './sidebar/Sidebar'
 import Sketch from './Sketch'
 import Grid from "@material-ui/core/Grid";
 import './App.css'
@@ -13,8 +13,8 @@ class App extends React.Component {
                         spacing={0}
                         direction='row'
                         justify='center'
-                        wrap='nowrap'
-                        alignItems='stretch'>
+                        alignItems='stretch'
+                        wrap='nowrap'>
                         <Grid item xs={3}>
                             <Sidebar />
                         </Grid>
