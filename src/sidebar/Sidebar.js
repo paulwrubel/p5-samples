@@ -43,7 +43,7 @@ class Sidebar extends React.Component {
                             linkDamping={this.props.linkDamping}
                             onLinkDampingChange={this.props.onLinkDampingChange} />
                     </Grid>
-                    <Grid item>
+                    {/* <Grid item>
                         <p>---DEBUG INFO---</p>
                         <p>FPS: {this.props.frameRate}</p>
                         <p>MODE: {this.props.mode}</p>
@@ -52,7 +52,7 @@ class Sidebar extends React.Component {
                         <p>TENSION: {this.props.linkTension}</p>
                         <p>DAMPING: {this.props.linkDamping}</p>
 
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </div>
         );
