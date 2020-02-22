@@ -4,10 +4,25 @@ import chainball from './sketches/chainball';
 import './Sketch.css';
 
 class Sketch extends React.Component {
+    // constructor(props) {
+    //     super(props);
+    // }
+
+    // componentDidMount(){
+    //     this.forceUpdate();
+    // }
+
     render() {
         return (
             <div id="Sketch" className="Sketch">
-                <P5Wrapper sketch={chainball} className="P5Wrapper"></P5Wrapper>
+                <P5Wrapper sketch={chainball} className="P5Wrapper"
+                mode={this.props.mode} 
+                ballCount={this.props.ballCount} 
+                linkLength={this.props.linkLength} 
+                linkTension={this.props.linkTension} 
+                linkDamping={this.props.linkDamping} 
+                onFrameRateChange={this.props.onFrameRateChange}>
+                </P5Wrapper>
             </div>
         );
     }
