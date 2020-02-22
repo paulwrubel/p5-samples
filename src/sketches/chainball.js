@@ -319,7 +319,7 @@ let chainball = (p) => {
         for (let i = 0; i < count; i++) {
             balls.push({
                 radius: defaultBallRadius,
-                position: balls[0].position.copy(),
+                position: balls[balls.length-1].position.copy(),
                 velocity: p.createVector(0, 0),
                 followDistance: defaultFollowDistance,
                 minColor: p.color(0, 0, 100),

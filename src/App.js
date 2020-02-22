@@ -12,7 +12,7 @@ class App extends React.Component {
             ballCount: 5,
             linkLength: 50,
             linkTension: 0.1,
-            linkDamping: 0.6,
+            linkDamping: 0.4,
             mode: "static",
             frameRate: "not yet started"
         }

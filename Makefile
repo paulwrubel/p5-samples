@@ -32,3 +32,7 @@ id:
 	@echo $(CONTAINER_ID)
 
 show: ps
+
+publish:
+	-rm -r ./docs
+	mv ./build ./docs

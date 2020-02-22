@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/vixuals/static/css/main.4c04d491.chunk.css",
-    "main.js": "/vixuals/static/js/main.57451059.chunk.js",
-    "main.js.map": "/vixuals/static/js/main.57451059.chunk.js.map",
+    "main.js": "/vixuals/static/js/main.4b2b1ae9.chunk.js",
+    "main.js.map": "/vixuals/static/js/main.4b2b1ae9.chunk.js.map",
     "runtime-main.js": "/vixuals/static/js/runtime-main.563fc985.js",
     "runtime-main.js.map": "/vixuals/static/js/runtime-main.563fc985.js.map",
     "static/js/2.d5fc0fdb.chunk.js": "/vixuals/static/js/2.d5fc0fdb.chunk.js",
     "static/js/2.d5fc0fdb.chunk.js.map": "/vixuals/static/js/2.d5fc0fdb.chunk.js.map",
     "index.html": "/vixuals/index.html",
-    "precache-manifest.4a6426f1b4d8ad1a36c6ca24b8b52c4e.js": "/vixuals/precache-manifest.4a6426f1b4d8ad1a36c6ca24b8b52c4e.js",
+    "precache-manifest.3d0d2d3ccc1bc56541d1829492d8e6bb.js": "/vixuals/precache-manifest.3d0d2d3ccc1bc56541d1829492d8e6bb.js",
     "service-worker.js": "/vixuals/service-worker.js",
     "static/css/main.4c04d491.chunk.css.map": "/vixuals/static/css/main.4c04d491.chunk.css.map",
     "static/js/2.d5fc0fdb.chunk.js.LICENSE.txt": "/vixuals/static/js/2.d5fc0fdb.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.563fc985.js",
     "static/js/2.d5fc0fdb.chunk.js",
     "static/css/main.4c04d491.chunk.css",
-    "static/js/main.57451059.chunk.js"
+    "static/js/main.4b2b1ae9.chunk.js"
   ]
 }
