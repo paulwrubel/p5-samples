@@ -27,7 +27,7 @@ let chainball = (p) => {
     let defaultBallRadius = 10;
 
     let tension = 0.1;
-    let damping = 0.6;
+    let damping = 0.4;
 
     let velocityArrow;
     let accelerationArrow;
@@ -256,7 +256,7 @@ let chainball = (p) => {
                 // let goalPosition = p5.Vector.add(thisBall.position, toParent);
                 thisBall.acceleration = toParent.mult(tension);
                 thisBall.velocity.add(thisBall.acceleration);
-                thisBall.velocity.mult(damping);
+                thisBall.velocity.mult(1.0 - damping);
                 thisBall.position.add(thisBall.velocity);
             }
 

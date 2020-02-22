@@ -29,23 +29,26 @@ class SketchProperties extends React.Component {
                     <Grid item xs={12}>
                         <BallCountSlider
                             ballCount={this.props.ballCount}
-                            onBallCountChange={this.props.onBallCountChange}/>
+                            onBallCountChange={this.props.onBallCountChange} />
                     </Grid>
                     <Grid item xs={12}>
                         <LinkLengthSlider
                             linkLength={this.props.linkLength}
-                            onLinkLengthChange={this.props.onLinkLengthChange}/>
+                            onLinkLengthChange={this.props.onLinkLengthChange} />
                     </Grid>
-                    <Grid item xs={12}>
-                        <LinkTensionSlider
-                            linkTension={this.props.linkTension}
-                            onLinkTensionChange={this.props.onLinkTensionChange}/>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <LinkDampingSlider
-                            linkDamping={this.props.linkDamping}
-                            onLinkDampingChange={this.props.onLinkDampingChange}/>
-                    </Grid>
+                    {this.props.mode === "dynamic" &&
+                        <Grid item xs={12}>
+                            <LinkTensionSlider
+                                linkTension={this.props.linkTension}
+                                onLinkTensionChange={this.props.onLinkTensionChange} />
+                        </Grid>
+                    }{this.props.mode === "dynamic" &&
+                        <Grid item xs={12}>
+                            <LinkDampingSlider
+                                linkDamping={this.props.linkDamping}
+                                onLinkDampingChange={this.props.onLinkDampingChange} />
+                        </Grid>
+                    }
                 </Grid>
             </div>
         );

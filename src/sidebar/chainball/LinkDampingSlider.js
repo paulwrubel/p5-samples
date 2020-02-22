@@ -12,6 +12,10 @@ class LinkDampingSlider extends React.Component {
         this.props.onLinkDampingChange(newValue);
     }
 
+    getValueText(value) {
+        return `${(value*100).toFixed(0)}%`;
+    }
+
     render() {
         return (
             <div>
@@ -21,10 +25,12 @@ class LinkDampingSlider extends React.Component {
                     onChange={this.handleLinkDampingChange}
                     min={0.0}
                     max={1.0}
-                    step={0.05}
-                    // getAriaValueText={() => `this.props.ballCount`}
+                    step={0.02}
+                    getAriaValueText={this.getValueText}
+                    valueLabelFormat={this.getValueText}
                     aria-labelledby="link-damping-slider"
                     valueLabelDisplay="on"
+                    marks={false}
                 />
                 <Typography id="link-damping-slider" gutterBottom>
                     Link Damping
