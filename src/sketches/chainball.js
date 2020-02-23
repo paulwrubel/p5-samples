@@ -142,10 +142,15 @@ let chainball = (p) => {
         }
 
         // draw the balls
-        balls.forEach(ball => {
+        for (let i=balls.length-1; i>=0; i--) {
+            let ball = balls[i];   
             p.fill(ball.minColor);
             p.circle(ball.position.x, ball.position.y, ball.radius * 2);
-        })
+        }
+        // balls.forEach(ball => {
+        //     p.fill(ball.minColor);
+        //     p.circle(ball.position.x, ball.position.y, ball.radius * 2);
+        // })
 
         // draw the core
         // colorMode(RGB);

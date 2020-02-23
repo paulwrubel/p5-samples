@@ -1,9 +1,9 @@
 import React from 'react';
 import P5Wrapper from 'react-p5-wrapper';
-import chainball from './sketches/chainball';
-import './Sketch.css';
+import chainball from 'sketches/chainball';
+import 'sketch_containers/Sketch.css';
 
-class Sketch extends React.Component {
+class Chainball extends React.Component {
     // constructor(props) {
     //     super(props);
     // }
@@ -28,4 +28,4 @@ class Sketch extends React.Component {
     }
 }
 
-export default Sketch;
+export default Chainball;

@@ -1,8 +1,8 @@
 import React from 'react';
-import Sidebar from './sidebar/Sidebar'
-import Sketch from './Sketch'
+import Sidebar from 'sidebar/Sidebar'
+import Chainball from 'sketch_containers/Chainball'
 import Grid from "@material-ui/core/Grid";
-import './App.css'
+import 'App.css'
 
 class App extends React.Component {
     constructor(props) {
@@ -87,7 +87,7 @@ class App extends React.Component {
                             frameRate={this.state.frameRate}/>
                         </Grid>
                         <Grid item xs>
-                            <Sketch 
+                            <Chainball 
                             mode={this.state.mode}
                             ballCount={this.state.ballCount}
                             linkLength={this.state.linkLength}

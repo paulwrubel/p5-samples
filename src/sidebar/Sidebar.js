@@ -1,13 +1,13 @@
 import React from 'react';
-import SketchSelector from './SketchSelector'
-import SketchProperties from './SketchProperties'
-import './Sidebar.css';
+import SketchSelector from 'sidebar/SketchSelector'
+import SketchProperties from 'sidebar/SketchProperties'
+import 'sidebar/Sidebar.css';
 import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles'
 
 const styles = theme => ({
     root: {
-        padding: "10%",
+        padding: "20px",
         margin: "0"
     }
 });
