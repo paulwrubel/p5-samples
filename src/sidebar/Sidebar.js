@@ -7,8 +7,10 @@ import withStyles from '@material-ui/core/styles/withStyles'
 
 const styles = theme => ({
     root: {
+        boxSizing: "border-box",
         padding: "20px",
-        margin: "0"
+        margin: "0",
+        width: "25vw"
     }
 });
 
@@ -30,7 +32,7 @@ class Sidebar extends React.Component {
                     {/* <Grid item xs>
                         <SketchSelector />
                     </Grid> */}
-                    <Grid item xs={12}>
+                    <Grid item xs>
                         <SketchProperties
                             mode={this.props.mode}
                             onModeChange={this.props.onModeChange}
