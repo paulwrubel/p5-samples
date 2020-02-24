@@ -1,10 +1,19 @@
 import React from 'react';
 import Sidebar from 'sidebar/Sidebar'
-import Chainball from 'sketch_containers/Chainball'
+import ChainballContainer from 'sketches/chainball/ChainballContainer'
 import Grid from "@material-ui/core/Grid";
-import 'App.css'
+import withStyles from "@material-ui/core/styles/withStyles";
+import SketchContainer from 'sketches/SketchContainer';
 
-class App extends React.Component {
+const styles = theme => ({
+    root: {
+        // width: "100vw",
+        // height: "92vh"
+    }
+});
+
+
+class ChainballApp extends React.Component {
     constructor(props) {
         super(props);
 
@@ -61,19 +70,18 @@ class App extends React.Component {
         });
     }
 
-
     render() {
         return (
-            <div className="App">
-                    <Grid
-                        container
-                        spacing={0}
-                        direction='row'
-                        justify='center'
-                        alignItems='stretch'
-                        wrap='nowrap'>
-                        <Grid item xs={3}>
-                            <Sidebar 
+            <div className={`${this.props.classes.root} App`}>
+                <Grid
+                    container
+                    spacing={0}
+                    direction='row'
+                    justify='center'
+                    alignItems='stretch'
+                    wrap='nowrap'>
+                    <Grid item xs={3}>
+                        <Sidebar
                             mode={this.state.mode}
                             onModeChange={this.handleModeChange}
                             ballCount={this.state.ballCount}
@@ -84,21 +92,22 @@ class App extends React.Component {
                             onLinkTensionChange={this.handleLinkTensionChange}
                             linkDamping={this.state.linkDamping}
                             onLinkDampingChange={this.handleLinkDampingChange}
-                            frameRate={this.state.frameRate}/>
-                        </Grid>
-                        <Grid item xs>
-                            <Chainball 
-                            mode={this.state.mode}
-                            ballCount={this.state.ballCount}
-                            linkLength={this.state.linkLength}
-                            linkTension={this.state.linkTension}
-                            linkDamping={this.state.linkDamping}
-                            onFrameRateChange={this.handleFrameRateChange}/>
-                        </Grid>
+                            frameRate={this.state.frameRate} />
                     </Grid>
+                    <Grid item xs>
+                        <SketchContainer
+                            selectedSketch={<ChainballContainer
+                                mode={this.state.mode}
+                                ballCount={this.state.ballCount}
+                                linkLength={this.state.linkLength}
+                                linkTension={this.state.linkTension}
+                                linkDamping={this.state.linkDamping}
+                                onFrameRateChange={this.handleFrameRateChange} />} />
+                    </Grid>
+                </Grid>
             </div>
         );
     }
 }
 
-export default App;
+export default withStyles(styles)(ChainballApp);

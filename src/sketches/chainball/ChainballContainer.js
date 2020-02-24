@@ -1,9 +1,15 @@
 import React from 'react';
 import P5Wrapper from 'react-p5-wrapper';
-import chainball from 'sketches/chainball';
-import 'sketch_containers/Sketch.css';
+import chainball from 'sketches/chainball/p5_Chainball'
+import withStyles from "@material-ui/core/styles/withStyles";
 
-class Chainball extends React.Component {
+const styles = theme => ({
+    root: {
+        // width: "75vw"
+    }
+});
+
+class ChainballContainer extends React.Component {
     // constructor(props) {
     //     super(props);
     // }
@@ -28,4 +34,4 @@ class Chainball extends React.Component {
     }
 }
 
-export default Chainball;
+export default withStyles(styles)(ChainballContainer);

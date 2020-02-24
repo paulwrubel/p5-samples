@@ -34,9 +34,9 @@ let chainball = (p) => {
     let linkingLine;
 
     p.setup = function () {
-        let w = p.select(".App").width;// - p.select(".Sidebar").width;
-        let h = p.select(".App").height;
-        p.createCanvas(w * 0.75, h);
+        let w = p.select(".SketchContainer").width;// - p.select(".Sidebar").width;
+        let h = p.select(".SketchContainer").height;
+        p.createCanvas(w, h);
         // p.createCanvas(p.windowWidth, p.windowHeight);
         // canvas.parent('Sketch');
         // canvas.style('display', 'block');
@@ -58,14 +58,19 @@ let chainball = (p) => {
 
         for (let i = 0; i < ballCount; i++) {
             let followDist;
+            let pos;
             if (i === 0) {
                 followDist = defaultFollowDistance + (core.radius - defaultBallRadius);
+                pos = core.position.copy();
             } else {
                 followDist = defaultFollowDistance;
+                console.log(balls.length)
+                pos = balls[balls.length-1].position.copy();
+                console.log(pos)
             }
             balls.push({
                 radius: defaultBallRadius,
-                position: core.position.copy(),
+                position: pos,
                 velocity: p.createVector(0, 0),
                 followDistance: followDist,
                 minColor: p.color(0, 0, 100),
@@ -272,9 +277,9 @@ let chainball = (p) => {
     };
 
     p.windowResized = function () {
-        let w = p.select(".App").width;// - p.select(".Sidebar").width;
-        let h = p.select(".App").height;
-        p.createCanvas(w * 0.75, h);
+        let w = p.select(".SketchContainer").width;// - p.select(".Sidebar").width;
+        let h = p.select(".SketchContainer").height;
+        p.createCanvas(w, h);
     };
 
     p.mousePressed = function (event) {
@@ -286,30 +291,6 @@ let chainball = (p) => {
     };
 
     p.keyTyped = function () {
-        // if (p.key === '=') {
-        //     p.addBall(1);
-        // } else if (p.key === '-') {
-        //     p.removeBall(1);
-        // } else if (p.key === '0') {
-        //     p.addBall(10);
-        // } else if (p.key === '9') {
-        //     p.removeBall(10);
-        // } else if (p.key === ']') {
-        //     p.modifyFollowDistance(5);
-        // } else if (p.key === '[') {
-        //     p.modifyFollowDistance(-5);
-        // } else if (p.key === 'p') {
-        //     p.modifyFollowDistance(50);
-        // } else if (p.key === 'o') {
-        //     p.modifyFollowDistance(-50);
-        // }
-        // else if (p.key === 'm') {
-        //     if (currentMode === Modes.STATIC) {
-        //         currentMode = Modes.DYNAMIC;
-        //     } else {
-        //         currentMode = Modes.STATIC;
-        //     }
-        // }
     };
 
     p.setBallCount = function (newLength) {
