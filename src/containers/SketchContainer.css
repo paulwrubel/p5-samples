@@ -1,0 +1,9 @@
+/* .p5Canvas {
+    display: block;
+} */
+
+
+.SketchContainer {
+    height: calc(100vh - 50px);
+    width: 100%;
+}

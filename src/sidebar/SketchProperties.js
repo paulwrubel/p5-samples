@@ -1,10 +1,10 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import ModeRadioButtons from 'sidebar/chainball/ModeRadioButtons';
-import BallCountSlider from 'sidebar/chainball/BallCountSlider';
-import LinkLengthSlider from 'sidebar/chainball/LinkLengthSlider';
-import LinkTensionSlider from 'sidebar/chainball/LinkTensionSlider';
-import LinkDampingSlider from 'sidebar/chainball/LinkDampingSlider';
+import ModeRadioButtons from 'sketches/chainball/controls/ModeRadioButtons';
+import BallCountSlider from 'sketches/chainball/controls/BallCountSlider';
+import LinkLengthSlider from 'sketches/chainball/controls/LinkLengthSlider';
+import LinkTensionSlider from 'sketches/chainball/controls/LinkTensionSlider';
+import LinkDampingSlider from 'sketches/chainball/controls/LinkDampingSlider';
 import { Paper } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles'
 
@@ -21,14 +21,14 @@ const styles = theme => ({
     }
 });
 
-class SketchProperties extends React.Component {
+class ChainballControls extends React.Component {
     // constructor(props) {
     //     super(props);
     // }
 
     render() {
         return (
-            <div className={`${this.props.classes.root} SketchProperties`}>
+            <div className="SketchControls">
                 <Grid
                     container
                     spacing={2}
@@ -85,4 +85,4 @@ class SketchProperties extends React.Component {
     }
 }
 
-export default withStyles(styles)(SketchProperties);
+export default ChainballControls;

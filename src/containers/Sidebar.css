@@ -1,0 +1,22 @@
+.Sidebar {
+    padding: 20px;
+    width: 100%;
+}
+
+
+.SidebarControls {
+    padding: 0;
+    margin: 0;
+}
+
+.PaperRadioControl {
+    padding: 15px;
+}
+
+.PaperSliderControl {
+    padding: 45px 25px 5px 25px;
+}
+
+.PaperSlider {
+
+}

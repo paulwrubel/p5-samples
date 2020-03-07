@@ -1,17 +1,10 @@
 import React from 'react';
-import Sidebar from 'sidebar/Sidebar'
-import ChainballContainer from 'sketches/chainball/ChainballContainer'
+import SidebarContainer from 'containers/SidebarContainer'
 import Grid from "@material-ui/core/Grid";
 import withStyles from "@material-ui/core/styles/withStyles";
-import SketchContainer from 'sketches/SketchContainer';
-
-const styles = theme => ({
-    root: {
-        // width: "100vw",
-        // height: "92vh"
-    }
-});
-
+import SketchContainer from 'containers/SketchContainer';
+import p5Chainball from "sketches/chainball/p5_chainball";
+import ChainballSidebar from "./ChainballSidebar"
 
 class ChainballApp extends React.Component {
     constructor(props) {
@@ -72,16 +65,16 @@ class ChainballApp extends React.Component {
 
     render() {
         return (
-            <div className={`${this.props.classes.root} App`}>
+            <div className="App">
                 <Grid
                     container
                     spacing={0}
                     direction='row'
-                    justify='center'
+                    // justify='flex-start'
                     alignItems='stretch'
                     wrap='nowrap'>
-                    <Grid item xs={3}>
-                        <Sidebar
+                    <Grid container item xs={3}>
+                        <ChainballSidebar
                             mode={this.state.mode}
                             onModeChange={this.handleModeChange}
                             ballCount={this.state.ballCount}
@@ -94,15 +87,15 @@ class ChainballApp extends React.Component {
                             onLinkDampingChange={this.handleLinkDampingChange}
                             frameRate={this.state.frameRate} />
                     </Grid>
-                    <Grid item xs>
+                    <Grid container item xs={9}>
                         <SketchContainer
-                            selectedSketch={<ChainballContainer
-                                mode={this.state.mode}
-                                ballCount={this.state.ballCount}
-                                linkLength={this.state.linkLength}
-                                linkTension={this.state.linkTension}
-                                linkDamping={this.state.linkDamping}
-                                onFrameRateChange={this.handleFrameRateChange} />} />
+                            sketch={p5Chainball}
+                            mode={this.state.mode}
+                            ballCount={this.state.ballCount}
+                            linkLength={this.state.linkLength}
+                            linkTension={this.state.linkTension}
+                            linkDamping={this.state.linkDamping}
+                            onFrameRateChange={this.handleFrameRateChange} />
                     </Grid>
                 </Grid>
             </div>
@@ -110,4 +103,4 @@ class ChainballApp extends React.Component {
     }
 }
 
-export default withStyles(styles)(ChainballApp);
+export default ChainballApp;
