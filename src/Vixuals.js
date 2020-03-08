@@ -1,17 +1,12 @@
 import React from 'react';
-// import Sidebar from 'sketches/chainball/Sidebar'
-import Grid from "@material-ui/core/Grid";
-import withStyles from "@material-ui/core/styles/withStyles"
-import SketchContainer from 'containers/SketchContainer';
-import ChainballApp from 'sketches/chainball/ChainballApp';
-import AppContainer from "containers/AppContainer"
-import MenuBar from "MenuBar"
-import "./Vixuals.css"
-import appMap from "./AppMap"
-import { Route, HashRouter, Switch, Redirect, withRouter } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
+import MenuBar from './MenuBar';
+import './Vixuals.css';
+import appMap from "./AppMap";
+import { Redirect, withRouter } from 'react-router-dom';
 
 const appName = "Vixuals"
-const appVersion = "0.1a"
+const appVersion = "0.2a"
 
 const defaultApp = "chainball"
 
@@ -40,6 +35,9 @@ class Vixuals extends React.Component {
         if (this.state.shouldRedirect) {
             this.setState({shouldRedirect: false})
             return <Redirect to={`/${this.state.redirectLocation}`}/>
+        }
+        if (this.props.match.params.app === this.props.defaultParam) {
+            return <Redirect to={`/${defaultApp}`}/>
         }
         return (
             <div className="Vixuals">

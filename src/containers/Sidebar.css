@@ -1,12 +1,12 @@
-.Sidebar {
+.SidebarGrid {
     padding: 20px;
-    width: 100%;
 }
 
-
-.SidebarControls {
-    padding: 0;
-    margin: 0;
+.SidebarDrawer .MuiDrawer-paper {
+    margin-top: 50px;
+    height: calc(100% - 50px);
+    width: 25vw;
+    overflow-x: hidden;
 }
 
 .PaperRadioControl {
@@ -15,8 +15,4 @@
 
 .PaperSliderControl {
     padding: 45px 25px 5px 25px;
-}
-
-.PaperSlider {
-
 }

@@ -1,10 +1,10 @@
 import React from 'react';
-import { List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import { List, ListItem, ListItemText } from '@material-ui/core';
 import "./AppList.css"
 class AppList extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
 
     render() {
         return (

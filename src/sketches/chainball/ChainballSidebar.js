@@ -1,11 +1,6 @@
 import React from 'react';
-// import SketchSelector from 'SketchSelector'
-// import SketchProperties from 'sidebar/SketchProperties'
-// import 'sidebar/Sidebar.css';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import withStyles from '@material-ui/core/styles/withStyles';
-import "containers/Sidebar.css"
+import { Grid, Paper, Drawer } from '@material-ui/core';
+import "containers/Sidebar.css";
 
 import BallCountSlider from "sketches/chainball/controls/BallCountSlider";
 import LinkDampingSlider from "sketches/chainball/controls/LinkDampingSlider";
@@ -22,12 +17,15 @@ class ChainballSidebar extends React.Component {
     render() {
         return (
             <div className="Sidebar">
-                <Grid
-                    container
-                    spacing={2}
-                    direction="column"
-                    justify="flex-start"
-                    alignItems="stretch">
+            <Drawer
+            className="SidebarDrawer"
+            variant="permanent">
+            <Grid
+            className="SidebarGrid"
+                container
+                spacing={2}
+                direction="column"
+                wrap="nowrap">
 
                     <Grid item xs>
                         <Paper elevation={2}
@@ -73,6 +71,7 @@ class ChainballSidebar extends React.Component {
                         </Grid>
                     }
                 </Grid>
+                </Drawer>
             </div>
         );
     }

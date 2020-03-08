@@ -21,6 +21,7 @@ let orbiter = (p) => {
     let deltaTimeOffset = 0.05;
 
     let isSunBeingDragged = false;
+    let sunLocationOffset = [0, 0];
 
     p.setup = function () {
         let w = p.select(".SketchContainer").width;// - p.select(".Sidebar").width;
@@ -39,8 +40,8 @@ let orbiter = (p) => {
 
     p.draw = function () {
         if (isSunBeingDragged) {
-            sunLocation[0] += p.movedX;
-            sunLocation[1] += p.movedY;
+            sunLocation[0] = p.mouseX + sunLocationOffset[0];
+            sunLocation[1] = p.mouseY + sunLocationOffset[1];
         }
         p.background(0);
 
@@ -79,11 +80,15 @@ let orbiter = (p) => {
     p.mousePressed = function(event) {
         if (p.isMouseOverCircle(sunLocation, sunRadius)) {
             isSunBeingDragged = true;
+            sunLocationOffset[0] = sunLocation[0] - p.mouseX;
+            sunLocationOffset[1] = sunLocation[1] - p.mouseY;
         }
     };
 
     p.mouseReleased = function(event) {
         isSunBeingDragged = false;
+        sunLocation[0] = p.mouseX + sunLocationOffset[0];
+        sunLocation[1] = p.mouseY + sunLocationOffset[1];
     };
 
     p.isMouseOverCircle = function(circleLoc, circleRadius) {

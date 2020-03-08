@@ -1,12 +1,8 @@
 import React from 'react';
-// import './SketchSelector.css';
-import Grid from '@material-ui/core/Grid';
-import Typography from "@material-ui/core/Typography"
-import withStyles from "@material-ui/core/styles/withStyles"
-import "./MenuBar.css"
-import { AppBar, Toolbar, IconButton, Drawer } from '@material-ui/core';
+import "./MenuBar.css";
+import { Typography, AppBar, Toolbar, IconButton, Drawer } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import AppList from 'AppList';
+import AppList from './AppList';
 
 class MenuBar extends React.Component {
     constructor(props) {

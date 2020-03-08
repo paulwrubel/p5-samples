@@ -1,17 +1,6 @@
 import React from 'react';
-// import SketchSelector from 'SketchSelector'
-// import SketchProperties from 'sidebar/SketchProperties'
-// import 'sidebar/Sidebar.css';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { Grid, Drawer } from '@material-ui/core';
 import "containers/Sidebar.css"
-
-import BallCountSlider from "sketches/chainball/controls/BallCountSlider";
-import LinkDampingSlider from "sketches/chainball/controls/LinkDampingSlider";
-import LinkLengthSlider from "sketches/chainball/controls/LinkLengthSlider";
-import LinkTensionSlider from "sketches/chainball/controls/LinkTensionSlider";
-import ModeRadioButtons from "sketches/chainball/controls/ModeRadioButtons";
 
 class OrbiterSidebar extends React.Component {
     // constructor(props) {
@@ -22,14 +11,17 @@ class OrbiterSidebar extends React.Component {
     render() {
         return (
             <div className="Sidebar">
+                <Drawer
+                className="SidebarDrawer"
+                variant="permanent">
                 <Grid
+                className="SidebarGrid"
                     container
                     spacing={2}
                     direction="column"
-                    justify="flex-start"
-                    alignItems="stretch">
+                    wrap="nowrap">
 
-                    <Grid item xs>
+                    {/* <Grid item xs>
                         <Paper elevation={2}
                             className="PaperRadioControl">
                             <ModeRadioButtons
@@ -37,23 +29,17 @@ class OrbiterSidebar extends React.Component {
                                 onModeChange={this.props.onModeChange} />
                         </Paper>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs>
                         <Paper elevation={2}
                             className="PaperSliderControl">
                             <BallCountSlider
                                 ballCount={this.props.ballCount}
                                 onBallCountChange={this.props.onBallCountChange} />
                         </Paper>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Paper elevation={2}
-                            className="PaperSliderControl">
-                            <LinkLengthSlider
-                                linkLength={this.props.linkLength}
-                                onLinkLengthChange={this.props.onLinkLengthChange} />
-                        </Paper>
-                    </Grid>
+                    </Grid> */}
+                    
                 </Grid>
+                </Drawer>
             </div>
         );
     }

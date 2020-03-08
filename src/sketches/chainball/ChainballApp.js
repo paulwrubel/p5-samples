@@ -1,7 +1,5 @@
 import React from 'react';
-import SidebarContainer from 'containers/SidebarContainer'
-import Grid from "@material-ui/core/Grid";
-import withStyles from "@material-ui/core/styles/withStyles";
+import { Grid } from "@material-ui/core";
 import SketchContainer from 'containers/SketchContainer';
 import p5Chainball from "sketches/chainball/p5_chainball";
 import ChainballSidebar from "./ChainballSidebar"
