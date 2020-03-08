@@ -20,7 +20,7 @@ class Vixuals extends React.Component {
         super(props);
 
         this.state = {
-            selectedApp: appMap.get(defaultApp)
+            // selectedApp: appMap.get(defaultApp)
         };
 
         this.handleSelectedAppChange = this.handleSelectedAppChange.bind(this);
@@ -29,22 +29,29 @@ class Vixuals extends React.Component {
     handleSelectedAppChange(newValue) {
         return event => {
             this.setState({
-                selectedApp: appMap.get(newValue)
+                redirectLocation: newValue,
+                shouldRedirect: true
             });
         }
+        // return <Redirect to={`/${newValue}`}/>
     }
 
     render() {
+        if (this.state.shouldRedirect) {
+            this.setState({shouldRedirect: false})
+            return <Redirect to={`/${this.state.redirectLocation}`}/>
+        }
         return (
             <div className="Vixuals">
-                <Route path="/:app/">
+                {/* <Route 
+                path="/:app"> */}
                     <Grid
                         container
                         spacing={0}
                         direction="column"
                         wrap='nowrap'>
                         <Grid item>
-                            {console.log(this.props.match)}
+                            {console.log(this.props)}
                             <MenuBar
                                 appName={appName}
                                 appVersion={appVersion}
@@ -53,13 +60,13 @@ class Vixuals extends React.Component {
                                 apps={appMap} />
                         </Grid>
                         <Grid item>
-                            {this.state.selectedApp.component}
+                            {appMap.get(this.props.match.params.app).component}
                         </Grid>
                     </Grid>
-                </Route>
+                {/* </Route>
                 <Route path="/">
                     <Redirect to={`/${defaultApp}`} />
-                </Route>
+                </Route> */}
             </div>
         );
     }

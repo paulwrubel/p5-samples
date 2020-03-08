@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Switch, withRouter } from 'react-router-dom';
+import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Vixuals from 'Vixuals'
 
 class VixualsRouter extends React.Component {
@@ -9,7 +9,12 @@ class VixualsRouter extends React.Component {
             <div className="VixualsRouter">
                 <HashRouter>
                     <Switch>
-                        <Vixuals/>
+                        <Route path="/:app">
+                            <Vixuals/>
+                        </Route>
+                        <Route path="/">
+                            <Redirect to="/chainball"/>
+                        </Route>
                     </Switch>
                 </HashRouter>
             </div>
