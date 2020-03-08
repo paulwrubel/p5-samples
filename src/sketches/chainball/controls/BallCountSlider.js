@@ -12,10 +12,6 @@ class BallCountSlider extends React.Component {
         this.props.onBallCountChange(newValue);
     }
 
-    scale(x) {
-        return x ** 10;
-    };
-
     render() {
         return (
             <div>
@@ -26,7 +22,6 @@ class BallCountSlider extends React.Component {
                     min={5}
                     max={500}
                     step={5}
-                    // getAriaValueText={() => `this.props.ballCount`}
                     aria-labelledby="ball-count-slider"
                     valueLabelDisplay="on"
                 />

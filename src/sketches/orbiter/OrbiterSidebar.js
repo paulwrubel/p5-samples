@@ -13,7 +13,7 @@ import LinkLengthSlider from "sketches/chainball/controls/LinkLengthSlider";
 import LinkTensionSlider from "sketches/chainball/controls/LinkTensionSlider";
 import ModeRadioButtons from "sketches/chainball/controls/ModeRadioButtons";
 
-class ChainballSidebar extends React.Component {
+class OrbiterSidebar extends React.Component {
     // constructor(props) {
     //     super(props);
     // }
@@ -53,29 +53,10 @@ class ChainballSidebar extends React.Component {
                                 onLinkLengthChange={this.props.onLinkLengthChange} />
                         </Paper>
                     </Grid>
-                    {this.props.mode === "dynamic" &&
-                        <Grid item xs={12}>
-                            <Paper elevation={2}
-                                className="PaperSliderControl">
-                                <LinkTensionSlider
-                                    linkTension={this.props.linkTension}
-                                    onLinkTensionChange={this.props.onLinkTensionChange} />
-                            </Paper>
-                        </Grid>
-                    }{this.props.mode === "dynamic" &&
-                        <Grid item xs={12}>
-                            <Paper elevation={2}
-                                className="PaperSliderControl">
-                                <LinkDampingSlider
-                                    linkDamping={this.props.linkDamping}
-                                    onLinkDampingChange={this.props.onLinkDampingChange} />
-                            </Paper>
-                        </Grid>
-                    }
                 </Grid>
             </div>
         );
     }
 }
 
-export default ChainballSidebar;
+export default OrbiterSidebar;

@@ -3,98 +3,68 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography"
 import withStyles from "@material-ui/core/styles/withStyles"
-
-const styles = theme => ({
-    root: {
-        boxSizing: "border-box",
-        height: "50px",
-        // width: "100vw",
-        margin: "0",
-        padding: "0",
-        // display: "block",
-        // overflow: "hidden"
-    },
-    menuBar: {
-
-        height: "50px",
-    },
-    appBar: {
-
-        // height: "50px",
-    },
-    versionBar: {
-        padding: "0",
-        // height: "50px",
-    },
-});
+import "./MenuBar.css"
+import { AppBar, Toolbar, IconButton, Drawer } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+import AppList from 'AppList';
 
 class MenuBar extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            drawerIsOpen: false
+        };
+
+        this.toggleDrawer = this.toggleDrawer.bind(this);
+    }
+
+    toggleDrawer(newValue) {
+        return event => {
+            if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+                return;
+            }
+            this.setState({
+                drawerIsOpen: newValue
+            });
+        };
+    }
+
     render() {
         return (
-            <div className={`${this.props.classes.root} MenuBar`}>
-                <Grid className={this.props.classes.menuBar}
-                    container
-                    spacing={0}
-                    direction="row"
-                    justify="space-between"
-                    // alignItems="center"
-                    wrap="nowrap">
-                    <Grid className={this.props.classes.appBar}
-                        item xs
-                        container
-                        spacing={0}
-                        direction="row"
-                        justify="flex-start"
-                        // alignItems="center"
-                        wrap="nowrap">
-                        <Grid item xs={2}
-                        container
-                        direction="column"
-                        justify="center">
-                            <Typography>
-                                {this.props.selectedApp.name}
-                                {this.props.selectedApp.version}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2}
-                        container
-                        direction="column"
-                        justify="center">
-                            <Typography>
-                                APP SELECTOR
-                            </Typography>
-                        </Grid>
-                        <Grid item xs
-                        container
-                        direction="column"
-                        justify="center">
-                            <Typography>
-                                {this.props.selectedApp.description}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <Grid className={this.props.classes.versionBar}
-                        item xs={3}
-                        container
-                        spacing={0}
-                        justify="center"
-                        direction="column"
-                        wrap="nowrap">
-                        <Grid item>
-                            <Typography>
-                                {this.props.appName}: {this.props.appVersion}
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography>
-                                {this.props.selectedApp.name}: {this.props.selectedApp.version}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
+            <div className="MenuBar">
+                <AppBar position="static">
+                    <Toolbar variant="dense" className="Toolbar">
+                        <IconButton edge="start" onClick={this.toggleDrawer(true)}>
+                            <MenuIcon />
+                        </IconButton>
+                        <Drawer open={this.state.drawerIsOpen} onClose={this.toggleDrawer(false)}>
+                            <AppList 
+                                apps={this.props.apps}
+                                toggleDrawer={this.toggleDrawer}
+                                setSelectedApp={this.props.setSelectedApp}/>
+                        </Drawer>
+                        <Typography variant="h5" className="SelectedName">
+                            {this.props.selectedApp.displayName}
+                        </Typography>
+                        <Typography variant="body2" className="SelectedVersion">
+                            v{this.props.selectedApp.version}
+                        </Typography>
+                        <Typography variant="body1" className="SelectedDescription Grow">
+                            {this.props.selectedApp.description}
+                        </Typography>
+                        {/* <div className="Grow" /> */}
+                        <Typography variant="body2" className="AppInfo">
+                            {`
+                            ${this.props.appName} 
+                            v${this.props.appVersion}
+                            `}
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
             </div>
         );
     }
 }
 
-export default withStyles(styles)(MenuBar);
+export default MenuBar;

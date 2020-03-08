@@ -1,0 +1,24 @@
+.Toolbar {
+    height: 50px;
+}
+
+.SelectedName {
+    padding: 5px 2px 5px 5px;
+}
+
+.SelectedVersion {
+    padding: 12px 15px 5px 5px;
+}
+
+.SelectedDescription {
+    padding: 5px;
+    text-align: center;
+}
+
+.AppInfo {
+    padding: 5px 15px 5px 5px;
+}
+
+.Grow {
+    flex-grow: 1;
+}
