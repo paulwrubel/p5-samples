@@ -18,7 +18,6 @@ let chainball = (p) => {
 
     let frameRateCallback;
     let coreSpeedCallback;
-    let resizeOnChange;
 
     let ballCount = 5;
     let environmentFriction = 0.9995;
@@ -102,12 +101,7 @@ let chainball = (p) => {
     };
 
     p.draw = function () {
-        let w = p.select(".SketchContainer").width;// - p.select(".Sidebar").width;
-        let h = p.select(".SketchContainer").height;
-        if (w != p.width || h != p.height) {
-            p.resize();
-        }
-        // p.createCanvas(w, h);
+        p.checkResize();
 
         p.background(0);
         let mouseVector = p.createVector(p.mouseX, p.mouseY);
@@ -295,6 +289,14 @@ let chainball = (p) => {
         p.resize();
     };
 
+    p.checkResize = function () {
+        let w = p.select(".SketchContainer").width;// - p.select(".Sidebar").width;
+        let h = p.select(".SketchContainer").height;
+        if (w !== p.width || h !== p.height) {
+            p.resize();
+        }
+    }
+
     p.resize = function () {
         let w = p.select(".SketchContainer").width;// - p.select(".Sidebar").width;
         let h = p.select(".SketchContainer").height;
@@ -414,13 +416,6 @@ let chainball = (p) => {
         if (typeof newProps.onCoreSpeedChange !== "undefined") {
             coreSpeedCallback = newProps.onCoreSpeedChange;
         }
-        // if (typeof newProps.resizeOnChange !== "undefined") {
-        //     if (newProps.resizeOnChange !== resizeOnChange) {
-        //         p.resize();
-        //         resizeOnChange = newProps.resizeOnChange;
-        //     }
-        // }
-        // }
     };
 
 };

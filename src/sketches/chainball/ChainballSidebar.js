@@ -29,7 +29,7 @@ class ChainballSidebar extends React.Component {
                         wrap="nowrap">
                         <Grid item xs>
                             <Paper elevation={2}
-                                className="PaperRadioControl">
+                                className="PaperInformation">
                                 <Typography 
                                     variant="body1"
                                     color="textSecondary">
@@ -39,11 +39,6 @@ class ChainballSidebar extends React.Component {
                                     variant="body1"
                                     color="textSecondary">
                                     Core Speed: {this.props.coreSpeed}
-                                </Typography>
-                                <Typography 
-                                    variant="body1"
-                                    color="textSecondary">
-                                    Panel Open?: {this.props.isControlsPanelOpen.toString()}
                                 </Typography>
                             </Paper>
                         </Grid>

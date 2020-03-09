@@ -1,4 +1,3 @@
-import React from 'react';
 import ChainballApp from "sketches/chainball/ChainballApp"
 import OrbiterApp from "sketches/orbiter/OrbiterApp"
 
@@ -14,7 +13,7 @@ const appMap = new Map([
         name: "orbiter",
         displayName: "Orbiter",
         component: OrbiterApp,
-        version: "0.1a",
+        version: "0.2a",
         description: "Orbiter simulation"
     }]
 ]);

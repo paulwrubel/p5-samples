@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Drawer } from '@material-ui/core';
+import { Paper, Typography, Grid, Drawer } from '@material-ui/core';
 import "containers/Sidebar.css"
 
 class OrbiterSidebar extends React.Component {
@@ -7,21 +7,41 @@ class OrbiterSidebar extends React.Component {
     //     super(props);
     // }
 
-
     render() {
         return (
             <div className="Sidebar">
                 <Drawer
-                className="SidebarDrawer"
-                variant="permanent">
-                <Grid
-                className="SidebarGrid"
-                    container
-                    spacing={2}
-                    direction="column"
-                    wrap="nowrap">
+                    className="SidebarDrawer"
+                    variant="persistent"
+                    open={this.props.isControlsPanelOpen}>
+                    <Grid
+                        className="SidebarGrid"
+                        container
+                        spacing={2}
+                        direction="column"
+                        wrap="nowrap">
+                        <Grid item xs>
+                            <Paper elevation={2}
+                                className="PaperRadioControl">
+                                <Typography
+                                    variant="body1"
+                                    color="textSecondary">
+                                    FPS: {this.props.frameRate}
+                                </Typography>
+                                <Typography
+                                    variant="body1"
+                                    color="textSecondary">
+                                    Planet Speed: {this.props.planetSpeed}
+                                </Typography>
+                                <Typography
+                                    variant="body1"
+                                    color="textSecondary">
+                                    Moon Speed: {this.props.moonSpeed}
+                                </Typography>
+                            </Paper>
+                        </Grid>
 
-                    {/* <Grid item xs>
+                        {/* <Grid item xs>
                         <Paper elevation={2}
                             className="PaperRadioControl">
                             <ModeRadioButtons
@@ -37,8 +57,8 @@ class OrbiterSidebar extends React.Component {
                                 onBallCountChange={this.props.onBallCountChange} />
                         </Paper>
                     </Grid> */}
-                    
-                </Grid>
+
+                    </Grid>
                 </Drawer>
             </div>
         );

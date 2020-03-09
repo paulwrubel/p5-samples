@@ -14,7 +14,7 @@ class OrbiterApp extends React.Component {
             // linkTension: 0.1,
             // linkDamping: 0.4,
             // mode: "static",
-            // frameRate: "not yet started"
+            frameRate: 0
         }
 
         // this.handleModeChange = this.handleModeChange.bind(this);
@@ -22,7 +22,9 @@ class OrbiterApp extends React.Component {
         // this.handleLinkLengthChange = this.handleLinkLengthChange.bind(this);
         // this.handleLinkTensionChange = this.handleLinkTensionChange.bind(this);
         // this.handleLinkDampingChange = this.handleLinkDampingChange.bind(this);
-        // this.handleFrameRateChange = this.handleFrameRateChange.bind(this);
+        this.handleFrameRateChange = this.handleFrameRateChange.bind(this);
+        this.handlePlanetSpeedChange = this.handlePlanetSpeedChange.bind(this);
+        this.handleMoonSpeedChange = this.handleMoonSpeedChange.bind(this);
     }
 
     // handleModeChange(newValue) {
@@ -55,11 +57,23 @@ class OrbiterApp extends React.Component {
     //     });
     // }
 
-    // handleFrameRateChange(newFrameRateValue) {
-    //     this.setState({
-    //         frameRate: newFrameRateValue
-    //     });
-    // }
+    handleFrameRateChange(newFrameRateValue) {
+        this.setState({
+            frameRate: newFrameRateValue
+        });
+    }
+
+    handlePlanetSpeedChange(newPlanetSpeedValue) {
+        this.setState({
+            planetSpeed: newPlanetSpeedValue
+        });
+    }
+
+    handleMoonSpeedChange(newMoonSpeedValue) {
+        this.setState({
+            moonSpeed: newMoonSpeedValue
+        });
+    }
 
     render() {
         return (
@@ -71,7 +85,7 @@ class OrbiterApp extends React.Component {
                     // justify='flex-start'
                     alignItems='stretch'
                     wrap='nowrap'>
-                    <Grid container item xs={3}>
+                    <Grid container item xs>
                         <OrbiterSidebar
                             // mode={this.state.mode}
                             // onModeChange={this.handleModeChange}
@@ -83,18 +97,21 @@ class OrbiterApp extends React.Component {
                             // onLinkTensionChange={this.handleLinkTensionChange}
                             // linkDamping={this.state.linkDamping}
                             // onLinkDampingChange={this.handleLinkDampingChange}
-                            // frameRate={this.state.frameRate} 
+
+                            frameRate={this.state.frameRate} 
+                            planetSpeed={this.state.planetSpeed} 
+                            moonSpeed={this.state.moonSpeed} 
+
+                            isControlsPanelOpen={this.props.isControlsPanelOpen}
                             />
                     </Grid>
-                    <Grid container item xs={9}>
+                    <Grid container item xs={this.props.isControlsPanelOpen ? 9 : 12}>
                         <SketchContainer
                             sketch={p5Orbiter}
-                            // mode={this.state.mode}
-                            // ballCount={this.state.ballCount}
-                            // linkLength={this.state.linkLength}
-                            // linkTension={this.state.linkTension}
-                            // linkDamping={this.state.linkDamping}
-                            // onFrameRateChange={this.handleFrameRateChange}
+
+                            onFrameRateChange={this.handleFrameRateChange}
+                            onPlanetSpeedChange={this.handlePlanetSpeedChange}
+                            onMoonSpeedChange={this.handleMoonSpeedChange}
                             />
                     </Grid>
                 </Grid>
