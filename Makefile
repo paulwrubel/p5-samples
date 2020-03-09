@@ -33,6 +33,12 @@ id:
 
 show: ps
 
+start:
+	npm start
+
+npm-build:
+	npm run build
+
 publish:
 	-rm -r ./docs
 	mv ./build ./docs
