@@ -17,6 +17,8 @@ let chainball = (p) => {
     let currentMode = Modes.STATIC;
 
     let frameRateCallback;
+    let coreSpeedCallback;
+    let resizeOnChange;
 
     let ballCount = 5;
     let environmentFriction = 0.9995;
@@ -100,6 +102,13 @@ let chainball = (p) => {
     };
 
     p.draw = function () {
+        let w = p.select(".SketchContainer").width;// - p.select(".Sidebar").width;
+        let h = p.select(".SketchContainer").height;
+        if (w != p.width || h != p.height) {
+            p.resize();
+        }
+        // p.createCanvas(w, h);
+
         p.background(0);
         let mouseVector = p.createVector(p.mouseX, p.mouseY);
         let mouseIsOverCanvas =
@@ -199,7 +208,7 @@ let chainball = (p) => {
                 velocityArrowColor);
         }
 
-        // draw framerate
+        // calc framerate
         if (p.frameCount % 10 === 0) {
             frameRates.push(p.frameRate());
             if (frameRates.length > 10) {
@@ -208,9 +217,15 @@ let chainball = (p) => {
             displayFrameRate = frameRates.reduce((sum, num) => {
                 return sum + num;
             }) / frameRates.length;
+        }
 
+        // callbacks
+        if (p.frameCount % 10 === 0) {
             if (typeof frameRateCallback !== "undefined") {
                 frameRateCallback(displayFrameRate.toFixed(0));
+            }
+            if (typeof coreSpeedCallback !== "undefined") {
+                coreSpeedCallback(core.velocity.mag().toFixed(2));
             }
         }
         // $('#framerate').text(`FPS: ${displayFrameRate.toFixed(0)}`);
@@ -277,10 +292,15 @@ let chainball = (p) => {
     };
 
     p.windowResized = function () {
+        p.resize();
+    };
+
+    p.resize = function () {
         let w = p.select(".SketchContainer").width;// - p.select(".Sidebar").width;
         let h = p.select(".SketchContainer").height;
-        p.createCanvas(w, h);
-    };
+        p.resizeCanvas(w, h);
+        console.log("did resize");
+    }
 
     p.mousePressed = function (event) {
         core.forceIsBeingApplied = true;
@@ -391,6 +411,15 @@ let chainball = (p) => {
         if (typeof newProps.onFrameRateChange !== "undefined") {
             frameRateCallback = newProps.onFrameRateChange;
         }
+        if (typeof newProps.onCoreSpeedChange !== "undefined") {
+            coreSpeedCallback = newProps.onCoreSpeedChange;
+        }
+        // if (typeof newProps.resizeOnChange !== "undefined") {
+        //     if (newProps.resizeOnChange !== resizeOnChange) {
+        //         p.resize();
+        //         resizeOnChange = newProps.resizeOnChange;
+        //     }
+        // }
         // }
     };
 

@@ -14,7 +14,6 @@ class ChainballApp extends React.Component {
             linkTension: 0.1,
             linkDamping: 0.4,
             mode: "static",
-            frameRate: "not yet started"
         }
 
         this.handleModeChange = this.handleModeChange.bind(this);
@@ -23,6 +22,7 @@ class ChainballApp extends React.Component {
         this.handleLinkTensionChange = this.handleLinkTensionChange.bind(this);
         this.handleLinkDampingChange = this.handleLinkDampingChange.bind(this);
         this.handleFrameRateChange = this.handleFrameRateChange.bind(this);
+        this.handleCoreSpeedChange = this.handleCoreSpeedChange.bind(this);
     }
 
     handleModeChange(newValue) {
@@ -61,6 +61,12 @@ class ChainballApp extends React.Component {
         });
     }
 
+    handleCoreSpeedChange(newCoreSpeedValue) {
+        this.setState({
+            coreSpeed: newCoreSpeedValue
+        });
+    }
+
     render() {
         return (
             <div className="App">
@@ -71,7 +77,7 @@ class ChainballApp extends React.Component {
                     // justify='flex-start'
                     alignItems='stretch'
                     wrap='nowrap'>
-                    <Grid container item xs={3}>
+                    <Grid container item xs>
                         <ChainballSidebar
                             mode={this.state.mode}
                             onModeChange={this.handleModeChange}
@@ -83,9 +89,12 @@ class ChainballApp extends React.Component {
                             onLinkTensionChange={this.handleLinkTensionChange}
                             linkDamping={this.state.linkDamping}
                             onLinkDampingChange={this.handleLinkDampingChange}
-                            frameRate={this.state.frameRate} />
+                            
+                            frameRate={this.state.frameRate}
+                            coreSpeed={this.state.coreSpeed}
+                            isControlsPanelOpen={this.props.isControlsPanelOpen} />
                     </Grid>
-                    <Grid container item xs={9}>
+                    <Grid container item xs={this.props.isControlsPanelOpen ? 9 : 12}>
                         <SketchContainer
                             sketch={p5Chainball}
                             mode={this.state.mode}
@@ -93,7 +102,11 @@ class ChainballApp extends React.Component {
                             linkLength={this.state.linkLength}
                             linkTension={this.state.linkTension}
                             linkDamping={this.state.linkDamping}
-                            onFrameRateChange={this.handleFrameRateChange} />
+
+                            resizeOnChange={this.props.isControlsPanelOpen}
+
+                            onFrameRateChange={this.handleFrameRateChange}
+                            onCoreSpeedChange={this.handleCoreSpeedChange} />
                     </Grid>
                 </Grid>
             </div>

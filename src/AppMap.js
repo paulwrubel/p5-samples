@@ -6,14 +6,14 @@ const appMap = new Map([
     ["chainball", {
         name: "chainball",
         displayName: "Chainball",
-        component: <ChainballApp/>,
+        component: ChainballApp,
         version: "1.0",
         description: "2D kinematic demonstration"
     }],
     ["orbiter", {
         name: "orbiter",
         displayName: "Orbiter",
-        component: <OrbiterApp/>,
+        component: OrbiterApp,
         version: "0.1a",
         description: "Orbiter simulation"
     }]

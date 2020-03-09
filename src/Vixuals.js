@@ -15,10 +15,11 @@ class Vixuals extends React.Component {
         super(props);
 
         this.state = {
-            // selectedApp: appMap.get(defaultApp)
+            isControlsPanelOpen: true
         };
 
         this.handleSelectedAppChange = this.handleSelectedAppChange.bind(this);
+        this.handleControlsPanelToggle = this.handleControlsPanelToggle.bind(this);
     }
 
     handleSelectedAppChange(newValue) {
@@ -31,36 +32,49 @@ class Vixuals extends React.Component {
         // return <Redirect to={`/${newValue}`}/>
     }
 
+    handleControlsPanelToggle(newValue) {
+        return event => {
+            this.setState({
+                isControlsPanelOpen: newValue
+            });
+        }
+    }
+
     render() {
         if (this.state.shouldRedirect) {
-            this.setState({shouldRedirect: false})
-            return <Redirect to={`/${this.state.redirectLocation}`}/>
+            this.setState({ shouldRedirect: false })
+            return <Redirect to={`/${this.state.redirectLocation}`} />
         }
         if (this.props.match.params.app === this.props.defaultParam) {
-            return <Redirect to={`/${defaultApp}`}/>
+            return <Redirect to={`/${defaultApp}`} />
         }
+        let App = appMap.get(this.props.match.params.app).component;
         return (
             <div className="Vixuals">
                 {/* <Route 
                 path="/:app"> */}
-                    <Grid
-                        container
-                        spacing={0}
-                        direction="column"
-                        wrap='nowrap'>
-                        <Grid item>
-                            {console.log(this.props)}
-                            <MenuBar
-                                appName={appName}
-                                appVersion={appVersion}
-                                selectedApp={appMap.get(this.props.match.params.app)}
-                                setSelectedApp={this.handleSelectedAppChange}
-                                apps={appMap} />
-                        </Grid>
-                        <Grid item>
-                            {appMap.get(this.props.match.params.app).component}
-                        </Grid>
+                <Grid
+                    container
+                    spacing={0}
+                    direction="column"
+                    wrap='nowrap'>
+                    <Grid item>
+                        <MenuBar
+                            appName={appName}
+                            appVersion={appVersion}
+                            selectedApp={appMap.get(this.props.match.params.app)}
+                            setSelectedApp={this.handleSelectedAppChange}
+                            apps={appMap}
+
+                            onControlsPanelToggle={this.handleControlsPanelToggle}
+                            isControlsPanelOpen={this.state.isControlsPanelOpen} />
                     </Grid>
+                    <Grid item>
+                        <App
+                            onControlsPanelToggle={this.handleControlsPanelToggle}
+                            isControlsPanelOpen={this.state.isControlsPanelOpen} />
+                    </Grid>
+                </Grid>
                 {/* </Route>
                 <Route path="/">
                     <Redirect to={`/${defaultApp}`} />

@@ -1,7 +1,9 @@
 import React from 'react';
 import "./MenuBar.css";
-import { Typography, AppBar, Toolbar, IconButton, Drawer } from '@material-ui/core';
+import { Typography, AppBar, Toolbar, IconButton, Drawer, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import AppList from './AppList';
 
 class MenuBar extends React.Component {
@@ -9,19 +11,19 @@ class MenuBar extends React.Component {
         super(props);
 
         this.state = {
-            drawerIsOpen: false
+            isMenuDrawerOpen: false
         };
 
-        this.toggleDrawer = this.toggleDrawer.bind(this);
+        this.handleMenuButtonToggle = this.handleMenuButtonToggle.bind(this);
     }
 
-    toggleDrawer(newValue) {
+    handleMenuButtonToggle(newValue) {
         return event => {
             if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
                 return;
             }
             this.setState({
-                drawerIsOpen: newValue
+                isMenuDrawerOpen: newValue
             });
         };
     }
@@ -31,15 +33,21 @@ class MenuBar extends React.Component {
             <div className="MenuBar">
                 <AppBar position="static">
                     <Toolbar variant="dense" className="Toolbar">
-                        <IconButton edge="start" onClick={this.toggleDrawer(true)}>
-                            <MenuIcon />
-                        </IconButton>
-                        <Drawer open={this.state.drawerIsOpen} onClose={this.toggleDrawer(false)}>
-                            <AppList 
-                                apps={this.props.apps}
-                                toggleDrawer={this.toggleDrawer}
-                                setSelectedApp={this.props.setSelectedApp}/>
-                        </Drawer>
+                        {this.props.isControlsPanelOpen &&
+                            <Tooltip title="Collapse Controls">
+                                <IconButton edge="start" onClick={this.props.onControlsPanelToggle(false)}>
+                                    <ArrowBackIcon
+                                        className="AppBarButton" />
+                                </IconButton>
+                            </Tooltip>
+                        }{!this.props.isControlsPanelOpen &&
+                            <Tooltip title="Expand Controls">
+                                <IconButton edge="start" onClick={this.props.onControlsPanelToggle(true)}>
+                                    <ArrowForwardIcon
+                                        className="AppBarButton" />
+                                </IconButton>
+                            </Tooltip>
+                        }
                         <Typography variant="h5" className="SelectedName">
                             {this.props.selectedApp.displayName}
                         </Typography>
@@ -56,8 +64,23 @@ class MenuBar extends React.Component {
                             v${this.props.appVersion}
                             `}
                         </Typography>
+                        <Tooltip title="Open Menu">
+                            <IconButton edge="end" onClick={this.handleMenuButtonToggle(true)}>
+                                <MenuIcon
+                                    className="AppBarButton" />
+                            </IconButton>
+                        </Tooltip>
                     </Toolbar>
                 </AppBar>
+                <Drawer
+                    open={this.state.isMenuDrawerOpen}
+                    onClose={this.handleMenuButtonToggle(false)}
+                    anchor="right">
+                    <AppList
+                        apps={this.props.apps}
+                        toggleDrawer={this.handleMenuButtonToggle}
+                        setSelectedApp={this.props.setSelectedApp} />
+                </Drawer>
             </div>
         );
     }
