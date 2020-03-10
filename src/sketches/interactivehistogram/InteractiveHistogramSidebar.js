@@ -2,6 +2,8 @@ import React from 'react';
 import { Paper, Typography, Grid, Drawer } from '@material-ui/core';
 import "containers/Sidebar.css"
 
+import BarHeightScalarSlider from "sketches/interactivehistogram/panels/BarHeightScalarSlider";
+
 class InteractiveHistogramSidebar extends React.Component {
     // constructor(props) {
     //     super(props);
@@ -28,11 +30,14 @@ class InteractiveHistogramSidebar extends React.Component {
                                     color="textSecondary">
                                     FPS: {this.props.frameRate}
                                 </Typography>
-                                <Typography
-                                    variant="body1"
-                                    color="textSecondary">
-                                    Bar Height Scalar: {this.props.barHeightScalar}
-                                </Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs>
+                            <Paper elevation={2}
+                                className="PaperSliderControl">
+                                <BarHeightScalarSlider
+                                    barHeightScalar={this.props.barHeightScalar}
+                                    onBarHeightScalarChange={this.props.onBarHeightScalarChange} />
                             </Paper>
                         </Grid>
                     </Grid>

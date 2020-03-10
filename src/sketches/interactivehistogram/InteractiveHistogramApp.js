@@ -42,6 +42,7 @@ class InteractiveHistogramApp extends React.Component {
                         <InteractiveHistogramSidebar
                             frameRate={this.state.frameRate}
                             barHeightScalar={this.state.barHeightScalar}
+                            onBarHeightScalarChange={this.handleBarHeightScalarChange}
 
                             isControlsPanelOpen={this.props.isControlsPanelOpen}
                             />
@@ -51,6 +52,7 @@ class InteractiveHistogramApp extends React.Component {
                             sketch={p5InteractiveHistogram}
 
                             onFrameRateChange={this.handleFrameRateChange}
+                            barHeightScalar={this.state.barHeightScalar}
                             onBarHeightScalarChange={this.handleBarHeightScalarChange}
                             />
                     </Grid>

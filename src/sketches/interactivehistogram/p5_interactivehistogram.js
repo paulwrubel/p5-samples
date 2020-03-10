@@ -23,6 +23,8 @@ let InteractiveHistogram = (p) => {
     let frameRateCallback;
     let barHeightScalarCallback;
 
+    let didSetup = false;
+
     p.setup = function () {
         let w = p.select(".SketchContainer").width;// - p.select(".Sidebar").width;
         let h = p.select(".SketchContainer").height;
@@ -30,6 +32,9 @@ let InteractiveHistogram = (p) => {
 
         p.colorMode(p.HSB, 360, 100, 100);
         p.background('#e6e6fa'); //e6e6fa
+        p.frameRate(120);
+
+        didSetup = true;
     };
 
     p.draw = function () {
@@ -125,17 +130,18 @@ let InteractiveHistogram = (p) => {
     };
 
     p.myCustomRedrawAccordingToNewPropsHandler = (newProps) => {
-        // if (didSetup) {
-        //     if (typeof newProps.mode !== "undefined") {
-        //         currentMode = newProps.mode;
-        //     }
-        // }
+        if (didSetup) {
+            if (typeof newProps.barHeightScalar !== "undefined") {
+                barHeightScalar = newProps.barHeightScalar;
+                console.log(barHeightScalar)
+            }
+        }
         if (typeof newProps.onFrameRateChange !== "undefined") {
             frameRateCallback = newProps.onFrameRateChange;
         }
-        if (typeof newProps.onBarHeightScalarChange !== "undefined") {
-            barHeightScalarCallback = newProps.onBarHeightScalarChange;
-        }
+        // if (typeof newProps.onBarHeightScalarChange !== "undefined") {
+        //     barHeightScalarCallback = newProps.onBarHeightScalarChange;
+        // }
     };
 
 };
