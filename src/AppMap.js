@@ -1,6 +1,7 @@
 import ChainballApp from "sketches/chainball/ChainballApp"
 import OrbiterApp from "sketches/orbiter/OrbiterApp"
 import InteractiveHistogramApp from "sketches/interactivehistogram/InteractiveHistogramApp"
+import CubeGridApp from "sketches/cubegrid/CubeGridApp"
 
 const appMap = new Map([
     ["chainball", {
@@ -23,6 +24,13 @@ const appMap = new Map([
         component: InteractiveHistogramApp,
         version: "1.0",
         description: "An Interactive Histogram (2016)"
+    }],
+    ["cubegrid", {
+        name: "cubegrid",
+        displayName: "CubeGrid",
+        component: CubeGridApp,
+        version: "0.0.1pre",
+        description: "3D customizable grid of cubes (2016)"
     }]
 ]);
 
