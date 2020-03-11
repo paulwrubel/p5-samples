@@ -184,11 +184,18 @@ let cubegrid = (p) => {
             //     barHeightScalarCallback(barHeightScalar.toFixed(0));
             // }
         }
-	}
+	};
 
-	p.mousePressed = function () {
+	p.isMouseOverCanvas = function () {
 		if (p.mouseX > 0 && p.mouseX < p.width &&
 			p.mouseY > 0 && p.mouseY < p.height) {
+				return true;
+		}
+		return false;
+	};
+
+	p.mousePressed = function () {
+		if (p.isMouseOverCanvas()) {
 				isBeingRotated = true;
 		}
 	};
@@ -198,7 +205,9 @@ let cubegrid = (p) => {
 	};
 
 	p.mouseWheel = function (event) {
-		cameraDistance -= event.delta * scrollingFactor;
+		if (p.isMouseOverCanvas()) {
+			cameraDistance -= event.delta * scrollingFactor;
+		}
 	}
 
     p.windowResized = function () {
