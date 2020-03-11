@@ -13,14 +13,23 @@ class CubeGridApp extends React.Component {
         }
 
         this.handleFrameRateChange = this.handleFrameRateChange.bind(this);
+        this.handleCubeCountChange = this.handleCubeCountChange.bind(this);
         this.handleRowCountChange = this.handleRowCountChange.bind(this);
         this.handleColumnCountChange = this.handleColumnCountChange.bind(this);
         this.handleLayerCountChange = this.handleLayerCountChange.bind(this);
+        this.handleCubeDistanceChange = this.handleCubeDistanceChange.bind(this);
+        this.handleCubeLengthChange = this.handleCubeLengthChange.bind(this);
     }
 
     handleFrameRateChange(newFrameRateValue) {
         this.setState({
             frameRate: newFrameRateValue
+        });
+    }
+
+    handleCubeCountChange(newCubeCountValue) {
+        this.setState({
+            cubeCount: newCubeCountValue
         });
     }
 
@@ -36,13 +45,23 @@ class CubeGridApp extends React.Component {
         });
     }
 
-
     handleLayerCountChange(newLayerCountValue) {
         this.setState({
             layerCount: newLayerCountValue
         });
     }
 
+    handleCubeDistanceChange(newCubeDistanceValue) {
+        this.setState({
+            cubeDistance: newCubeDistanceValue
+        });
+    }
+
+    handleCubeLengthChange(newCubeLengthValue) {
+        this.setState({
+            cubeLength: newCubeLengthValue
+        });
+    }
 
     render() {
         return (
@@ -57,12 +76,18 @@ class CubeGridApp extends React.Component {
                     <Grid container item xs>
                         <CubeGridSidebar
                             frameRate={this.state.frameRate}
+                            cubeCount={this.state.cubeCount}
+
                             rowCount={this.state.rowCount}
                             onRowCountChange={this.handleRowCountChange}
                             columnCount={this.state.columnCount}
                             onColumnCountChange={this.handleColumnCountChange}
                             layerCount={this.state.layerCount}
                             onLayerCountChange={this.handleLayerCountChange}
+                            cubeDistance={this.state.cubeDistance}
+                            onCubeDistanceChange={this.handleCubeDistanceChange}
+                            cubeLength={this.state.cubeLength}
+                            onCubeLengthChange={this.handleCubeLengthChange}
 
                             isControlsPanelOpen={this.props.isControlsPanelOpen}
                             />
@@ -72,10 +97,13 @@ class CubeGridApp extends React.Component {
                             sketch={p5CubeGrid}
 
                             onFrameRateChange={this.handleFrameRateChange}
+                            onCubeCountChange={this.handleCubeCountChange}
 
                             rowCount={this.state.rowCount}
                             columnCount={this.state.columnCount}
                             layerCount={this.state.layerCount}
+                            cubeDistance={this.state.cubeDistance}
+                            cubeLength={this.state.cubeLength}
                             />
                     </Grid>
                 </Grid>
