@@ -60,7 +60,10 @@ let cubegrid = (p) => {
 
         let w = p.select(".SketchContainer").width;
         let h = p.select(".SketchContainer").height;
-        p.createCanvas(w, h, p.WEBGL);
+		p.createCanvas(w, h, p.WEBGL);
+		
+		let eyeZ = ((p.height/2.0) / p.tan(p.PI*60.0/360.0));
+		p.perspective(p.PI/3.0, p.width/p.height, eyeZ/10.0, eyeZ*10.0);
 
 		// p.ortho(
 		// 	5 * -p.width / 2,
