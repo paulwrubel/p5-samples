@@ -19,6 +19,9 @@ class CubeGridApp extends React.Component {
         this.handleLayerCountChange = this.handleLayerCountChange.bind(this);
         this.handleCubeDistanceChange = this.handleCubeDistanceChange.bind(this);
         this.handleCubeLengthChange = this.handleCubeLengthChange.bind(this);
+        this.handleRotationSpeedXChange = this.handleRotationSpeedXChange.bind(this);
+        this.handleRotationSpeedYChange = this.handleRotationSpeedYChange.bind(this);
+        this.handleRotationSpeedZChange = this.handleRotationSpeedZChange.bind(this);
     }
 
     handleFrameRateChange(newFrameRateValue) {
@@ -63,6 +66,24 @@ class CubeGridApp extends React.Component {
         });
     }
 
+    handleRotationSpeedXChange(newValue) {
+        this.setState({
+            rotationSpeedX: newValue
+        });
+    }
+
+    handleRotationSpeedYChange(newValue) {
+        this.setState({
+            rotationSpeedY: newValue
+        });
+    }
+
+    handleRotationSpeedZChange(newValue) {
+        this.setState({
+            rotationSpeedZ: newValue
+        });
+    }
+
     render() {
         return (
             <div className="App">
@@ -88,6 +109,12 @@ class CubeGridApp extends React.Component {
                             onCubeDistanceChange={this.handleCubeDistanceChange}
                             cubeLength={this.state.cubeLength}
                             onCubeLengthChange={this.handleCubeLengthChange}
+                            rotationSpeedX={this.state.rotationSpeedX}
+                            onRotationSpeedXChange={this.handleRotationSpeedXChange}
+                            rotationSpeedY={this.state.rotationSpeedY}
+                            onRotationSpeedYChange={this.handleRotationSpeedYChange}
+                            rotationSpeedZ={this.state.rotationSpeedZ}
+                            onRotationSpeedZChange={this.handleRotationSpeedZChange}
 
                             isControlsPanelOpen={this.props.isControlsPanelOpen}
                             />
@@ -104,6 +131,9 @@ class CubeGridApp extends React.Component {
                             layerCount={this.state.layerCount}
                             cubeDistance={this.state.cubeDistance}
                             cubeLength={this.state.cubeLength}
+                            rotationSpeedX={this.state.rotationSpeedX}
+                            rotationSpeedY={this.state.rotationSpeedY}
+                            rotationSpeedZ={this.state.rotationSpeedZ}
                             />
                     </Grid>
                 </Grid>

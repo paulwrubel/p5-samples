@@ -6,6 +6,9 @@ import ColumnCountSlider from './panels/ColumnCountSlider';
 import LayerCountSlider from './panels/LayerCountSlider';
 import CubeDistanceSlider from './panels/CubeDistanceSlider';
 import CubeLengthSlider from './panels/CubeLengthSlider';
+import RotationSpeedXSlider from './panels/RotationSpeedXSlider';
+import RotationSpeedYSlider from './panels/RotationSpeedYSlider';
+import RotationSpeedZSlider from './panels/RotationSpeedZSlider';
 
 // import BarHeightScalarSlider from "sketches/interactivehistogram/panels/BarHeightScalarSlider";
 
@@ -80,6 +83,30 @@ class CubeGridSidebar extends React.Component {
                                 <CubeLengthSlider
                                     cubeLength={this.props.cubeLength}
                                     onCubeLengthChange={this.props.onCubeLengthChange} />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs>
+                            <Paper elevation={2}
+                                className="PaperSliderControl">
+                                <RotationSpeedXSlider
+                                    rotationSpeedX={this.props.rotationSpeedX}
+                                    onRotationSpeedChange={this.props.onRotationSpeedXChange} />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs>
+                            <Paper elevation={2}
+                                className="PaperSliderControl">
+                                <RotationSpeedYSlider
+                                    rotationSpeedY={this.props.rotationSpeedY}
+                                    onRotationSpeedChange={this.props.onRotationSpeedYChange} />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs>
+                            <Paper elevation={2}
+                                className="PaperSliderControl">
+                                <RotationSpeedZSlider
+                                    rotationSpeedZ={this.props.rotationSpeedZ}
+                                    onRotationSpeedChange={this.props.onRotationSpeedZChange} />
                             </Paper>
                         </Grid>
                     </Grid>
