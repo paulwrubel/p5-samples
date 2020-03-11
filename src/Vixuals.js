@@ -6,7 +6,7 @@ import appMap from "./AppMap";
 import { Redirect, withRouter } from 'react-router-dom';
 
 const appName = "Vixuals"
-const appVersion = "0.4.3a"
+const appVersion = "0.4.4a"
 
 const defaultApp = "chainball"
 
