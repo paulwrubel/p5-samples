@@ -2,6 +2,7 @@ import ChainballApp from "sketches/chainball/ChainballApp"
 import OrbiterApp from "sketches/orbiter/OrbiterApp"
 import InteractiveHistogramApp from "sketches/interactivehistogram/InteractiveHistogramApp"
 import CubeGridApp from "sketches/cubegrid/CubeGridApp"
+import TrailsApp from "sketches/trails/TrailsApp"
 
 const appMap = new Map([
     ["chainball", {
@@ -29,8 +30,15 @@ const appMap = new Map([
         name: "cubegrid",
         displayName: "CubeGrid",
         component: CubeGridApp,
-        version: "0.0.1pre",
+        version: "0.9b",
         description: "3D customizable grid of cubes (2016)"
+    }],
+    ["trails", {
+        name: "trails",
+        displayName: "Trails",
+        component: TrailsApp,
+        version: "0.1a",
+        description: "Trail art creator (2017)"
     }]
 ]);
 
