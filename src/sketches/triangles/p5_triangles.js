@@ -1,3 +1,5 @@
+import ControlsBox from "./p5_controlsbox";
+
 let triangles = (p) => {
 
     // Required for all sketches
@@ -64,7 +66,7 @@ let triangles = (p) => {
     let fixedPoint = null;
     let autoFire = false;
 
-    // let controls = new ControlsBox(p);
+    let controls = new ControlsBox(p);
     let gravList = [];
     let gravPoint;
     let triangles = [];
@@ -96,6 +98,8 @@ let triangles = (p) => {
 
     p.draw = function () {
         p.checkResize();
+
+        let superStart = window.performance.now();
 
         // START SKETCH
 
@@ -179,103 +183,104 @@ let triangles = (p) => {
         end = window.performance.now();
         bulletUpdateTime = (end - start) / 1000000.0 / triangles.length;
 
-        // start = System.nanoTime();
-        // for (Triangle t : triangles) {
+        start = window.performance.now();
+        triangles.forEach(triangle => {
+            triangle.bullets.forEach(bullet => {
 
-        //     for (Bullet b : t.bullets()) {
+                //b.update();
+                bullet.draw();
 
-        //         //b.update();
-        //         b.draw();
+            });
+        });
+        end = window.performance.now();
+        bulletDrawTime = (end - start) / 1000000.0 / triangles.length;
 
-        //     }
+        start = window.performance.now();
+        triangles.forEach(triangle => {
 
-        // }
-        // end = System.nanoTime();
-        // bulletDrawTime = (end - start) / 1000000d / triangles.size();
+            triangle.update();
+            triangle.draw();
 
-        // start = System.nanoTime();
-        // for (Triangle t : triangles) {
+            bulletCount += triangle.bullets.length;
+        });
+        end = window.performance.now();
+        triangleTime = (end - start) / 1000000.0 / triangles.length;
 
-        //     t.update();
-        //     t.draw();
+        //  Only if in dynamic mode
+        //  Check for mouse buttons and key presses and perform actions accordingly
+        if (currentMode === Mode.DYNAMIC) {
+            //  Add Triangles
+            if (mouseButtons[p.RIGHT] && p.frameCount % TRIANGLE_ADD_FREQ === 0) {
+                p.handleAdd();
+            }
+            //  Remove Triangles
+            if (keys[p.BACKSPACE] && (p.frameCount % TRIANGLE_REMOVE_FREQ) === 0) {
+                if (triangles.length > 0) {
+                    triangles.remove(0);
+                }
+            }
+            //  Add Bullets
+            if ((mouseButtons[p.LEFT] || autoFire) && (p.frameCount % BULLET_FREQ) === 0) {
+                triangles.forEach(triangle => {
+                    if (bulletCount < BULLET_LIMIT) {
+                        triangle.addBullet();
+                    }
+                });
+            }
+        }
 
-        //     bulletCount += t.bullets().size();
-        // }
-        // end = System.nanoTime();
-        // triangleTime = (end - start) / 1000000d / triangles.size();
+        //  Print basic debug text to screen
+        //  Text is written to top left corner of window
+        if (!onControls || true) {
+            p.textSize(12);
+            p.fill(0);
+            // p.textMode(p.SHAPE);
+            p.textAlign(p.LEFT);
 
-        // //  Only if in dynamic mode
-        // //  Check for mouse buttons and key presses and perform actions accordingly
-        // if (dynamic) {
-        //     //  Add Triangles
-        //     if (mouseButtons[RIGHT] && frameCount % TRIANGLE_ADD_FREQ == 0) {
-        //         handleAdd();
-        //     }
-        //     //  Remove Triangles
-        //     if (keys[(int) BACKSPACE] && (frameCount % TRIANGLE_REMOVE_FREQ) == 0) {
-        //         if (triangles.size() != 0) {
-        //             triangles.remove(0);
-        //         }
-        //     }
-        //     //  Add Bullets
-        //     if ((mouseButtons[LEFT] || autofire) && (frameCount % BULLET_FREQ) == 0) {
-        //         for (Triangle t : triangles) {
-        //             if (bulletCount < BULLET_LIMIT) {
-        //                 t.addBullet();
-        //             }
-        //         }
-        //     }
-        // }
+            let yLoc = 30;
+            p.text(`TIME: ${window.performance.now() - superStart}`, 50, yLoc);
+            yLoc += 20;
+            // let yLoc = 50;
+            p.text("X: " + p.mouseX, 50, yLoc);
+            yLoc += 20;
+            p.text("Y: " + p.mouseY, 50, yLoc);
+            yLoc += 20;
+            p.text("Triangle Count: " + triangles.length, 50, yLoc);
+            yLoc += 20;
+            p.text("Bullet Count: " + bulletCount, 50, yLoc);
+            yLoc += 20;
+            let triangleText = `Triangle Time: ~${triangleTime}ms`;
+            let bulletUpdateText = `Bullet Update Time: ~${bulletUpdateTime}ms`;
+            let bulletDrawText = `Bullet Draw Time: ~${bulletDrawTime}ms`;
+            let FPSText = `FPS: ${p.frameRate().toFixed(2)}`;
+            p.text(triangleText, 50, yLoc);
+            yLoc += 20;
+            p.text(bulletUpdateText, 50, yLoc);
+            yLoc += 20;
+            p.text(bulletDrawText, 50, yLoc);
+            yLoc += 20;
+            p.text(FPSText, 50, yLoc);
+            yLoc += 20;
+            if (isBounceEnabled) {
+                p.text("Bounce: ON", 50, yLoc);
+            } else {
+                p.text("Bounce: OFF", 50, yLoc);
+            }
+            yLoc += 20;
+            if (gravityMode === GravityMode.OFF) {
+                p.text("Decay: OFF", 50, yLoc);
+            } else {
+                p.text("Decay: " + decay, 50, yLoc);
+            }
+            yLoc += 20;
+            p.text("Gravity Mode: " + gravityMode, 50, yLoc);
 
-        // //  Print basic debug text to screen
-        // //  Text is written to top left corner of window
-        // if (!onControls) {
-        //     textSize(12);
-        //     fill(0);
-        //     textMode(SHAPE);
-        //     textAlign(LEFT);
+        }
 
-        //     float yLoc = 50;
-        //     text("X: " + mouseX, 50, yLoc);
-        //     yLoc += 20;
-        //     text("Y: " + mouseY, 50, yLoc);
-        //     yLoc += 20;
-        //     text("Triangle Count: " + triangles.size(), 50, yLoc);
-        //     yLoc += 20;
-        //     text("Bullet Count: " + bulletCount, 50, yLoc);
-        //     yLoc += 20;
-        //     String triangleText = String.format("Triangle Time: ~%.4fms", triangleTime);
-        //     String bulletUpdateText = String.format("Bullet Update Time: ~%.4fms", bulletUpdateTime);
-        //     String bulletDrawText = String.format("Bullet Draw Time: ~%.4fms", bulletDrawTime);
-        //     String FPSText = String.format("FPS: %d", (int) frameRate);
-        //     text(triangleText, 50, yLoc);
-        //     yLoc += 20;
-        //     text(bulletUpdateText, 50, yLoc);
-        //     yLoc += 20;
-        //     text(bulletDrawText, 50, yLoc);
-        //     yLoc += 20;
-        //     text(FPSText, 50, yLoc);
-        //     yLoc += 20;
-        //     if (bounce) {
-        //         text("Bounce: ON", 50, yLoc);
-        //     } else {
-        //         text("Bounce: OFF", 50, yLoc);
-        //     }
-        //     yLoc += 20;
-        //     if (gravityMode == Gravity.OFF) {
-        //         text("Decay: OFF", 50, yLoc);
-        //     } else {
-        //         text("Decay: " + decay, 50, yLoc);
-        //     }
-        //     yLoc += 20;
-        //     text("Gravity Mode: " + gravityMode, 50, yLoc);
-
-        // }
-
-        // if (onControls) {
-        //     controls.update();
-        //     controls.draw();
-        // }
+        if (onControls) {
+            controls.update();
+            controls.draw();
+        }
 
         // END SKETCH
 
