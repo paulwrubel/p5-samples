@@ -9,9 +9,6 @@ let InteractiveHistogram = (p) => {
     // is a bar colored?
     let colored = [];
 
-    // has the color of the bars changed?
-    let change = [];
-
     // holds all bars heights (not for generation, 
     // but for detection when clicking)
     let heights = [];
@@ -147,25 +144,3 @@ let InteractiveHistogram = (p) => {
 };
 
 export default InteractiveHistogram;
-
-/*
-
-package me.paul.interactivehistogram;
-
-import javafx.scene.paint.Color;
-import processing.core.PApplet;
-
-public class InteractiveHistogram extends PApplet {
-
-	public void draw() {
-
-		if (keyPressed && key == '1')
-			k -= k / 250;
-		if (keyPressed && key == '2')
-			k += k / 250;
-
-
-	}
-}
-
-*/

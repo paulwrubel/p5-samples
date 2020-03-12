@@ -23,8 +23,10 @@ class TrailsApp extends React.Component {
         // this.handleLinkTensionChange = this.handleLinkTensionChange.bind(this);
         // this.handleLinkDampingChange = this.handleLinkDampingChange.bind(this);
         this.handleFrameRateChange = this.handleFrameRateChange.bind(this);
-        // this.handlePlanetSpeedChange = this.handlePlanetSpeedChange.bind(this);
-        // this.handleMoonSpeedChange = this.handleMoonSpeedChange.bind(this);
+        this.handleActiveTrailCountChange = this.handleActiveTrailCountChange.bind(this);
+        this.handleModeChange = this.handleModeChange.bind(this);
+        this.handleClearButtonPress = this.handleClearButtonPress.bind(this);
+        this.setClearButtonPressFunc = this.setClearButtonPressFunc.bind(this);
     }
 
     // handleModeChange(newValue) {
@@ -57,23 +59,35 @@ class TrailsApp extends React.Component {
     //     });
     // }
 
-    handleFrameRateChange(newFrameRateValue) {
+    handleFrameRateChange(newValue) {
         this.setState({
-            frameRate: newFrameRateValue
+            frameRate: newValue
         });
     }
 
-    // handlePlanetSpeedChange(newPlanetSpeedValue) {
-    //     this.setState({
-    //         planetSpeed: newPlanetSpeedValue
-    //     });
-    // }
+    handleActiveTrailCountChange(newValue) {
+        this.setState({
+            activeTrailCount: newValue
+        });
+    }
 
-    // handleMoonSpeedChange(newMoonSpeedValue) {
-    //     this.setState({
-    //         moonSpeed: newMoonSpeedValue
-    //     });
-    // }
+    handleModeChange(newValue) {
+        this.setState({
+            mode: newValue
+        });
+    }
+
+    handleClearButtonPress() {
+        if (typeof this.state.clearButtonPressFunc !== "undefined") {
+            this.state.clearButtonPressFunc();
+        }
+    }
+
+    setClearButtonPressFunc(newValue) {
+        this.setState({
+            clearButtonPressFunc: newValue
+        });
+    }
 
     render() {
         return (
@@ -87,8 +101,8 @@ class TrailsApp extends React.Component {
                     wrap='nowrap'>
                     <Grid container item xs>
                         <TrailsSidebar
-                            // mode={this.state.mode}
-                            // onModeChange={this.handleModeChange}
+                            mode={this.state.mode}
+                            onModeChange={this.handleModeChange}
                             // ballCount={this.state.ballCount}
                             // onBallCountChange={this.handleBallCountChange}
                             // linkLength={this.state.linkLength}
@@ -99,8 +113,8 @@ class TrailsApp extends React.Component {
                             // onLinkDampingChange={this.handleLinkDampingChange}
 
                             frameRate={this.state.frameRate} 
-                            // planetSpeed={this.state.planetSpeed} 
-                            // moonSpeed={this.state.moonSpeed} 
+                            activeTrailCount={this.state.activeTrailCount}
+                            onClearButtonPress={this.handleClearButtonPress}
 
                             isControlsPanelOpen={this.props.isControlsPanelOpen}
                             />
@@ -109,9 +123,11 @@ class TrailsApp extends React.Component {
                         <SketchContainer
                             sketch={p5Trails}
 
+                            mode={this.state.mode}
+
+                            setClearScreenCallback={this.setClearButtonPressFunc}
                             onFrameRateChange={this.handleFrameRateChange}
-                            // onPlanetSpeedChange={this.handlePlanetSpeedChange}
-                            // onMoonSpeedChange={this.handleMoonSpeedChange}
+                            onActiveTrailCountChange={this.handleActiveTrailCountChange}
                             />
                     </Grid>
                 </Grid>

@@ -37,7 +37,7 @@ const appMap = new Map([
         name: "trails",
         displayName: "Trails",
         component: TrailsApp,
-        version: "0.1a",
+        version: "0.7b",
         description: "Trail art creator (2017)"
     }]
 ]);
