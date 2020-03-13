@@ -71,6 +71,7 @@ let triangles = (p) => {
 
     let mouseButtons = [];
     let keys = [];
+    let keysSize = 128;
     let keyCodes = [];
 
     p.setup = function () {
@@ -299,7 +300,6 @@ let triangles = (p) => {
             }
         } else {
             //  If brand-new, just add one!
-            console.log("adding a triangle!");
             triangles.push(new Triangle(p, p.createVector(p.mouseX, p.mouseY)));
         }
     };
@@ -354,10 +354,10 @@ let triangles = (p) => {
         }
 
         //  Get key data
-        let k = event.key;
-        let kc = event.keyCode;
+        let k = p.key;
+        let kc = p.keyCode;
 
-        if (k < keys.length) {
+        if (k < keysSize) {
             keys[k] = true;
         } else {
             keyCodes[kc] = true;
@@ -471,9 +471,6 @@ let triangles = (p) => {
 
         //  Handle mouse button actions
         if (currentMode === Mode.STATIC) {
-            console.log("yep, we're in static mode");
-            console.log(mb);
-            console.log(p.RIGHT);
             if (mb === p.LEFT) {
                 triangles.forEach(triangle => {
                     if (bulletCount < BULLET_LIMIT) {
@@ -482,7 +479,6 @@ let triangles = (p) => {
                 });
             }
             if (mb === p.RIGHT) {
-                console.log("handling add...");
                 p.handleAdd();
             }
         }

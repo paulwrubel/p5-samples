@@ -67,16 +67,21 @@ class Triangle {
         //  Applicable if keys are pressed
         if (this.pos.dist(this.aimPoint) > this.velocity.mag()/2) {
 
-            if (this.p.getKeyCodes()[this.p.LEFT]) {
+            // console.log(this.p.getKeyCodes());
+            if (typeof this.p.getKeyCodes()[this.p.LEFT_ARROW] !== "undefined") {
+                console.log(this.p.getKeyCodes()[this.p.LEFT]);
+            }
+            if (this.p.getKeyCodes()[this.p.LEFT_ARROW]) {
+                console.log("left is confirmed");
                 this.pos.add(this.velocity.copy().rotate(-this.p.acos(this.velocity.mag() / (2 * p5.Vector.dist(this.pos, this.aimPoint)))));
             }
-            if (this.p.getKeyCodes()[this.p.RIGHT]) {
+            if (this.p.getKeyCodes()[this.p.RIGHT_ARROW]) {
                 this.pos.add(this.velocity.copy().rotate(this.p.acos(this.velocity.mag() / (2 * p5.Vector.dist(this.pos, this.aimPoint)))));
             }
-            if (this.p.getKeyCodes()[this.p.UP]) {
+            if (this.p.getKeyCodes()[this.p.UP_ARROW]) {
                 this.pos.add(this.velocity);
             }
-            if (this.p.getKeyCodes()[this.p.DOWN]) {
+            if (this.p.getKeyCodes()[this.p.DOWN_ARROW]) {
                 this.pos.sub(this.velocity);
             }
 
