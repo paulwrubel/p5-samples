@@ -7,10 +7,10 @@ class InfoPanel extends React.Component {
             <div>
                 {this.props.info.map(fact => (
                     <Typography
-                        key={fact.label}
+                        key={fact.key}
                         variant="body1"
                         color="textSecondary">
-                        {fact.label}: {fact.data}
+                        {fact.text}
                     </Typography>
                 ))}
             </div>

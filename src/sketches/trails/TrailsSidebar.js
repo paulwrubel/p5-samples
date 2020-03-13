@@ -29,12 +29,12 @@ class TrailsSidebar extends React.Component {
                                 <InfoPanel
                                     info={[
                                         {
-                                            label: "FPS",
-                                            data: this.props.frameRate
+                                            key: "fps",
+                                            text: "FPS: " + this.props.frameRate
                                         },
                                         {
-                                            label: "Active Trails",
-                                            data: this.props.activeTrailCount
+                                            key: "active_trails",
+                                            text: "Active Trails: " + this.props.activeTrailCount
                                         }
                                     ]} />
                             </Paper>

@@ -27,13 +27,9 @@ class TrianglesSidebar extends React.Component {
                                 <InfoPanel
                                     info={[
                                         {
-                                            label: "FPS",
-                                            data: this.props.frameRate
+                                            key: "fps",
+                                            text: "FPS: " + this.props.frameRate
                                         },
-                                        {
-                                            label: "Active Trails",
-                                            data: this.props.activeTrailCount
-                                        }
                                     ]} />
                             </Paper>
                         </Grid>

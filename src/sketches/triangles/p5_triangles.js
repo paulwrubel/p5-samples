@@ -1,4 +1,6 @@
 import ControlsBox from "./p5_controlsbox";
+import Triangle from "./p5_triangle"
+import GravityMode from "./p5_gravitymode"
 
 let triangles = (p) => {
 
@@ -7,16 +9,11 @@ let triangles = (p) => {
     let frameRates = [];
     let displayFrameRate;
 
+    let frameRateCallback;
+
     let didSetup = false;
 
     // Gravity Enum replacement
-    const GravityMode = {
-        OFF: "off",
-        SIMPLE: "simple",
-        TRUE: "true",
-        POINT: "point",
-        MULTI_POINT: "multi_point"
-    };
 
     const Mode = {
         STATIC: "static",
@@ -62,7 +59,7 @@ let triangles = (p) => {
     let gravityMode = GravityMode.OFF;
     let decay = 0.99;
 
-    let onControls = true;
+    let onControls = false;
     let fixedPoint = null;
     let autoFire = false;
 
@@ -79,7 +76,8 @@ let triangles = (p) => {
     p.setup = function () {
         let w = p.select(".SketchContainer").width;
         let h = p.select(".SketchContainer").height;
-        p.createCanvas(w, h);
+        let c = p.createCanvas(w, h);
+        p.disableRightClick(c.canvas);
 
         p.frameRate(60);
 
@@ -181,7 +179,7 @@ let triangles = (p) => {
             });
         });
         end = window.performance.now();
-        bulletUpdateTime = (end - start) / 1000000.0 / triangles.length;
+        bulletUpdateTime = (end - start);
 
         start = window.performance.now();
         triangles.forEach(triangle => {
@@ -193,7 +191,7 @@ let triangles = (p) => {
             });
         });
         end = window.performance.now();
-        bulletDrawTime = (end - start) / 1000000.0 / triangles.length;
+        bulletDrawTime = (end - start);
 
         start = window.performance.now();
         triangles.forEach(triangle => {
@@ -204,7 +202,7 @@ let triangles = (p) => {
             bulletCount += triangle.bullets.length;
         });
         end = window.performance.now();
-        triangleTime = (end - start) / 1000000.0 / triangles.length;
+        triangleTime = (end - start);
 
         //  Only if in dynamic mode
         //  Check for mouse buttons and key presses and perform actions accordingly
@@ -231,9 +229,10 @@ let triangles = (p) => {
 
         //  Print basic debug text to screen
         //  Text is written to top left corner of window
-        if (!onControls || true) {
+        if (!onControls) {
             p.textSize(12);
             p.fill(0);
+            p.strokeWeight(0);
             // p.textMode(p.SHAPE);
             p.textAlign(p.LEFT);
 
@@ -249,9 +248,9 @@ let triangles = (p) => {
             yLoc += 20;
             p.text("Bullet Count: " + bulletCount, 50, yLoc);
             yLoc += 20;
-            let triangleText = `Triangle Time: ~${triangleTime}ms`;
-            let bulletUpdateText = `Bullet Update Time: ~${bulletUpdateTime}ms`;
-            let bulletDrawText = `Bullet Draw Time: ~${bulletDrawTime}ms`;
+            let triangleText = `Triangle Time: ~${triangleTime.toFixed(2)}ms`;
+            let bulletUpdateText = `Bullet Update Time: ~${bulletUpdateTime.toFixed(2)}ms`;
+            let bulletDrawText = `Bullet Draw Time: ~${bulletDrawTime.toFixed(2)}ms`;
             let FPSText = `FPS: ${p.frameRate().toFixed(2)}`;
             p.text(triangleText, 50, yLoc);
             yLoc += 20;
@@ -286,7 +285,221 @@ let triangles = (p) => {
 
         p.calculateFrameRate();
         p.updateCallbacks();
+    };
+
+    p.handleAdd = function () {
+        if (triangles.length !== 0) {
+            //  Make sure the mouse is in a different position
+            if (p.mouseX !== triangles[triangles.length - 1].pos.x || p.mouseY !== triangles[triangles.length - 1].pos.y) {
+                triangles.push(new Triangle(p, p.createVector(p.mouseX, p.mouseY)));
+                //  Remove oldest
+                if (triangles.length > TRIANGLE_LIMIT) {
+                    triangles.shift();
+                }
+            }
+        } else {
+            //  If brand-new, just add one!
+            console.log("adding a triangle!");
+            triangles.push(new Triangle(p, p.createVector(p.mouseX, p.mouseY)));
+        }
+    };
+
+    p.isBounceEnabled = function () {
+        return isBounceEnabled;
     }
+
+    p.getGravityMode = function () {
+        return gravityMode;
+    }
+
+    p.getGravityPoint = function () {
+        if (gravityMode === GravityMode.SIMPLE || gravityMode === GravityMode.TRUE) {
+            return p.createVector(p.mouseX, p.mouseY);
+        } else {
+            return gravPoint;
+        }
+    };
+
+    p.getGravityList = function () {
+        return gravList;
+    };
+
+    p.getDecay = function () {
+        return decay;
+    }
+
+    p.getAimPoint = function () {
+        if (p.fixedPoint != null) {
+            return p.fixedPoint;
+        } else {
+            return p.createVector(p.mouseX, p.mouseY);
+        }
+    };
+
+    p.getKeyCodes = function () {
+        return keyCodes;
+    };
+
+    p.getBounceMode = function () {
+        return isBounceEnabled;
+    };
+
+    p.getBorderWeight = function () {
+        return BORDER_WEIGHT;
+    }
+
+    p.keyPressed = function (event) {
+        if (onControls) {
+            return;
+        }
+
+        //  Get key data
+        let k = event.key;
+        let kc = event.keyCode;
+
+        if (k < keys.length) {
+            keys[k] = true;
+        } else {
+            keyCodes[kc] = true;
+        }
+
+        // Handle key data
+        if (kc === p.ENTER) {
+            currentMode = currentMode === Mode.STATIC ? Mode.DYNAMIC : Mode.STATIC;
+        }
+        if (k === 'f') {
+            if (fixedPoint != null) {
+                fixedPoint = null;
+            } else {
+                fixedPoint = p.createVector(p.mouseX, p.mouseY);
+            }
+        }
+        if (k === 'a') {
+            autoFire = !autoFire;
+        }
+        if (k === 'h') {
+            onControls = true;
+        }
+        if (k === ' ') {
+            triangles = [];
+        }
+        if (k === 'b') {
+            isBounceEnabled = !isBounceEnabled;
+        }
+        if (k === 'c') {
+            triangles.forEach(triangle => {
+                triangle.bullets = [];
+            });
+        }
+        if (k === 'g') {
+            if (gravityMode === GravityMode.POINT) {
+                gravPoint = p.createVector(p.mouseX, p.mouseY);
+            } else if (gravityMode === GravityMode.MULTI_POINT) {
+                gravList.push(p.createVector(p.mouseX, p.mouseY));
+            }
+        }
+        if (k === 'r') {
+            if (gravityMode === GravityMode.POINT) {
+                gravPoint = p.createVector(p.width / 2, p.height / 2);
+            } else if (gravityMode === GravityMode.MULTI_POINT) {
+                gravList = [];
+            }
+        }
+        if (k === '1') {
+            gravityMode = GravityMode.OFF;
+        }
+        if (k === '2') {
+            gravityMode = GravityMode.SIMPLE;
+        }
+        if (k === '3') {
+            gravityMode = GravityMode.TRUE;
+        }
+        if (k === '4') {
+            gravityMode = GravityMode.POINT;
+        }
+        if (k === '5') {
+            gravityMode = GravityMode.MULTI_POINT;
+        }
+        if (currentMode === Mode.STATIC) {
+            if (kc === p.BACKSPACE) {
+                if (triangles.length !== 0) {
+                    triangles.shift();
+                }
+            }
+        }
+    };
+
+
+
+    /**
+     * Is called once when a key is released
+     *
+     * @param event event holding data about the released key
+     */
+    p.keyReleased = function (event) {
+        let k = event.key;
+        let kc = event.keyCode;
+
+        //  Simply set corresponding array pos to false;
+        if (k < keys.length) {
+            keys[k] = false;
+        } else {
+            keyCodes[kc] = false;
+        }
+    }
+
+    /**
+     * Is called once when a mouse button is pressed
+     *
+     * @param event event containing mouse button info
+     */
+
+    p.mousePressed = function (event) {
+        let mb = p.mouseButton;
+
+        if (onControls) {
+            onControls = false;
+            return;
+        }
+
+        //  Set array position to true
+        mouseButtons[mb] = true;
+
+        if (mb === p.CENTER) {
+
+        }
+
+        //  Handle mouse button actions
+        if (currentMode === Mode.STATIC) {
+            console.log("yep, we're in static mode");
+            console.log(mb);
+            console.log(p.RIGHT);
+            if (mb === p.LEFT) {
+                triangles.forEach(triangle => {
+                    if (bulletCount < BULLET_LIMIT) {
+                        triangle.addBullet();
+                    }
+                });
+            }
+            if (mb === p.RIGHT) {
+                console.log("handling add...");
+                p.handleAdd();
+            }
+        }
+    }
+
+    /**
+     * Is called once when a mouse button is released
+     *
+     * @param event event containing data about the mouse button released
+     */
+
+    p.mouseReleased = function (event) {
+        let mb = p.mouseButton;
+
+        //  Simply set position to false
+        mouseButtons[mb] = false;
+    };
 
     p.calculateFrameRate = function () {
         if (p.frameCount % updateFrequency === 0) {
@@ -302,9 +515,9 @@ let triangles = (p) => {
 
     p.updateCallbacks = function () {
         if (p.frameCount % updateFrequency === 0) {
-            // if (typeof frameRateCallback !== "undefined") {
-            //     frameRateCallback(displayFrameRate.toFixed(0));
-            // }
+            if (typeof frameRateCallback !== "undefined") {
+                frameRateCallback(displayFrameRate.toFixed(0));
+            }
             // if (typeof activeTrailCountCallback !== "undefined") {
             //     activeTrailCountCallback(trails.length);
             // }
@@ -318,6 +531,13 @@ let triangles = (p) => {
         }
         return false;
     };
+
+    p.disableRightClick = function (c) {
+        c.oncontextmenu = function (event) {
+            event.preventDefault();
+            return false;
+        }
+    }
 
     p.windowResized = function () {
         p.resize();
@@ -347,11 +567,11 @@ let triangles = (p) => {
         // 		}
         //     }
         // }
-        // if (typeof newProps.onFrameRateChange !== "undefined") {
-        //     if (typeof frameRateCallback === "undefined") {
-        //         frameRateCallback = newProps.onFrameRateChange;
-        //     }
-        // }
+        if (typeof newProps.onFrameRateChange !== "undefined") {
+            if (typeof frameRateCallback === "undefined") {
+                frameRateCallback = newProps.onFrameRateChange;
+            }
+        }
     };
 
 };
@@ -405,368 +625,12 @@ export default triangles;
  *
  *
 
-public class TriangleManager extends PApplet {
-
-
-    /**
-     * Controls Saturation and Brightness values of screen background
-     * Ranges from 0 - 100
-     *
-    private static final float SAT = 20;
-    private static final float BRIGHT = 100;
-
-    /**
-     * Stroke weight for the window border and crosshairs
-     * Ranges from 0 - INF
-     *
-    private static final float BORDER_WEIGHT = 12;
-    private static final float CROSSHAIRS_WEIGHT = 5;
-
-    /**
-     * Limit of the amount of Triangles and Bullets in the window
-     * Ranges from 0 - INF
-     *
-    private static final int TRIANGLE_LIMIT = 500;
-    private static final int BULLET_LIMIT = 1500;
-
-    /**
-     * Frequency of the creation (and removal) of Triangles and Bullets in dynamic mode
-     * 1 writes every frame, 5 every 5 frames, and so on.
-     * Lower values are faster
-     * Ranges from 1 - INF
-     *
-    private static final int TRIANGLE_ADD_FREQ = 4;
-    private static final int TRIANGLE_REMOVE_FREQ = 4;
-    private static final int BULLET_FREQ = 4;
-
-    /**
-     * Controls mode of program
-     * Dynamic mode:
-     * Continuous creation and removal of Triangles and Bullets
-     * Smooth and constant movement of window when changing perspective
-     * Static mode:
-     * Every creation requires a mouse click or key press
-     * Perspective movement jumps to preset values and is block-like
-     *
-    private boolean dynamic;
-    private boolean bounce;
-    private boolean onControls;
-    private boolean autofire;
-    private Gravity gravityMode;
-    private ArrayList<PVector> gravList;
-    private PVector gravPoint;
-    private PVector fixedPoint;
-    private float decay;
-    private ControlsBox controls;
-
-    /**
-     * References to all on-screen Triangles
-     *
-    private ArrayList<Triangle> triangles;
-    private int bulletCount;
-
-    /**
-     * Arrays to save state of all key and mouse presses concurrently
-     * (currently not supported by processing, unfortunately)
-     *
-    private boolean[] mouseButtons;
-    private boolean[] keys;
-    private boolean[] keyCodes;
-
-    /**
-     * Called once, only to set window size and render method
-     * P3D is used to utilize OpenGL's graphics card integration
-     * Otherwise there is big lag!
-     *
-    public void settings() {
-        size(WINDOW_WIDTH, WINDOW_HEIGHT, P2D);
-        smooth(8);
-    }
-
-    /**
-     * Called once, for initialization purposes. Nothing is drawn here
-     *
-    public void setup() {
-        frameRate(60);
-
-        //  Initial values
-        dynamic = false;
-        bounce = false;
-        gravityMode = Gravity.OFF;
-        decay = 0.99f;
-        onControls = true;
-        fixedPoint = null;
-        autofire = false;
-
-        controls = new ControlsBox(this);
-        gravList = new ArrayList<>();
-        gravPoint = new PVector(width / 2, height / 2);
-        triangles = new ArrayList<>();
-        bulletCount = 0;
-        mouseButtons = new boolean[40];
-        keys = new boolean[128];
-        keyCodes = new boolean[41];
-
-        //  Can resize window (alpha)
-        surface.setResizable(true);
-        surface.setLocation((displayWidth - width) / 2, (displayHeight - height) / 2 - 50);
-
-        //  Hue, Saturation, Brightness, and ranges
-        colorMode(HSB, 360, 100, 100, 100);
-        //  Ellipses are drawn from centre and distances are radii
-        ellipseMode(RADIUS);
-        //  Background begins black
-        background(color(0, 0, 0));
-        //  To avoid rendering artifacts from 3D mode
-        //  Essentially tells renderer to just ignore z-dimension
-    }
-
-    /**
-     * Called once every frame.
-     * All drawing to window buffer occurs here, either directly or indirectly (from supporting classes called)
-     *
-    public void draw() {
-
-        //  Set window title based on current mode
-        if (dynamic) {
-            surface.setTitle("Triangles - Dynamic");
-        } else {
-            surface.setTitle("Triangles - Static");
-        }
-
-        //  Set hue based on horizontal mouse position
-        float hue = map(mouseX, 0, width, 0, 360);
-        background(hue, SAT, BRIGHT, 100);
-
-        //  Draw border around effective "window", if bounce is set
-        //  to show the bouncing "walls"
-        if (bounce) {
-            fill(color(0, 0, 0));
-            noStroke();
-            rectMode(CORNER);
-            //  Top Border
-            rect(0, 0, width, BORDER_WEIGHT);
-            //  Left Border
-            rect(0, 0, BORDER_WEIGHT, height);
-            //  Bottom Border
-            rect(0, height - BORDER_WEIGHT, width, BORDER_WEIGHT);
-            //  Right Border
-            rect(width - BORDER_WEIGHT, 0, BORDER_WEIGHT, height);
-        }
-
-        //  Draw red border signifying outer bullet perimeter
-        //  and frame border
-        fill(color(0, 100, 100));
-        noStroke();
-        rectMode(CORNER);
-        //  Top Border
-        rect(0 - BORDER_WEIGHT, 0 - BORDER_WEIGHT, width + BORDER_WEIGHT * 2, BORDER_WEIGHT);
-        //  Left Border
-        rect(0 - BORDER_WEIGHT, 0 - BORDER_WEIGHT, BORDER_WEIGHT, height + BORDER_WEIGHT * 2);
-        //  Bottom Border
-        rect(0 - BORDER_WEIGHT, height, width + BORDER_WEIGHT * 2, BORDER_WEIGHT);
-        //  Right Border
-        rect(width, 0 - BORDER_WEIGHT, BORDER_WEIGHT, height + BORDER_WEIGHT * 2);
-
-        stroke(color(0, 0, 0));
-        if (gravityMode == Gravity.POINT) {
-            //  Draw Gravity Point
-            stroke(color(0, 0, 0));
-            strokeWeight(2);
-            fill(color(0, 0, 100));
-            ellipse(gravPoint.x, gravPoint.y, 4, 4);
-        } else if (gravityMode == Gravity.MULTI_POINT) {
-            stroke(color(0, 0, 0));
-            strokeWeight(2);
-            fill(color(0, 0, 100));
-            for (PVector v : gravList) {
-                ellipse(v.x, v.y, 4, 4);
-            }
-        }
-
-        //  Draw crosshairs
-        if (!onControls) {
-            stroke(color(0, 100, 100));
-            strokeWeight(CROSSHAIRS_WEIGHT);
-            line(mouseX, mouseY - 10, mouseX, mouseY + 10);
-            line(mouseX - 10, mouseY, mouseX + 10, mouseY);
-        }
-
-        //  Initial values for timing vars
-        double triangleTime;
-        double bulletUpdateTime ;
-        double bulletDrawTime;
-        long start;
-        long end;
-
-        bulletCount = 0;
-
-        start = System.nanoTime();
-        for (Triangle t : triangles) {
-
-            for (Bullet b : t.bullets()) {
-
-                b.update();
-                //b.draw();
-
-            }
-        }
-        end = System.nanoTime();
-        bulletUpdateTime = (end - start) / 1000000d / triangles.size();
-
-        start = System.nanoTime();
-        for (Triangle t : triangles) {
-
-            for (Bullet b : t.bullets()) {
-
-                //b.update();
-                b.draw();
-
-            }
-
-        }
-        end = System.nanoTime();
-        bulletDrawTime = (end - start) / 1000000d / triangles.size();
-
-        start = System.nanoTime();
-        for (Triangle t : triangles) {
-
-            t.update();
-            t.draw();
-
-            bulletCount += t.bullets().size();
-        }
-        end = System.nanoTime();
-        triangleTime = (end - start) / 1000000d / triangles.size();
-
-        //  Only if in dynamic mode
-        //  Check for mouse buttons and key presses and perform actions accordingly
-        if (dynamic) {
-            //  Add Triangles
-            if (mouseButtons[RIGHT] && frameCount % TRIANGLE_ADD_FREQ == 0) {
-                handleAdd();
-            }
-            //  Remove Triangles
-            if (keys[(int) BACKSPACE] && (frameCount % TRIANGLE_REMOVE_FREQ) == 0) {
-                if (triangles.size() != 0) {
-                    triangles.remove(0);
-                }
-            }
-            //  Add Bullets
-            if ((mouseButtons[LEFT] || autofire) && (frameCount % BULLET_FREQ) == 0) {
-                for (Triangle t : triangles) {
-                    if (bulletCount < BULLET_LIMIT) {
-                        t.addBullet();
-                    }
-                }
-            }
-        }
-
-        //  Print basic debug text to screen
-        //  Text is written to top left corner of window
-        if (!onControls) {
-            textSize(12);
-            fill(0);
-            textMode(SHAPE);
-            textAlign(LEFT);
-
-            float yLoc = 50;
-            text("X: " + mouseX, 50, yLoc);
-            yLoc += 20;
-            text("Y: " + mouseY, 50, yLoc);
-            yLoc += 20;
-            text("Triangle Count: " + triangles.size(), 50, yLoc);
-            yLoc += 20;
-            text("Bullet Count: " + bulletCount, 50, yLoc);
-            yLoc += 20;
-            String triangleText = String.format("Triangle Time: ~%.4fms", triangleTime);
-            String bulletUpdateText = String.format("Bullet Update Time: ~%.4fms", bulletUpdateTime);
-            String bulletDrawText = String.format("Bullet Draw Time: ~%.4fms", bulletDrawTime);
-            String FPSText = String.format("FPS: %d", (int) frameRate);
-            text(triangleText, 50, yLoc);
-            yLoc += 20;
-            text(bulletUpdateText, 50, yLoc);
-            yLoc += 20;
-            text(bulletDrawText, 50, yLoc);
-            yLoc += 20;
-            text(FPSText, 50, yLoc);
-            yLoc += 20;
-            if (bounce) {
-                text("Bounce: ON", 50, yLoc);
-            } else {
-                text("Bounce: OFF", 50, yLoc);
-            }
-            yLoc += 20;
-            if (gravityMode == Gravity.OFF) {
-                text("Decay: OFF", 50, yLoc);
-            } else {
-                text("Decay: " + decay, 50, yLoc);
-            }
-            yLoc += 20;
-            text("Gravity Mode: " + gravityMode, 50, yLoc);
-
-        }
-
-        if (onControls) {
-            controls.update();
-            controls.draw();
-        }
-    }
-
-    /**
-     * Handles adding of Triangles to screen
-     * Will erase oldest if over TRIANGLE_LIMIT already on screen
-     *
-    private void handleAdd() {
-        if (triangles.size() != 0) {
-            //  Make sure the mouse is in a different position
-            if (mouseX != triangles.get(triangles.size() - 1).getPos().x || mouseY != triangles.get(triangles.size() - 1).getPos().y) {
-                triangles.add(new Triangle(this, new PVector(mouseX, mouseY)));
-                //  Remove oldest
-                if (triangles.size() > TRIANGLE_LIMIT) {
-                    triangles.remove(0);
-                }
-            }
-        } else {
-            //  If brand-new, just add one!
-            triangles.add(new Triangle(this, new PVector(mouseX, mouseY)));
-        }
-    }
-
-    boolean getBounceMode() {
-        return bounce;
-    }
-
-    Gravity getGravityMode() {
-        return gravityMode;
-    }
-
-    PVector getGravityPoint() {
-        if (gravityMode == Gravity.SIMPLE || gravityMode == Gravity.TRUE) {
-            return new PVector(mouseX, mouseY);
-        } else {
-            return gravPoint;
-        }
-    }
-
-    ArrayList<PVector> getGravityList() {
-        return gravList;
-    }
-
     float getBorderWeight() {
         return BORDER_WEIGHT;
     }
 
     float getDecay() {
         return decay;
-    }
-
-    PVector getAimPoint() {
-        if (fixedPoint != null) {
-            return fixedPoint;
-        } else {
-            return new PVector(mouseX, mouseY);
-        }
     }
 
     /**
@@ -785,152 +649,7 @@ public class TriangleManager extends PApplet {
      * @param event event linked to which key was pressed
      *
 
-    public void keyPressed(KeyEvent event) {
-        if (onControls) {
-            return;
-        }
-
-        //  Get key data
-        char k = event.getKey();
-        int kc = event.getKeyCode();
-
-        if (k < keys.length) {
-            keys[k] = true;
-        } else {
-            keyCodes[kc] = true;
-        }
-
-        // Handle key data
-        if (k == ENTER) {
-            dynamic = !dynamic;
-        }
-        if (k == 'f') {
-            if (fixedPoint != null) {
-                fixedPoint = null;
-            } else {
-                fixedPoint = new PVector(mouseX, mouseY);
-            }
-        }
-        if (k == 'a') {
-            autofire = !autofire;
-        }
-        if (k == 'h') {
-            onControls = true;
-        }
-        if (k == ' ') {
-            triangles.clear();
-        }
-        if (k == 'b') {
-            bounce = !bounce;
-        }
-        if (k == 'c') {
-            for (Triangle t : triangles) {
-                t.clearBullets();
-            }
-        }
-        if (k == 'g') {
-            if (gravityMode == Gravity.POINT) {
-                gravPoint = new PVector(mouseX, mouseY);
-            } else if (gravityMode == Gravity.MULTI_POINT) {
-                gravList.add(new PVector(mouseX, mouseY));
-            }
-        }
-        if (k == 'r') {
-            if (gravityMode == Gravity.POINT) {
-                gravPoint = new PVector(width / 2, height / 2);
-            } else if (gravityMode == Gravity.MULTI_POINT) {
-                gravList.clear();
-            }
-        }
-        if (k == '1') {
-            gravityMode = Gravity.OFF;
-        }
-        if (k == '2') {
-            gravityMode = Gravity.SIMPLE;
-        }
-        if (k == '3') {
-            gravityMode = Gravity.TRUE;
-        }
-        if (k == '4') {
-            gravityMode = Gravity.POINT;
-        }
-        if (k == '5') {
-            gravityMode = Gravity.MULTI_POINT;
-        }
-        if (!dynamic) {
-            if (k == BACKSPACE) {
-                if (triangles.size() != 0) {
-                    triangles.remove(0);
-                }
-            }
-        }
-    }
-
-    /**
-     * Is called once when a key is released
-     *
-     * @param event event holding data about the released key
-     *
-    public void keyReleased(KeyEvent event) {
-        char k = event.getKey();
-        int kc = event.getKeyCode();
-
-        //  Simply set corresponding array pos to false;
-        if (k < keys.length) {
-            keys[k] = false;
-        } else {
-            keyCodes[kc] = false;
-        }
-    }
-
-    /**
-     * Is called once when a mouse button is pressed
-     *
-     * @param event event containing mouse button info
-     *
-
-    public void mousePressed(MouseEvent event) {
-        int mb = event.getButton();
-
-        if (onControls) {
-            onControls = false;
-            return;
-        }
-
-        //  Set array position to true
-        mouseButtons[mb] = true;
-
-        if (mb == CENTER) {
-
-        }
-
-        //  Handle mouse button actions
-        if (!dynamic) {
-            if (mb == LEFT) {
-                for (Triangle t : triangles) {
-                    if (bulletCount < BULLET_LIMIT) {
-                        t.addBullet();
-                    }
-                }
-            }
-            if (mb == RIGHT) {
-                handleAdd();
-            }
-        }
-    }
-
-    /**
-     * Is called once when a mouse button is released
-     *
-     * @param event event containing data about the mouse button released
-     *
-
-    public void mouseReleased(MouseEvent event) {
-        int mb = event.getButton();
-
-        //  Simply set position to false
-        mouseButtons[mb] = false;
-    }
+    
 
 }
 
