@@ -45,7 +45,7 @@ const appMap = new Map([
         name: "triangles",
         displayName: "Triangles",
         component: TrianglesApp,
-        version: "0.1a",
+        version: "0.2a",
         description: "Triangles (2018)"
     }]
 ]);
