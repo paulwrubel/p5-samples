@@ -9,15 +9,55 @@ class TrianglesApp extends React.Component {
         super(props);
 
         this.state = {
-            frameRate: 0
+            frameRate: 0,
+            generationMode: "discrete",
+            gravityMode: "off",
+            isBorderEnabled: false,
+            isAutoFireEnabled: false,
+            information: new Map(),
         }
         
         this.handleFrameRateChange = this.handleFrameRateChange.bind(this);
+        this.handleInformationChange = this.handleInformationChange.bind(this);
+        this.handleGenerationModeChange = this.handleGenerationModeChange.bind(this);
+        this.handleGravityModeChange = this.handleGravityModeChange.bind(this);
+        this.handleBorderChange = this.handleBorderChange.bind(this);
+        this.handleAutoFireChange = this.handleAutoFireChange.bind(this);
     }
 
     handleFrameRateChange(newValue) {
         this.setState({
             frameRate: newValue
+        });
+    }
+
+    handleInformationChange(newValue) {
+        this.setState({
+            information: newValue
+        });
+    }
+
+    handleGenerationModeChange(newValue) {
+        this.setState({
+            generationMode: newValue
+        });
+    }
+
+    handleGravityModeChange(newValue) {
+        this.setState({
+            gravityMode: newValue
+        });
+    }
+
+    handleBorderChange(newValue) {
+        this.setState({
+            isBorderEnabled: newValue
+        });
+    }
+
+    handleAutoFireChange(newValue) {
+        this.setState({
+            isAutoFireEnabled: newValue
         });
     }
 
@@ -39,8 +79,17 @@ class TrianglesApp extends React.Component {
                     wrap='nowrap'>
                     <Grid container item xs>
                         <TrianglesSidebar
+                            generationMode={this.state.generationMode}
+                            onGenerationModeChange={this.handleGenerationModeChange}
+                            gravityMode={this.state.gravityMode}
+                            onGravityModeChange={this.handleGravityModeChange}
+                            isBorderEnabled={this.state.isBorderEnabled}
+                            onBorderChange={this.handleBorderChange}
+                            isAutoFireEnabled={this.state.isAutoFireEnabled}
+                            onAutoFireChange={this.handleAutoFireChange}
 
-                            frameRate={this.state.frameRate} 
+                            frameRate={this.state.frameRate}
+                            information={this.state.information}
                             
                             isControlsPanelOpen={this.props.isControlsPanelOpen}
                             />
@@ -49,9 +98,13 @@ class TrianglesApp extends React.Component {
                         <SketchContainer
                             sketch={p5Triangles}
 
-                            // mode={this.state.mode}
+                            generationMode={this.state.generationMode}
+                            gravityMode={this.state.gravityMode}
+                            isBorderEnabled={this.state.isBorderEnabled}
+                            isAutoFireEnabled={this.state.isAutoFireEnabled}
 
                             onFrameRateChange={this.handleFrameRateChange}
+                            onInformationChange={this.handleInformationChange}
                             />
                     </Grid>
                 </Grid>

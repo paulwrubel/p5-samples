@@ -162,7 +162,9 @@ class Bullet {
 
         if (this.FILL) {
             let hue = 180 + this.p.degrees(this.velocity.copy().rotate(this.p.radians(-90)).heading());
+            // let hue = 90 + this.p.degrees(this.velocity.heading());
             let sat = this.p.sqrt(this.p.map(this.velocity.mag(), 0, 50, 10, 10000));
+            // let sat = this.p.map(this.velocity.mag(), 0, 50, 1, 100);
             this.p.fill(this.p.color(hue, sat, this.BRIGHT));
         } else {
             this.p.noFill();

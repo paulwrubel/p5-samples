@@ -10,14 +10,24 @@ let triangles = (p) => {
     let displayFrameRate;
 
     let frameRateCallback;
+    let triangleCountCallback;
+    let bulletCountCallback;
+
+    let informationCallback;
 
     let didSetup = false;
 
+    // Timing stuff
+    let triangleUpdateTime;
+    let triangleDrawTime;
+    let bulletUpdateTime;
+    let bulletDrawTime;
+
     // Gravity Enum replacement
 
-    const Mode = {
-        STATIC: "static",
-        DYNAMIC: "dynamic",
+    const GenerationMode = {
+        DISCRETE: "discrete",
+        CONTINUOUS: "continuous",
     };
     // CONSTANTS
 
@@ -53,15 +63,14 @@ let triangles = (p) => {
     const BULLET_FREQ = 4;
 
     // Initials for this sketch
-    let currentMode = Mode.STATIC;
-    let isBounceEnabled = false;
+    let generationMode = GenerationMode.DISCRETE;
+    let isBorderEnabled = false;
 
     let gravityMode = GravityMode.OFF;
     let decay = 0.99;
 
-    let onControls = false;
     let fixedPoint = null;
-    let autoFire = false;
+    let isAutoFireEnabled = false;
 
     let controls = new ControlsBox(p);
     let gravList = [];
@@ -108,7 +117,7 @@ let triangles = (p) => {
 
         //  Draw border around effective "window", if bounce is set
         //  to show the bouncing "walls"
-        if (isBounceEnabled) {
+        if (isBorderEnabled) {
             p.fill(p.color(0, 0, 0));
             p.noStroke();
             p.rectMode(p.CORNER);
@@ -150,21 +159,17 @@ let triangles = (p) => {
             gravList.forEach((v => {
                 p.ellipse(v.x, v.y, 4, 4);
             }));
-            
+
         }
 
         //  Draw crosshairs
-        if (!onControls) {
-            p.stroke(p.color(0, 100, 100));
-            p.strokeWeight(CROSSHAIRS_WEIGHT);
-            p.line(p.mouseX, p.mouseY - 10, p.mouseX, p.mouseY + 10);
-            p.line(p.mouseX - 10, p.mouseY, p.mouseX + 10, p.mouseY);
-        }
+        p.stroke(p.color(0, 100, 100));
+        p.strokeWeight(CROSSHAIRS_WEIGHT);
+        p.line(p.mouseX, p.mouseY - 10, p.mouseX, p.mouseY + 10);
+        p.line(p.mouseX - 10, p.mouseY, p.mouseX + 10, p.mouseY);
+
 
         //  Initial values for timing vars
-        let triangleTime;
-        let bulletUpdateTime;
-        let bulletDrawTime;
         let start;
         let end;
 
@@ -198,16 +203,27 @@ let triangles = (p) => {
         triangles.forEach(triangle => {
 
             triangle.update();
-            triangle.draw();
+            // triangle.draw();
 
             bulletCount += triangle.bullets.length;
         });
         end = window.performance.now();
-        triangleTime = (end - start);
+        triangleUpdateTime = (end - start);
+
+        start = window.performance.now();
+        triangles.forEach(triangle => {
+
+            // triangle.update();
+            triangle.draw();
+
+            // bulletCount += triangle.bullets.length;
+        });
+        end = window.performance.now();
+        triangleDrawTime = (end - start);
 
         //  Only if in dynamic mode
         //  Check for mouse buttons and key presses and perform actions accordingly
-        if (currentMode === Mode.DYNAMIC) {
+        if (generationMode === GenerationMode.CONTINUOUS) {
             //  Add Triangles
             if (mouseButtons[p.RIGHT] && p.frameCount % TRIANGLE_ADD_FREQ === 0) {
                 p.handleAdd();
@@ -219,7 +235,7 @@ let triangles = (p) => {
                 }
             }
             //  Add Bullets
-            if ((mouseButtons[p.LEFT] || autoFire) && (p.frameCount % BULLET_FREQ) === 0) {
+            if ((mouseButtons[p.LEFT] || isAutoFireEnabled) && (p.frameCount % BULLET_FREQ) === 0) {
                 triangles.forEach(triangle => {
                     if (bulletCount < BULLET_LIMIT) {
                         triangle.addBullet();
@@ -230,7 +246,6 @@ let triangles = (p) => {
 
         //  Print basic debug text to screen
         //  Text is written to top left corner of window
-        if (!onControls) {
             p.textSize(12);
             p.fill(0);
             p.strokeWeight(0);
@@ -249,7 +264,7 @@ let triangles = (p) => {
             yLoc += 20;
             p.text("Bullet Count: " + bulletCount, 50, yLoc);
             yLoc += 20;
-            let triangleText = `Triangle Time: ~${triangleTime.toFixed(2)}ms`;
+            let triangleText = `Triangle Time: ~${triangleUpdateTime.toFixed(2)}ms`;
             let bulletUpdateText = `Bullet Update Time: ~${bulletUpdateTime.toFixed(2)}ms`;
             let bulletDrawText = `Bullet Draw Time: ~${bulletDrawTime.toFixed(2)}ms`;
             let FPSText = `FPS: ${p.frameRate().toFixed(2)}`;
@@ -261,7 +276,7 @@ let triangles = (p) => {
             yLoc += 20;
             p.text(FPSText, 50, yLoc);
             yLoc += 20;
-            if (isBounceEnabled) {
+            if (isBorderEnabled) {
                 p.text("Bounce: ON", 50, yLoc);
             } else {
                 p.text("Bounce: OFF", 50, yLoc);
@@ -274,13 +289,6 @@ let triangles = (p) => {
             }
             yLoc += 20;
             p.text("Gravity Mode: " + gravityMode, 50, yLoc);
-
-        }
-
-        if (onControls) {
-            controls.update();
-            controls.draw();
-        }
 
         // END SKETCH
 
@@ -305,7 +313,7 @@ let triangles = (p) => {
     };
 
     p.isBounceEnabled = function () {
-        return isBounceEnabled;
+        return isBorderEnabled;
     }
 
     p.getGravityMode = function () {
@@ -329,8 +337,9 @@ let triangles = (p) => {
     }
 
     p.getAimPoint = function () {
-        if (p.fixedPoint != null) {
-            return p.fixedPoint;
+        console.log()
+        if (fixedPoint != null) {
+            return fixedPoint;
         } else {
             return p.createVector(p.mouseX, p.mouseY);
         }
@@ -341,7 +350,7 @@ let triangles = (p) => {
     };
 
     p.getBounceMode = function () {
-        return isBounceEnabled;
+        return isBorderEnabled;
     };
 
     p.getBorderWeight = function () {
@@ -349,9 +358,6 @@ let triangles = (p) => {
     }
 
     p.keyPressed = function (event) {
-        if (onControls) {
-            return;
-        }
 
         //  Get key data
         let k = p.key;
@@ -364,28 +370,25 @@ let triangles = (p) => {
         }
 
         // Handle key data
-        if (kc === p.ENTER) {
-            currentMode = currentMode === Mode.STATIC ? Mode.DYNAMIC : Mode.STATIC;
-        }
+        // if (kc === p.ENTER) {
+        //     generationMode = generationMode === GenerationMode.DISCRETE ? GenerationMode.CONTINUOUS : GenerationMode.DISCRETE;
+        // }
         if (k === 'f') {
-            if (fixedPoint != null) {
+            if (fixedPoint !== null) {
                 fixedPoint = null;
             } else {
                 fixedPoint = p.createVector(p.mouseX, p.mouseY);
             }
         }
-        if (k === 'a') {
-            autoFire = !autoFire;
-        }
-        if (k === 'h') {
-            onControls = true;
-        }
+        // if (k === 'a') {
+        //     isAutoFireEnabled = !isAutoFireEnabled;
+        // }
         if (k === ' ') {
             triangles = [];
         }
-        if (k === 'b') {
-            isBounceEnabled = !isBounceEnabled;
-        }
+        // if (k === 'b') {
+        //     isBorderEnabled = !isBorderEnabled;
+        // }
         if (k === 'c') {
             triangles.forEach(triangle => {
                 triangle.bullets = [];
@@ -405,22 +408,22 @@ let triangles = (p) => {
                 gravList = [];
             }
         }
-        if (k === '1') {
-            gravityMode = GravityMode.OFF;
-        }
-        if (k === '2') {
-            gravityMode = GravityMode.SIMPLE;
-        }
-        if (k === '3') {
-            gravityMode = GravityMode.TRUE;
-        }
-        if (k === '4') {
-            gravityMode = GravityMode.POINT;
-        }
-        if (k === '5') {
-            gravityMode = GravityMode.MULTI_POINT;
-        }
-        if (currentMode === Mode.STATIC) {
+        // if (k === '1') {
+        //     gravityMode = GravityMode.OFF;
+        // }
+        // if (k === '2') {
+        //     gravityMode = GravityMode.SIMPLE;
+        // }
+        // if (k === '3') {
+        //     gravityMode = GravityMode.TRUE;
+        // }
+        // if (k === '4') {
+        //     gravityMode = GravityMode.POINT;
+        // }
+        // if (k === '5') {
+        //     gravityMode = GravityMode.MULTI_POINT;
+        // }
+        if (generationMode === GenerationMode.DISCRETE) {
             if (kc === p.BACKSPACE) {
                 if (triangles.length !== 0) {
                     triangles.shift();
@@ -457,11 +460,6 @@ let triangles = (p) => {
     p.mousePressed = function (event) {
         let mb = p.mouseButton;
 
-        if (onControls) {
-            onControls = false;
-            return;
-        }
-
         //  Set array position to true
         mouseButtons[mb] = true;
 
@@ -470,7 +468,7 @@ let triangles = (p) => {
         }
 
         //  Handle mouse button actions
-        if (currentMode === Mode.STATIC) {
+        if (generationMode === GenerationMode.DISCRETE) {
             if (mb === p.LEFT) {
                 triangles.forEach(triangle => {
                     if (bulletCount < BULLET_LIMIT) {
@@ -514,6 +512,18 @@ let triangles = (p) => {
             if (typeof frameRateCallback !== "undefined") {
                 frameRateCallback(displayFrameRate.toFixed(0));
             }
+
+            if (typeof informationCallback !== "undefined") {
+                informationCallback(new Map([
+                    ["frame_rate", "FPS: " + displayFrameRate.toFixed(0)],
+                    ["triangle_count", "Triangles: " + triangles.length],
+                    ["bullet_count", "Bullets: " + bulletCount],
+                    ["triangle_update_time", "Triangle Update Time: " + triangleUpdateTime + "ms"],
+                    ["bullet_update_time", "Bullet Update Time: " + bulletUpdateTime + "ms"],
+                    ["triangle_draw_time", "Triangle Draw Time: " + triangleDrawTime + "ms"],
+                    ["bullet_draw_time", "Bullet Draw Time: " + bulletDrawTime + "ms"],
+                ]));
+            }
             // if (typeof activeTrailCountCallback !== "undefined") {
             //     activeTrailCountCallback(trails.length);
             // }
@@ -556,16 +566,56 @@ let triangles = (p) => {
     };
 
     p.myCustomRedrawAccordingToNewPropsHandler = (newProps) => {
-        // if (didSetup) {
-        //     if (typeof newProps.mode !== "undefined") {
-        // 		if (currentMode !== newProps.mode) {
-        //             currentMode = newProps.mode;
-        // 		}
-        //     }
-        // }
+        // sketch components
+        if (didSetup) {
+            if (typeof newProps.generationMode !== "undefined") {
+                if (generationMode !== newProps.generationMode) {
+                    generationMode = newProps.generationMode;
+                }
+            }
+            if (typeof newProps.gravityMode !== "undefined") {
+                if (gravityMode !== newProps.gravityMode) {
+                    gravityMode = newProps.gravityMode;
+                }
+            }
+            if (typeof newProps.isBorderEnabled !== "undefined") {
+                if (isBorderEnabled !== newProps.isBorderEnabled) {
+                    isBorderEnabled = newProps.isBorderEnabled;
+                }
+            }
+            if (typeof newProps.isAutoFireEnabled !== "undefined") {
+                if (isAutoFireEnabled !== newProps.isAutoFireEnabled) {
+                    isAutoFireEnabled = newProps.isAutoFireEnabled;
+                }
+            }
+        }
+
+        // info callbacks
         if (typeof newProps.onFrameRateChange !== "undefined") {
             if (typeof frameRateCallback === "undefined") {
                 frameRateCallback = newProps.onFrameRateChange;
+            }
+        }
+        if (typeof newProps.onTriangleCountChange !== "undefined") {
+            if (typeof triangleCountCallback === "undefined") {
+                triangleCountCallback = newProps.onTriangleCountChange;
+            }
+        }
+        if (typeof newProps.onBulletCountChange !== "undefined") {
+            if (typeof bulletCountCallback === "undefined") {
+                bulletCountCallback = newProps.onBulletCountChange;
+            }
+        }
+        if (typeof newProps.onTriangleUpdateTimeChange !== "undefined") {
+            if (typeof triangleUpdateTimeChange === "undefined") {
+                bulletCountCallback = newProps.onTriangleTimeChange;
+            }
+        }
+        // HIGHLY EXPERIMENTAL
+
+        if (typeof newProps.onInformationChange !== "undefined") {
+            if (typeof informationCallback === "undefined") {
+                informationCallback = newProps.onInformationChange;
             }
         }
     };
@@ -645,7 +695,7 @@ export default triangles;
      * @param event event linked to which key was pressed
      *
 
-    
+
 
 }
 
