@@ -1,7 +1,13 @@
 import p5 from "p5";
 import Bullet from "./p5_bullet";
 
+const W_KEY = 87;
+const A_KEY = 65;
+const S_KEY = 83;
+const D_KEY = 68;
+
 class Triangle {
+
 
     /**
      * Default values for Saturation, Brightness
@@ -69,22 +75,28 @@ class Triangle {
 
             // console.log(this.p.getKeyCodes());
             if (this.p.isMouseOverCanvas()) {
-                if (this.p.getKeyCodes()[this.p.LEFT_ARROW]) {
+                if ((this.p.getKeyCodes()[this.p.LEFT_ARROW] ||
+                    this.p.getKeyCodes()[A_KEY]) && !(this.p.getKeyCodes()[this.p.RIGHT_ARROW] ||
+                    this.p.getKeyCodes()[D_KEY])) {
                     let deltaPos = this.velocity.copy();
                     deltaPos.mult(this.p.deltaTime * this.p.PHYSICS_SCALAR);
                     deltaPos.rotate(-this.p.acos(deltaPos.mag() / (2 * p5.Vector.dist(this.pos, this.aimPoint))));
                     this.pos.add(deltaPos);
                 }
-                if (this.p.getKeyCodes()[this.p.RIGHT_ARROW]) {
+                if ((this.p.getKeyCodes()[this.p.RIGHT_ARROW] ||
+                this.p.getKeyCodes()[D_KEY]) && !(this.p.getKeyCodes()[this.p.LEFT_ARROW] ||
+                this.p.getKeyCodes()[A_KEY])) {
                     let deltaPos = this.velocity.copy();
                     deltaPos.mult(this.p.deltaTime * this.p.PHYSICS_SCALAR);
                     deltaPos.rotate(this.p.acos(deltaPos.mag() / (2 * p5.Vector.dist(this.pos, this.aimPoint))));
                     this.pos.add(deltaPos);
                 }
-                if (this.p.getKeyCodes()[this.p.UP_ARROW]) {
+                if (this.p.getKeyCodes()[this.p.UP_ARROW] ||
+                this.p.getKeyCodes()[W_KEY]) {
                     this.pos.add(this.velocity.copy().mult(this.p.deltaTime * this.p.PHYSICS_SCALAR));
                 }
-                if (this.p.getKeyCodes()[this.p.DOWN_ARROW]) {
+                if (this.p.getKeyCodes()[this.p.DOWN_ARROW] ||
+                this.p.getKeyCodes()[S_KEY]) {
                     this.pos.sub(this.velocity.copy().mult(this.p.deltaTime * this.p.PHYSICS_SCALAR));
                 }
             }

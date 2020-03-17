@@ -356,6 +356,8 @@ let triangles = (p) => {
 
     p.getKeyCodes = () => keyCodes;
 
+    p.getKeys = () => keys;
+
     p.getBounceMode = () => isBorderEnabled;
 
     p.getBorderWeight = () => BORDER_WEIGHT;
@@ -365,6 +367,9 @@ let triangles = (p) => {
         //  Get key data
         let k = p.key;
         let kc = p.keyCode;
+
+        console.log(k);
+        console.log(kc);
 
         if (k < keysSize) {
             keys[k] = true;
@@ -467,14 +472,14 @@ let triangles = (p) => {
         mouseButtons[mb] = true;
 
         //  Handle mouse button actions
-        if (p.isMouseOverCanvas() && generationMode === GenerationMode.DISCRETE) {
-            if (mb === p.CENTER) {
-                if (gravityMode === GravityMode.POINT) {
-                    gravPoint = p.createVector(p.mouseX, p.mouseY);
-                } else if (gravityMode === GravityMode.MULTI_POINT) {
-                    gravList.push(p.createVector(p.mouseX, p.mouseY));
-                }
-            }
+        if (p.isMouseOverCanvas()) {
+            // if (mb === p.CENTER) {
+            //     if (gravityMode === GravityMode.POINT) {
+            //         gravPoint = p.createVector(p.mouseX, p.mouseY);
+            //     } else if (gravityMode === GravityMode.MULTI_POINT) {
+            //         gravList.push(p.createVector(p.mouseX, p.mouseY));
+            //     }
+            // }
             if (mb === p.LEFT) {
                 triangles.forEach(triangle => {
                     if (bulletCount < BULLET_LIMIT) {
