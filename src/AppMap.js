@@ -50,7 +50,7 @@ const appMap = new Map([
         name: "triangles",
         displayName: "Triangles",
         component: TrianglesApp,
-        version: "0.8.1b",
+        version: "0.8.2b",
         description: "Triangles",
         creationDate: "November 5, 2017 00:00:00",
     }]
