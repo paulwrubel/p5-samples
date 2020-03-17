@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paper, FormControlLabel, Switch, FormGroup } from '@material-ui/core';
+import "containers/Panels.css"
 
 class SwitchPanel extends React.Component {
     render() {

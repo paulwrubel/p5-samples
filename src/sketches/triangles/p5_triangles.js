@@ -1,4 +1,3 @@
-import ControlsBox from "./p5_controlsbox";
 import Triangle from "./p5_triangle"
 import GravityMode from "./p5_gravitymode"
 
@@ -10,10 +9,12 @@ let triangles = (p) => {
     let displayFrameRate;
 
     let frameRateCallback;
-    let triangleCountCallback;
-    let bulletCountCallback;
 
     let informationCallback;
+
+    let isClearBulletsCallbackSet = false;
+    let isClearTrianglesCallbackSet = false;
+    let isClearGravityPointsCallbackSet = false;
 
     let didSetup = false;
 
@@ -29,12 +30,26 @@ let triangles = (p) => {
         DISCRETE: "discrete",
         CONTINUOUS: "continuous",
     };
+
+    const AimMode = {
+        MOUSE: "mouse",
+        FIXED: "fixed",
+    };
+
+    const PlacementMode = {
+        TRIANGLE: "triangle",
+        FIXED_POINT: "fixed_point",
+        GRAVITY_POINTS: "gravity_points",
+    };
     // CONSTANTS
 
     /**
      * Controls Saturation and Brightness values of screen background
      * Ranges from 0 - 100
      */
+
+    p.PHYSICS_SCALAR = 60 / 1000;
+
     const SAT = 20;
     const BRIGHT = 100;
 
@@ -67,12 +82,13 @@ let triangles = (p) => {
     let isBorderEnabled = false;
 
     let gravityMode = GravityMode.OFF;
+    let placementMode = PlacementMode.TRIANGLE;
+    let aimMode = AimMode.MOUSE;
     let decay = 0.99;
 
     let fixedPoint = null;
     let isAutoFireEnabled = false;
 
-    let controls = new ControlsBox(p);
     let gravList = [];
     let gravPoint;
     let triangles = [];
@@ -86,14 +102,14 @@ let triangles = (p) => {
     p.setup = function () {
         let w = p.select(".SketchContainer").width;
         let h = p.select(".SketchContainer").height;
-        let c = p.createCanvas(w, h);
+        let c = p.createCanvas(w, h, p.P2D);
         p.disableRightClick(c.canvas);
 
-        p.frameRate(60);
+        p.frameRate(120);
 
         //  Initial values
         gravPoint = p.createVector(p.width / 2, p.height / 2);
-
+        fixedPoint = p.createVector(p.width / 2, p.height / 2);
         //  Hue, Saturation, Brightness, and ranges
         p.colorMode(p.HSB, 360, 100, 100, 100);
         //  Ellipses are drawn from centre and distances are radii
@@ -107,7 +123,7 @@ let triangles = (p) => {
     p.draw = function () {
         p.checkResize();
 
-        let superStart = window.performance.now();
+        // p.translate(-p.width / 2, -p.height / 2);
 
         // START SKETCH
 
@@ -163,11 +179,7 @@ let triangles = (p) => {
         }
 
         //  Draw crosshairs
-        p.stroke(p.color(0, 100, 100));
-        p.strokeWeight(CROSSHAIRS_WEIGHT);
-        p.line(p.mouseX, p.mouseY - 10, p.mouseX, p.mouseY + 10);
-        p.line(p.mouseX - 10, p.mouseY, p.mouseX + 10, p.mouseY);
-
+        p.drawCrosshair();
 
         //  Initial values for timing vars
         let start;
@@ -225,17 +237,22 @@ let triangles = (p) => {
         //  Check for mouse buttons and key presses and perform actions accordingly
         if (generationMode === GenerationMode.CONTINUOUS) {
             //  Add Triangles
-            if (mouseButtons[p.RIGHT] && p.frameCount % TRIANGLE_ADD_FREQ === 0) {
+            if (placementMode === PlacementMode.TRIANGLE &&
+                p.isMouseOverCanvas() && 
+                mouseButtons[p.RIGHT] && 
+                p.frameCount % TRIANGLE_ADD_FREQ === 0) {
                 p.handleAdd();
             }
             //  Remove Triangles
-            if (keys[p.BACKSPACE] && (p.frameCount % TRIANGLE_REMOVE_FREQ) === 0) {
+            if (p.isMouseOverCanvas() && keys[p.BACKSPACE] && (p.frameCount % TRIANGLE_REMOVE_FREQ) === 0) {
                 if (triangles.length > 0) {
                     triangles.remove(0);
                 }
             }
             //  Add Bullets
-            if ((mouseButtons[p.LEFT] || isAutoFireEnabled) && (p.frameCount % BULLET_FREQ) === 0) {
+            if (p.isMouseOverCanvas() &&
+                (mouseButtons[p.LEFT] || isAutoFireEnabled) &&
+                (p.frameCount % BULLET_FREQ) === 0) {
                 triangles.forEach(triangle => {
                     if (bulletCount < BULLET_LIMIT) {
                         triangle.addBullet();
@@ -244,57 +261,41 @@ let triangles = (p) => {
             }
         }
 
-        //  Print basic debug text to screen
-        //  Text is written to top left corner of window
-            p.textSize(12);
-            p.fill(0);
-            p.strokeWeight(0);
-            // p.textMode(p.SHAPE);
-            p.textAlign(p.LEFT);
-
-            let yLoc = 30;
-            p.text(`TIME: ${window.performance.now() - superStart}`, 50, yLoc);
-            yLoc += 20;
-            // let yLoc = 50;
-            p.text("X: " + p.mouseX, 50, yLoc);
-            yLoc += 20;
-            p.text("Y: " + p.mouseY, 50, yLoc);
-            yLoc += 20;
-            p.text("Triangle Count: " + triangles.length, 50, yLoc);
-            yLoc += 20;
-            p.text("Bullet Count: " + bulletCount, 50, yLoc);
-            yLoc += 20;
-            let triangleText = `Triangle Time: ~${triangleUpdateTime.toFixed(2)}ms`;
-            let bulletUpdateText = `Bullet Update Time: ~${bulletUpdateTime.toFixed(2)}ms`;
-            let bulletDrawText = `Bullet Draw Time: ~${bulletDrawTime.toFixed(2)}ms`;
-            let FPSText = `FPS: ${p.frameRate().toFixed(2)}`;
-            p.text(triangleText, 50, yLoc);
-            yLoc += 20;
-            p.text(bulletUpdateText, 50, yLoc);
-            yLoc += 20;
-            p.text(bulletDrawText, 50, yLoc);
-            yLoc += 20;
-            p.text(FPSText, 50, yLoc);
-            yLoc += 20;
-            if (isBorderEnabled) {
-                p.text("Bounce: ON", 50, yLoc);
-            } else {
-                p.text("Bounce: OFF", 50, yLoc);
-            }
-            yLoc += 20;
-            if (gravityMode === GravityMode.OFF) {
-                p.text("Decay: OFF", 50, yLoc);
-            } else {
-                p.text("Decay: " + decay, 50, yLoc);
-            }
-            yLoc += 20;
-            p.text("Gravity Mode: " + gravityMode, 50, yLoc);
-
         // END SKETCH
 
         p.calculateFrameRate();
         p.updateCallbacks();
     };
+    p.drawCrosshair = () => {
+        switch (placementMode) {
+            case PlacementMode.TRIANGLE:
+                let aimPoint = p.getAimPoint();
+                p.stroke(p.color(0, 100, 100));
+                p.strokeWeight(CROSSHAIRS_WEIGHT);
+                p.line(aimPoint.x, aimPoint.y - 10, aimPoint.x, aimPoint.y + 10);
+                p.line(aimPoint.x - 10, aimPoint.y, aimPoint.x + 10, aimPoint.y);
+                break;
+            case PlacementMode.FIXED_POINT:
+                p.stroke(p.color(240, 100, 100));
+                p.strokeWeight(CROSSHAIRS_WEIGHT / 2);
+                p.line(fixedPoint.x, fixedPoint.y - 6, fixedPoint.x, fixedPoint.y + 6);
+                p.line(fixedPoint.x - 6, fixedPoint.y, fixedPoint.x + 6, fixedPoint.y);
+
+                p.stroke(p.color(0, 100, 100));
+                p.strokeWeight(CROSSHAIRS_WEIGHT);
+                p.line(p.mouseX - 10, p.mouseY - 10, p.mouseX + 10, p.mouseY + 10);
+                p.line(p.mouseX - 10, p.mouseY + 10, p.mouseX + 10, p.mouseY - 10);
+                break;
+            case PlacementMode.GRAVITY_POINTS:
+                p.stroke(p.color(120, 100, 100));
+                p.strokeWeight(CROSSHAIRS_WEIGHT / 2);
+                p.noFill();
+                p.ellipse(p.mouseX, p.mouseY, 8, 8);
+                break;
+            default:
+                throw new Error("unknown placement mode");
+        }
+    }
 
     p.handleAdd = function () {
         if (triangles.length !== 0) {
@@ -312,13 +313,24 @@ let triangles = (p) => {
         }
     };
 
-    p.isBounceEnabled = function () {
-        return isBorderEnabled;
-    }
+    p.clearTriangles = () => {
+        triangles = [];
+    };
 
-    p.getGravityMode = function () {
-        return gravityMode;
-    }
+    p.clearBullets = () => {
+        triangles.forEach(triangle => {
+            triangle.bullets = [];
+        });
+    };
+
+    p.clearGravityPoints = () => {
+        gravPoint = p.createVector(p.width / 2, p.height / 2);
+        gravList = [];
+    };
+
+    p.isBounceEnabled = () => isBorderEnabled;
+
+    p.getGravityMode = () => gravityMode;
 
     p.getGravityPoint = function () {
         if (gravityMode === GravityMode.SIMPLE || gravityMode === GravityMode.TRUE) {
@@ -328,34 +340,25 @@ let triangles = (p) => {
         }
     };
 
-    p.getGravityList = function () {
-        return gravList;
-    };
+    p.getGravityList = () => gravList;
 
-    p.getDecay = function () {
-        return decay;
-    }
+    p.getDecay = () => decay;
 
     p.getAimPoint = function () {
-        console.log()
-        if (fixedPoint != null) {
+        if (aimMode === AimMode.FIXED) {
             return fixedPoint;
-        } else {
+        } else if (aimMode === AimMode.MOUSE) {
             return p.createVector(p.mouseX, p.mouseY);
+        } else {
+            throw new Error("Error finding aim mode");
         }
     };
 
-    p.getKeyCodes = function () {
-        return keyCodes;
-    };
+    p.getKeyCodes = () => keyCodes;
 
-    p.getBounceMode = function () {
-        return isBorderEnabled;
-    };
+    p.getBounceMode = () => isBorderEnabled;
 
-    p.getBorderWeight = function () {
-        return BORDER_WEIGHT;
-    }
+    p.getBorderWeight = () => BORDER_WEIGHT;
 
     p.keyPressed = function (event) {
 
@@ -373,41 +376,41 @@ let triangles = (p) => {
         // if (kc === p.ENTER) {
         //     generationMode = generationMode === GenerationMode.DISCRETE ? GenerationMode.CONTINUOUS : GenerationMode.DISCRETE;
         // }
-        if (k === 'f') {
-            if (fixedPoint !== null) {
-                fixedPoint = null;
-            } else {
-                fixedPoint = p.createVector(p.mouseX, p.mouseY);
-            }
-        }
+        // if (k === 'f') {
+        //     if (fixedPoint !== null) {
+        //         fixedPoint = null;
+        //     } else {
+        //         fixedPoint = p.createVector(p.mouseX, p.mouseY);
+        //     }
+        // }
         // if (k === 'a') {
         //     isAutoFireEnabled = !isAutoFireEnabled;
         // }
-        if (k === ' ') {
-            triangles = [];
-        }
+        // if (k === ' ') {
+        //     triangles = [];
+        // }
         // if (k === 'b') {
         //     isBorderEnabled = !isBorderEnabled;
         // }
-        if (k === 'c') {
-            triangles.forEach(triangle => {
-                triangle.bullets = [];
-            });
-        }
-        if (k === 'g') {
-            if (gravityMode === GravityMode.POINT) {
-                gravPoint = p.createVector(p.mouseX, p.mouseY);
-            } else if (gravityMode === GravityMode.MULTI_POINT) {
-                gravList.push(p.createVector(p.mouseX, p.mouseY));
-            }
-        }
-        if (k === 'r') {
-            if (gravityMode === GravityMode.POINT) {
-                gravPoint = p.createVector(p.width / 2, p.height / 2);
-            } else if (gravityMode === GravityMode.MULTI_POINT) {
-                gravList = [];
-            }
-        }
+        // if (k === 'c') {
+        //     triangles.forEach(triangle => {
+        //         triangle.bullets = [];
+        //     });
+        // }
+        // if (k === 'g') {
+        //     if (gravityMode === GravityMode.POINT) {
+        //         gravPoint = p.createVector(p.mouseX, p.mouseY);
+        //     } else if (gravityMode === GravityMode.MULTI_POINT) {
+        //         gravList.push(p.createVector(p.mouseX, p.mouseY));
+        //     }
+        // }
+        // if (k === 'r') {
+        //     if (gravityMode === GravityMode.POINT) {
+        //         gravPoint = p.createVector(p.width / 2, p.height / 2);
+        //     } else if (gravityMode === GravityMode.MULTI_POINT) {
+        //         gravList = [];
+        //     }
+        // }
         // if (k === '1') {
         //     gravityMode = GravityMode.OFF;
         // }
@@ -423,13 +426,13 @@ let triangles = (p) => {
         // if (k === '5') {
         //     gravityMode = GravityMode.MULTI_POINT;
         // }
-        if (generationMode === GenerationMode.DISCRETE) {
-            if (kc === p.BACKSPACE) {
-                if (triangles.length !== 0) {
-                    triangles.shift();
-                }
-            }
-        }
+        // if (generationMode === GenerationMode.DISCRETE) {
+        //     if (kc === p.BACKSPACE) {
+        //         if (triangles.length !== 0) {
+        //             triangles.shift();
+        //         }
+        //     }
+        // }
     };
 
 
@@ -463,12 +466,15 @@ let triangles = (p) => {
         //  Set array position to true
         mouseButtons[mb] = true;
 
-        if (mb === p.CENTER) {
-
-        }
-
         //  Handle mouse button actions
-        if (generationMode === GenerationMode.DISCRETE) {
+        if (p.isMouseOverCanvas() && generationMode === GenerationMode.DISCRETE) {
+            if (mb === p.CENTER) {
+                if (gravityMode === GravityMode.POINT) {
+                    gravPoint = p.createVector(p.mouseX, p.mouseY);
+                } else if (gravityMode === GravityMode.MULTI_POINT) {
+                    gravList.push(p.createVector(p.mouseX, p.mouseY));
+                }
+            }
             if (mb === p.LEFT) {
                 triangles.forEach(triangle => {
                     if (bulletCount < BULLET_LIMIT) {
@@ -477,7 +483,21 @@ let triangles = (p) => {
                 });
             }
             if (mb === p.RIGHT) {
-                p.handleAdd();
+                // console.log(placementMode);
+                if (placementMode === PlacementMode.TRIANGLE) {
+                    p.handleAdd();
+                } else if (placementMode === PlacementMode.FIXED_POINT) {
+                    fixedPoint = p.createVector(p.mouseX, p.mouseY);
+                } else if (placementMode === PlacementMode.GRAVITY_POINTS) {
+                    // console.log("placing gravwell");
+                    if (gravityMode === GravityMode.POINT) {
+                        gravPoint = p.createVector(p.mouseX, p.mouseY);
+                    } else if (gravityMode === GravityMode.MULTI_POINT) {
+                        gravList.push(p.createVector(p.mouseX, p.mouseY));
+                    }
+                } else {
+                    throw new Error("PLACEMENT MODE IS BIG PROBLEM")
+                }
             }
         }
     }
@@ -518,10 +538,10 @@ let triangles = (p) => {
                     ["frame_rate", "FPS: " + displayFrameRate.toFixed(0)],
                     ["triangle_count", "Triangles: " + triangles.length],
                     ["bullet_count", "Bullets: " + bulletCount],
-                    ["triangle_update_time", "Triangle Update Time: " + triangleUpdateTime + "ms"],
-                    ["bullet_update_time", "Bullet Update Time: " + bulletUpdateTime + "ms"],
-                    ["triangle_draw_time", "Triangle Draw Time: " + triangleDrawTime + "ms"],
-                    ["bullet_draw_time", "Bullet Draw Time: " + bulletDrawTime + "ms"],
+                    ["triangle_update_time", "Triangle Update Time: " + triangleUpdateTime.toFixed(2) + "ms"],
+                    ["bullet_update_time", "Bullet Update Time: " + bulletUpdateTime.toFixed(2) + "ms"],
+                    ["triangle_draw_time", "Triangle Draw Time: " + triangleDrawTime.toFixed(2) + "ms"],
+                    ["bullet_draw_time", "Bullet Draw Time: " + bulletDrawTime.toFixed(2) + "ms"],
                 ]));
             }
             // if (typeof activeTrailCountCallback !== "undefined") {
@@ -578,6 +598,16 @@ let triangles = (p) => {
                     gravityMode = newProps.gravityMode;
                 }
             }
+            if (typeof newProps.placementMode !== "undefined") {
+                if (placementMode !== newProps.placementMode) {
+                    placementMode = newProps.placementMode;
+                }
+            }
+            if (typeof newProps.aimMode !== "undefined") {
+                if (aimMode !== newProps.aimMode) {
+                    aimMode = newProps.aimMode;
+                }
+            }
             if (typeof newProps.isBorderEnabled !== "undefined") {
                 if (isBorderEnabled !== newProps.isBorderEnabled) {
                     isBorderEnabled = newProps.isBorderEnabled;
@@ -591,24 +621,44 @@ let triangles = (p) => {
         }
 
         // info callbacks
-        if (typeof newProps.onFrameRateChange !== "undefined") {
-            if (typeof frameRateCallback === "undefined") {
-                frameRateCallback = newProps.onFrameRateChange;
+        // if (typeof newProps.onFrameRateChange !== "undefined") {
+        //     if (typeof frameRateCallback === "undefined") {
+        //         frameRateCallback = newProps.onFrameRateChange;
+        //     }
+        // }
+        // if (typeof newProps.onTriangleCountChange !== "undefined") {
+        //     if (typeof triangleCountCallback === "undefined") {
+        //         triangleCountCallback = newProps.onTriangleCountChange;
+        //     }
+        // }
+        // if (typeof newProps.onBulletCountChange !== "undefined") {
+        //     if (typeof bulletCountCallback === "undefined") {
+        //         bulletCountCallback = newProps.onBulletCountChange;
+        //     }
+        // }
+        // if (typeof newProps.onTriangleUpdateTimeChange !== "undefined") {
+        //     if (typeof triangleUpdateTimeChange === "undefined") {
+        //         bulletCountCallback = newProps.onTriangleTimeChange;
+        //     }
+        // }
+
+
+        if (typeof newProps.setClearTrianglesCallback !== "undefined") {
+            if (!isClearTrianglesCallbackSet) {
+                isClearTrianglesCallbackSet = true;
+                newProps.setClearTrianglesCallback(p.clearTriangles);
             }
         }
-        if (typeof newProps.onTriangleCountChange !== "undefined") {
-            if (typeof triangleCountCallback === "undefined") {
-                triangleCountCallback = newProps.onTriangleCountChange;
+        if (typeof newProps.setClearBulletsCallback !== "undefined") {
+            if (!isClearBulletsCallbackSet) {
+                isClearBulletsCallbackSet = true;
+                newProps.setClearBulletsCallback(p.clearBullets);
             }
         }
-        if (typeof newProps.onBulletCountChange !== "undefined") {
-            if (typeof bulletCountCallback === "undefined") {
-                bulletCountCallback = newProps.onBulletCountChange;
-            }
-        }
-        if (typeof newProps.onTriangleUpdateTimeChange !== "undefined") {
-            if (typeof triangleUpdateTimeChange === "undefined") {
-                bulletCountCallback = newProps.onTriangleTimeChange;
+        if (typeof newProps.setClearGravityPointsCallback !== "undefined") {
+            if (!isClearGravityPointsCallbackSet) {
+                isClearGravityPointsCallbackSet = true;
+                newProps.setClearGravityPointsCallback(p.clearGravityPoints);
             }
         }
         // HIGHLY EXPERIMENTAL

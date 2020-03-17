@@ -211,7 +211,7 @@ let cubegrid = (p) => {
 		if (p.isMouseOverCanvas()) {
 			cameraDistance -= event.delta * scrollingFactor;
 		}
-	}
+	};
 
     p.windowResized = function () {
         p.resize();

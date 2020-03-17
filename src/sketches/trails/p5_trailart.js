@@ -156,7 +156,6 @@ let trails = (p) => {
                 setClearScreenCallback = newProps.setClearScreenCallback;
                 setClearScreenCallback(p.clearScreen);
             }
-
         }
         // if (typeof newProps.onBarHeightScalarChange !== "undefined") {
         //     barHeightScalarCallback = newProps.onBarHeightScalarChange;

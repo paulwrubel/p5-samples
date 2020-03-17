@@ -68,21 +68,25 @@ class Triangle {
         if (this.pos.dist(this.aimPoint) > this.velocity.mag()/2) {
 
             // console.log(this.p.getKeyCodes());
-            if (typeof this.p.getKeyCodes()[this.p.LEFT_ARROW] !== "undefined") {
-                console.log(this.p.getKeyCodes()[this.p.LEFT]);
-            }
-            if (this.p.getKeyCodes()[this.p.LEFT_ARROW]) {
-                console.log("left is confirmed");
-                this.pos.add(this.velocity.copy().rotate(-this.p.acos(this.velocity.mag() / (2 * p5.Vector.dist(this.pos, this.aimPoint)))));
-            }
-            if (this.p.getKeyCodes()[this.p.RIGHT_ARROW]) {
-                this.pos.add(this.velocity.copy().rotate(this.p.acos(this.velocity.mag() / (2 * p5.Vector.dist(this.pos, this.aimPoint)))));
-            }
-            if (this.p.getKeyCodes()[this.p.UP_ARROW]) {
-                this.pos.add(this.velocity);
-            }
-            if (this.p.getKeyCodes()[this.p.DOWN_ARROW]) {
-                this.pos.sub(this.velocity);
+            if (this.p.isMouseOverCanvas()) {
+                if (this.p.getKeyCodes()[this.p.LEFT_ARROW]) {
+                    let deltaPos = this.velocity.copy();
+                    deltaPos.mult(this.p.deltaTime * this.p.PHYSICS_SCALAR);
+                    deltaPos.rotate(-this.p.acos(deltaPos.mag() / (2 * p5.Vector.dist(this.pos, this.aimPoint))));
+                    this.pos.add(deltaPos);
+                }
+                if (this.p.getKeyCodes()[this.p.RIGHT_ARROW]) {
+                    let deltaPos = this.velocity.copy();
+                    deltaPos.mult(this.p.deltaTime * this.p.PHYSICS_SCALAR);
+                    deltaPos.rotate(this.p.acos(deltaPos.mag() / (2 * p5.Vector.dist(this.pos, this.aimPoint))));
+                    this.pos.add(deltaPos);
+                }
+                if (this.p.getKeyCodes()[this.p.UP_ARROW]) {
+                    this.pos.add(this.velocity.copy().mult(this.p.deltaTime * this.p.PHYSICS_SCALAR));
+                }
+                if (this.p.getKeyCodes()[this.p.DOWN_ARROW]) {
+                    this.pos.sub(this.velocity.copy().mult(this.p.deltaTime * this.p.PHYSICS_SCALAR));
+                }
             }
 
             if (this.pos.dist(this.aimPoint) > 0) {

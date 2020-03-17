@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paper, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@material-ui/core';
+import "containers/Panels.css"
 
 class RadioPanel extends React.Component {
     constructor(props) {

@@ -117,7 +117,7 @@ class Bullet {
 
         //  Update location based on heading
 
-        this.pos.add(this.velocity);
+        this.pos.add(this.velocity.copy().mult(this.p.deltaTime * this.p.PHYSICS_SCALAR));
 
         if (this.bounce) {
             if (this.pos.x < 0 + this.RADIUS + this.p.getBorderWeight()) {

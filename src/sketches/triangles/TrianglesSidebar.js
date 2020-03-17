@@ -4,6 +4,7 @@ import "containers/Sidebar.css"
 import InfoPanel from 'containers/panels/InfoPanel';
 import RadioPanel from 'containers/panels/RadioPanel';
 import SwitchPanel from 'containers/panels/SwitchPanel';
+import ButtonPanel from 'containers/panels/ButtonPanel';
 
 class TrianglesSidebar extends React.Component {
     // constructor(props) {
@@ -27,24 +28,49 @@ class TrianglesSidebar extends React.Component {
                             {/* {console.log(this.props.information.entries())} */}
                             {/* {this.props.information.entries().foreach(e => console.log(e))} */}
                             <InfoPanel
-                            info={Array.from(this.props.information, ([key, value]) => ({
-                                key: key,
-                                text: value,
-                            }))}
-                                // info={this.props.information.entries().map(entry => ({key: entry}))
-                                //     [
-                                //     {
-                                //         key: "information",
-                                //         text: "information: " + this.props.information.triangleCount
-                                //     },
-                                // ]
-                                // } 
-                                />
+                                info={Array.from(this.props.information, ([key, value]) => ({
+                                    key: key,
+                                    text: value,
+                                }))}
+                            // info={this.props.information.entries().map(entry => ({key: entry}))
+                            //     [
+                            //     {
+                            //         key: "information",
+                            //         text: "information: " + this.props.information.triangleCount
+                            //     },
+                            // ]
+                            // } 
+                            />
+                        </Grid>
+                        <Grid item xs>
+                            <RadioPanel
+                                panelKey="placement_mode"
+                                label="Placement"
+                                value={this.props.placementMode}
+                                defaultValue="triangle"
+                                onChange={this.props.onPlacementModeChange}
+                                buttons={[
+                                    {
+                                        key: "triangles",
+                                        label: "Triangles",
+                                        value: "triangle"
+                                    },
+                                    {
+                                        key: "aim_point",
+                                        label: "Aim Point",
+                                        value: "fixed_point"
+                                    },
+                                    {
+                                        key: "gravity_points",
+                                        label: "Gravity Points",
+                                        value: "gravity_points"
+                                    },
+                                ]} />
                         </Grid>
                         <Grid item xs>
                             <RadioPanel
                                 panelKey="generation_mode"
-                                label="Generation Mode"
+                                label="Generation"
                                 value={this.props.generationMode}
                                 defaultValue="discrete"
                                 onChange={this.props.onGenerationModeChange}
@@ -63,8 +89,28 @@ class TrianglesSidebar extends React.Component {
                         </Grid>
                         <Grid item xs>
                             <RadioPanel
+                                panelKey="aim_mode"
+                                label="Aim Point"
+                                value={this.props.aimMode}
+                                defaultValue="mouse"
+                                onChange={this.props.onAimModeChange}
+                                buttons={[
+                                    {
+                                        key: "mouse",
+                                        label: "Mouse",
+                                        value: "mouse"
+                                    },
+                                    {
+                                        key: "fixed",
+                                        label: "Fixed",
+                                        value: "fixed"
+                                    },
+                                ]} />
+                        </Grid>
+                        <Grid item xs>
+                            <RadioPanel
                                 panelKey="gravity_mode"
-                                label="Gravity Mode"
+                                label="Gravity"
                                 value={this.props.gravityMode}
                                 defaultValue="off"
                                 onChange={this.props.onGravityModeChange}
@@ -102,7 +148,7 @@ class TrianglesSidebar extends React.Component {
                                     let switches = [
                                         {
                                             key: "solid_border",
-                                            label: "Solid Border",
+                                            label: "Border",
                                             onChange: this.props.onBorderChange,
                                             value: this.props.isBorderEnabled,
                                         },
@@ -115,6 +161,30 @@ class TrianglesSidebar extends React.Component {
                                     ];
                                     return switches.filter((e) => e !== undefined);
                                 })())}
+                            />
+                        </Grid>
+                        <Grid item xs>
+                            <ButtonPanel
+                                buttons={(() => {
+                                    let buttons = [
+                                        typeof this.props.onClearTrianglesButtonClick !== "undefined" ? {
+                                            key: "clear_triangles",
+                                            label: "Clear Triangles",
+                                            onClick: this.props.onClearTrianglesButtonClick,
+                                        } : undefined,
+                                        typeof this.props.onClearBulletsButtonClick !== "undefined" ? {
+                                            key: "clear_bullets",
+                                            label: "Clear Bullets",
+                                            onClick: this.props.onClearBulletsButtonClick,
+                                        } : undefined,
+                                        typeof this.props.onClearGravityPointsButtonClick !== "undefined" ? {
+                                            key: "clear_gravity_points",
+                                            label: "Clear Gravity Points",
+                                            onClick: this.props.onClearGravityPointsButtonClick,
+                                        } : undefined,
+                                    ];
+                                    return buttons.filter((e) => e !== undefined);
+                                })()}
                             />
                         </Grid>
                         {/* <Grid item xs>

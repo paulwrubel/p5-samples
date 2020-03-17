@@ -12,6 +12,8 @@ class TrianglesApp extends React.Component {
             frameRate: 0,
             generationMode: "discrete",
             gravityMode: "off",
+            aimMode: "mouse",
+            placementMode: "triangle",
             isBorderEnabled: false,
             isAutoFireEnabled: false,
             information: new Map(),
@@ -21,8 +23,17 @@ class TrianglesApp extends React.Component {
         this.handleInformationChange = this.handleInformationChange.bind(this);
         this.handleGenerationModeChange = this.handleGenerationModeChange.bind(this);
         this.handleGravityModeChange = this.handleGravityModeChange.bind(this);
+        this.handleAimModeChange = this.handleAimModeChange.bind(this);
+        this.handlePlacementModeChange = this.handlePlacementModeChange.bind(this);
         this.handleBorderChange = this.handleBorderChange.bind(this);
         this.handleAutoFireChange = this.handleAutoFireChange.bind(this);
+        
+        this.handleClearTrianglesButtonClick = this.handleClearTrianglesButtonClick.bind(this);
+        this.setClearTrianglesButtonClickFunc = this.setClearTrianglesButtonClickFunc.bind(this);
+        this.handleClearBulletsButtonClick = this.handleClearBulletsButtonClick.bind(this);
+        this.setClearBulletsButtonClickFunc = this.setClearBulletsButtonClickFunc.bind(this);
+        this.handleClearGravityPointsButtonClick = this.handleClearGravityPointsButtonClick.bind(this);
+        this.setClearGravityPointsButtonClickFunc = this.setClearGravityPointsButtonClickFunc.bind(this);
     }
 
     handleFrameRateChange(newValue) {
@@ -49,6 +60,18 @@ class TrianglesApp extends React.Component {
         });
     }
 
+    handlePlacementModeChange(newValue) {
+        this.setState({
+            placementMode: newValue
+        });
+    }
+
+    handleAimModeChange(newValue) {
+        this.setState({
+            aimMode: newValue
+        });
+    }
+
     handleBorderChange(newValue) {
         this.setState({
             isBorderEnabled: newValue
@@ -58,6 +81,44 @@ class TrianglesApp extends React.Component {
     handleAutoFireChange(newValue) {
         this.setState({
             isAutoFireEnabled: newValue
+        });
+    }
+
+    // Buttons
+
+    handleClearTrianglesButtonClick() {
+        if (typeof this.state.clearTrianglesButtonClickFunc !== "undefined") {
+            this.state.clearTrianglesButtonClickFunc();
+        }
+    }
+
+    setClearTrianglesButtonClickFunc(newValue) {
+        this.setState({
+            clearTrianglesButtonClickFunc: newValue
+        });
+    }
+
+    handleClearBulletsButtonClick() {
+        if (typeof this.state.clearBulletsButtonClickFunc !== "undefined") {
+            this.state.clearBulletsButtonClickFunc();
+        }
+    }
+
+    setClearBulletsButtonClickFunc(newValue) {
+        this.setState({
+            clearBulletsButtonClickFunc: newValue
+        });
+    }
+
+    handleClearGravityPointsButtonClick() {
+        if (typeof this.state.clearGravityPointsButtonClickFunc !== "undefined") {
+            this.state.clearGravityPointsButtonClickFunc();
+        }
+    }
+
+    setClearGravityPointsButtonClickFunc(newValue) {
+        this.setState({
+            clearGravityPointsButtonClickFunc: newValue
         });
     }
 
@@ -83,10 +144,18 @@ class TrianglesApp extends React.Component {
                             onGenerationModeChange={this.handleGenerationModeChange}
                             gravityMode={this.state.gravityMode}
                             onGravityModeChange={this.handleGravityModeChange}
+                            aimMode={this.state.aimMode}
+                            onAimModeChange={this.handleAimModeChange}
+                            placementMode={this.state.placementMode}
+                            onPlacementModeChange={this.handlePlacementModeChange}
                             isBorderEnabled={this.state.isBorderEnabled}
                             onBorderChange={this.handleBorderChange}
                             isAutoFireEnabled={this.state.isAutoFireEnabled}
                             onAutoFireChange={this.handleAutoFireChange}
+
+                            onClearTrianglesButtonClick={this.state.clearTrianglesButtonClickFunc}
+                            onClearBulletsButtonClick={this.state.clearBulletsButtonClickFunc}
+                            onClearGravityPointsButtonClick={this.state.clearGravityPointsButtonClickFunc}
 
                             frameRate={this.state.frameRate}
                             information={this.state.information}
@@ -100,11 +169,17 @@ class TrianglesApp extends React.Component {
 
                             generationMode={this.state.generationMode}
                             gravityMode={this.state.gravityMode}
+                            aimMode={this.state.aimMode}
+                            placementMode={this.state.placementMode}
                             isBorderEnabled={this.state.isBorderEnabled}
                             isAutoFireEnabled={this.state.isAutoFireEnabled}
 
                             onFrameRateChange={this.handleFrameRateChange}
                             onInformationChange={this.handleInformationChange}
+
+                            setClearTrianglesCallback={this.setClearTrianglesButtonClickFunc}
+                            setClearBulletsCallback={this.setClearBulletsButtonClickFunc}
+                            setClearGravityPointsCallback={this.setClearGravityPointsButtonClickFunc}
                             />
                     </Grid>
                 </Grid>

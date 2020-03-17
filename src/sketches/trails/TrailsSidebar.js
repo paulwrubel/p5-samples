@@ -49,7 +49,7 @@ class TrailsSidebar extends React.Component {
                         </Grid>
                         <Grid item xs>
                             <Paper elevation={2}
-                                className="PaperRadioControl">
+                                className="PaperButtonControl">
                                 <ClearButton
                                     onClick={this.props.onClearButtonPress} />
                             </Paper>
