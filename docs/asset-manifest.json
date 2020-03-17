@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/vixuals/static/css/main.1fd43177.chunk.css",
-    "main.js": "/vixuals/static/js/main.301d62da.chunk.js",
-    "main.js.map": "/vixuals/static/js/main.301d62da.chunk.js.map",
+    "main.js": "/vixuals/static/js/main.d2463160.chunk.js",
+    "main.js.map": "/vixuals/static/js/main.d2463160.chunk.js.map",
     "runtime-main.js": "/vixuals/static/js/runtime-main.563fc985.js",
     "runtime-main.js.map": "/vixuals/static/js/runtime-main.563fc985.js.map",
     "static/js/2.916be19b.chunk.js": "/vixuals/static/js/2.916be19b.chunk.js",
     "static/js/2.916be19b.chunk.js.map": "/vixuals/static/js/2.916be19b.chunk.js.map",
     "index.html": "/vixuals/index.html",
-    "precache-manifest.4168435b8581752271b7df8043e3d090.js": "/vixuals/precache-manifest.4168435b8581752271b7df8043e3d090.js",
+    "precache-manifest.f1020043e8deb362b5550a68825858e1.js": "/vixuals/precache-manifest.f1020043e8deb362b5550a68825858e1.js",
     "service-worker.js": "/vixuals/service-worker.js",
     "static/css/main.1fd43177.chunk.css.map": "/vixuals/static/css/main.1fd43177.chunk.css.map",
     "static/js/2.916be19b.chunk.js.LICENSE.txt": "/vixuals/static/js/2.916be19b.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.563fc985.js",
     "static/js/2.916be19b.chunk.js",
     "static/css/main.1fd43177.chunk.css",
-    "static/js/main.301d62da.chunk.js"
+    "static/js/main.d2463160.chunk.js"
   ]
 }
