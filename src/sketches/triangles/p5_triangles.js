@@ -103,6 +103,7 @@ let triangles = (p) => {
         let w = p.select(".SketchContainer").width;
         let h = p.select(".SketchContainer").height;
         let c = p.createCanvas(w, h, p.P2D);
+        // let c = p.createCanvas(w, h, p.WEBGL);
         p.disableRightClick(c.canvas);
 
         p.frameRate(120);
@@ -194,10 +195,12 @@ let triangles = (p) => {
                 bullet.update();
                 //b.draw();
 
+                bulletCount++;
             });
         });
         end = window.performance.now();
-        bulletUpdateTime = (end - start);
+        bulletUpdateTime = (end - start) / bulletCount;
+        bulletUpdateTime = isNaN(bulletUpdateTime) ? 0 : bulletUpdateTime;
 
         start = window.performance.now();
         triangles.forEach(triangle => {
@@ -209,7 +212,8 @@ let triangles = (p) => {
             });
         });
         end = window.performance.now();
-        bulletDrawTime = (end - start);
+        bulletDrawTime = (end - start) / bulletCount;
+        bulletDrawTime = isNaN(bulletDrawTime) ? 0 : bulletDrawTime;
 
         start = window.performance.now();
         triangles.forEach(triangle => {
@@ -217,10 +221,10 @@ let triangles = (p) => {
             triangle.update();
             // triangle.draw();
 
-            bulletCount += triangle.bullets.length;
         });
         end = window.performance.now();
-        triangleUpdateTime = (end - start);
+        triangleUpdateTime = (end - start) / triangles.length;
+        triangleUpdateTime = isNaN(triangleUpdateTime) ? 0 : triangleUpdateTime;
 
         start = window.performance.now();
         triangles.forEach(triangle => {
@@ -231,7 +235,8 @@ let triangles = (p) => {
             // bulletCount += triangle.bullets.length;
         });
         end = window.performance.now();
-        triangleDrawTime = (end - start);
+        triangleDrawTime = (end - start) / triangles.length;
+        triangleDrawTime = isNaN(triangleDrawTime) ? 0 : triangleDrawTime;
 
         //  Only if in dynamic mode
         //  Check for mouse buttons and key presses and perform actions accordingly
