@@ -2,4 +2,4 @@
     deployment:
       tasks:
         - export DEPLOYPATH=/home/vixuzmsc/public_html/
-        - /bin/cp -R docs $DEPLOYPATH
+        - /bin/cp -R docs/. $DEPLOYPATH
