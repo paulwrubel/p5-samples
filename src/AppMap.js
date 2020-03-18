@@ -53,6 +53,14 @@ const appMap = new Map([
         version: "0.8.2b",
         description: "Triangles",
         creationDate: "November 5, 2017 00:00:00",
+    }],
+    ["artgenerator5", {
+        name: "artgenerator5",
+        displayName: "Art Generator 5",
+        component: ArtGenerator5App,
+        version: "0.0.1pre",
+        description: "It generates art",
+        creationDate: "March 17, 2020 00:00:00",
     }]
 ]);
 
