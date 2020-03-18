@@ -38,6 +38,10 @@ const artgenerator5 = (p) => {
         unvisitedPixels = new Map();
         drawPixels = new Map();
 
+        p.background(0);
+        
+        p.loadPixels();
+
         didSetup = true;
     };
 
@@ -119,7 +123,7 @@ const artgenerator5 = (p) => {
     }
 
     p.drawPixels = () => {
-        p.loadPixels();
+        // p.loadPixels();
         drawPixels.forEach((colorArr, locationStr) => {
             let location = locationStr.split(',');
             let color = p.color(colorArr[0], colorArr[1], colorArr[2], colorArr[3]);
