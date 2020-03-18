@@ -11,6 +11,7 @@ const artgenerator5 = (p) => {
     let isOriginSet = false;
 
     let fringePixels;
+    let fringeToAdd;
     let visitedPixels;
     let unvisitedPixels;
     let drawPixels;
@@ -34,12 +35,13 @@ const artgenerator5 = (p) => {
         //     unvisitedPixels[i] = [];
         // }
         fringePixels = new Map();
+        fringeToAdd = new Map();
         visitedPixels = new Map();
         unvisitedPixels = new Map();
         drawPixels = new Map();
 
         p.background(0);
-        
+
         p.loadPixels();
 
         didSetup = true;
@@ -49,13 +51,13 @@ const artgenerator5 = (p) => {
         p.checkResize();
 
         // START SKETCH
-        if (isOriginSet) {
-            // p.background(0);
-            p.updatePixelRound();
-            p.drawPixels();
-        } else {
-            p.background(0);
-        }
+        // if (isOriginSet) {
+        // p.background(0);
+        p.updatePixelRound();
+        p.drawPixels();
+        // } else {
+        //     p.background(0);
+        // }
 
         p.fill(0, 0, 100);
         p.text("FPS: " + displayFrameRate.toFixed(2), 20, 20);
@@ -73,54 +75,78 @@ const artgenerator5 = (p) => {
 
     p.updatePixelRound = () => {
         let fringeToRemove = [];
-        let fringeToAdd = []
-        fringePixels = new Map(p.shuffle(Array.from(fringePixels.entries())));
+        fringeToAdd.clear();
+        fringePixels = p.shuffleMap(fringePixels);
         fringePixels.forEach((colorArr, locationStr) => {
             let location = locationStr.split(',');
             location[0] = parseInt(location[0]);
             location[1] = parseInt(location[1]);
             // north
-            if (location[1] !== 0) {
+            if (p.random() < 0.5 && location[1] !== 0) {
                 let northLocationStr = (location[0]) + "," + (location[1] - 1);
                 // if we haven't seen this location before...
-                if (!fringePixels.has(northLocationStr) && !visitedPixels.has(northLocationStr)) {
+                if (!fringePixels.has(northLocationStr) &&
+                    !visitedPixels.has(northLocationStr) &&
+                    !fringeToAdd.has(northLocationStr)) {
                     // ...generate a new color and mark it
                     let northColor = [colorArr[0] + p.random(-5, 5), colorArr[1], colorArr[2], colorArr[3]];
-                    fringeToAdd.push([northLocationStr, northColor]);
+                    fringeToAdd.set(northLocationStr, northColor);
                 }
             }
             // east
-            if (location[0] !== p.width-1) {
+            if (p.random() < 0.5 && location[0] !== p.width - 1) {
                 let eastLocationStr = (location[0] + 1) + "," + (location[1]);
                 // if we haven't seen this location before...
-                if (!fringePixels.has(eastLocationStr) && !visitedPixels.has(eastLocationStr)) {
+                if (!fringePixels.has(eastLocationStr) &&
+                    !visitedPixels.has(eastLocationStr) &&
+                    !fringeToAdd.has(eastLocationStr)) {
                     // ...generate a new color and mark it
                     let eastColor = [colorArr[0] + p.random(-5, 5), colorArr[1], colorArr[2], colorArr[3]];
-                    fringeToAdd.push([eastLocationStr, eastColor]);
+                    fringeToAdd.set(eastLocationStr, eastColor);
                 }
             }
             // south
-            if (location[1] !== p.height-1) {
+            if (p.random() < 0.5 && location[1] !== p.height - 1) {
                 let southLocationStr = (location[0]) + "," + (location[1] + 1);
                 // if we haven't seen this location before...
-                if (!fringePixels.has(southLocationStr) && !visitedPixels.has(southLocationStr)) {
+                if (!fringePixels.has(southLocationStr) &&
+                    !visitedPixels.has(southLocationStr) &&
+                    !fringeToAdd.has(southLocationStr)) {
                     // ...generate a new color and mark it
                     let southColor = [colorArr[0] + p.random(-5, 5), colorArr[1], colorArr[2], colorArr[3]];
-                    fringeToAdd.push([southLocationStr, southColor]);
+                    fringeToAdd.set(southLocationStr, southColor);
                 }
             }
             // west
-            fringeToRemove.push(locationStr);
-            visitedPixels.set(locationStr, colorArr);
+            if (p.random() < 0.5 && location[0] !== 0) {
+                let westLocationStr = (location[0] - 1) + "," + (location[1]);
+                // if we haven't seen this location before...
+                if (!fringePixels.has(westLocationStr) &&
+                    !visitedPixels.has(westLocationStr) &&
+                    !fringeToAdd.has(westLocationStr)) {
+                    // ...generate a new color and mark it
+                    let westColor = [colorArr[0] + p.random(-5, 5), colorArr[1], colorArr[2], colorArr[3]];
+                    fringeToAdd.set(westLocationStr, westColor);
+                }
+            }
+
+            if (p.areAllNeighborsVisited(locationStr)) {
+                fringeToRemove.push(locationStr);
+                visitedPixels.set(locationStr, colorArr);
+            }
+
         });
+
+        fringeToAdd.forEach((value, key) => {
+            fringePixels.set(key, value);
+            drawPixels.set(key, value);
+        });
+
         fringeToRemove.forEach(key => {
             fringePixels.delete(key);
         });
-        fringeToAdd.forEach(keyvalue => {
-            fringePixels.set(keyvalue[0], keyvalue[1]);
-            drawPixels.set(keyvalue[0], keyvalue[1]);
-        })
-    }
+
+    };
 
     p.drawPixels = () => {
         // p.loadPixels();
@@ -132,8 +158,45 @@ const artgenerator5 = (p) => {
         p.updatePixels();
 
         drawPixels.clear();
-    }
+    };
 
+    p.areAllNeighborsVisited = (locationStr) => {
+        let location = locationStr.split(',');
+        location[0] = parseInt(location[0]);
+        location[1] = parseInt(location[1]);
+
+        let northLocationStr = (location[0]) + "," + (location[1] - 1);
+        let eastLocationStr = (location[0] + 1) + "," + (location[1]);
+        let southLocationStr = (location[0]) + "," + (location[1] + 1);
+        let westLocationStr = (location[0] - 1) + "," + (location[1]);
+
+        let isNorthVisited =
+            location[1] === 0 ||
+            visitedPixels.has(northLocationStr) ||
+            fringePixels.has(northLocationStr) ||
+            fringeToAdd.has(northLocationStr);
+
+        let isEastVisited =
+            location[0] === p.width - 1 ||
+            visitedPixels.has(eastLocationStr) ||
+            fringePixels.has(eastLocationStr) ||
+            fringeToAdd.has(eastLocationStr);
+
+        let isSouthVisited =
+            location[1] === p.height - 1 ||
+            visitedPixels.has(southLocationStr) ||
+            fringePixels.has(southLocationStr) ||
+            fringeToAdd.has(southLocationStr);
+
+        let isWestVisited =
+            location[0] === 0 ||
+            visitedPixels.has(westLocationStr) ||
+            fringePixels.has(westLocationStr) ||
+            fringeToAdd.has(westLocationStr);
+
+        return isNorthVisited && isEastVisited && isSouthVisited && isWestVisited;
+    };
+    
     p.setOrigin = (origin) => {
         let hue = p.map(p.random(), 0, 1, 0, 360);
         let saturation = p.map(p.random(), 0, 1, 80, 100);
@@ -143,14 +206,16 @@ const artgenerator5 = (p) => {
         isOriginSet = true;
     };
 
+    p.shuffleMap = (map) => new Map(p.shuffle(Array.from(map.entries())));
+
     // event and input
 
     p.mousePressed = () => {
         console.log(p.mouseX + ", " + p.mouseY);
         if (p.isMouseOverCanvas() && p.mouseButton === p.LEFT) {
             // if (!isOriginSet) {
-                let origin = p.createVector(p.mouseX,  p.mouseY);
-                p.setOrigin(origin)
+            let origin = p.createVector(p.mouseX, p.mouseY);
+            p.setOrigin(origin)
             // }
         }
     };
@@ -208,6 +273,13 @@ const artgenerator5 = (p) => {
         let w = p.select(".SketchContainer").width;
         let h = p.select(".SketchContainer").height;
         p.resizeCanvas(w, h);
+
+        p.background(0);
+        p.loadPixels();
+
+        visitedPixels.clear();
+        fringePixels.clear();
+        isOriginSet = false;
     };
 
     p.checkResize = () => {
