@@ -59,11 +59,7 @@ const appMap = new Map([
         name: "artgenerator5",
         displayName: "Art Generator 5",
         component: ArtGenerator5App,
-<<<<<<< HEAD
         version: "0.1a",
-=======
-        version: "0.0.3pre",
->>>>>>> master
         description: "It generates art",
         creationDate: "March 17, 2020 00:00:00",
     }]

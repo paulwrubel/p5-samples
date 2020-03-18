@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.1fd43177.chunk.css",
-    "main.js": "/static/js/main.c95f8fcb.chunk.js",
-    "main.js.map": "/static/js/main.c95f8fcb.chunk.js.map",
+    "main.js": "/static/js/main.f245a9d1.chunk.js",
+    "main.js.map": "/static/js/main.f245a9d1.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.d8e10344.js",
     "runtime-main.js.map": "/static/js/runtime-main.d8e10344.js.map",
     "static/js/2.eaeaceae.chunk.js": "/static/js/2.eaeaceae.chunk.js",
     "static/js/2.eaeaceae.chunk.js.map": "/static/js/2.eaeaceae.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.27fb4fafe13e502f3ab03819c825602c.js": "/precache-manifest.27fb4fafe13e502f3ab03819c825602c.js",
+    "precache-manifest.4ce56ade4034f0bf1181550fc364451a.js": "/precache-manifest.4ce56ade4034f0bf1181550fc364451a.js",
     "service-worker.js": "/service-worker.js",
     "static/css/main.1fd43177.chunk.css.map": "/static/css/main.1fd43177.chunk.css.map",
     "static/js/2.eaeaceae.chunk.js.LICENSE.txt": "/static/js/2.eaeaceae.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.d8e10344.js",
     "static/js/2.eaeaceae.chunk.js",
     "static/css/main.1fd43177.chunk.css",
-    "static/js/main.c95f8fcb.chunk.js"
+    "static/js/main.f245a9d1.chunk.js"
   ]
 }
