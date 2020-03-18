@@ -1,9 +1,10 @@
-import ChainballApp from "sketches/chainball/ChainballApp"
-import OrbiterApp from "sketches/orbiter/OrbiterApp"
-import InteractiveHistogramApp from "sketches/interactivehistogram/InteractiveHistogramApp"
-import CubeGridApp from "sketches/cubegrid/CubeGridApp"
-import TrailsApp from "sketches/trails/TrailsApp"
-import TrianglesApp from "sketches/triangles/TrianglesApp"
+import ChainballApp from "sketches/chainball/ChainballApp";
+import OrbiterApp from "sketches/orbiter/OrbiterApp";
+import InteractiveHistogramApp from "sketches/interactivehistogram/InteractiveHistogramApp";
+import CubeGridApp from "sketches/cubegrid/CubeGridApp";
+import TrailsApp from "sketches/trails/TrailsApp";
+import TrianglesApp from "sketches/triangles/TrianglesApp";
+import ArtGenerator5App from "sketches/artgenerator5/ArtGenerator5App";
 
 const appMap = new Map([
     ["chainball", {
@@ -58,7 +59,7 @@ const appMap = new Map([
         name: "artgenerator5",
         displayName: "Art Generator 5",
         component: ArtGenerator5App,
-        version: "0.0.1pre",
+        version: "0.0.2pre",
         description: "It generates art",
         creationDate: "March 17, 2020 00:00:00",
     }]
