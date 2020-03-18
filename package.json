@@ -1,7 +1,7 @@
 {
   "name": "vixuals",
   "version": "0.2.0",
-  "homepage": "https://paulwrubel.github.io/vixuals",
+  "homepage": "https://www.vixuals.io/",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.3",
