@@ -39,6 +39,6 @@ start:
 npm-build:
 	npm run build
 
-publish:
-	-rm -r ./docs
-	mv ./build ./docs
+# publish:
+# 	-rm -r ./docs
+# 	mv ./build ./docs
