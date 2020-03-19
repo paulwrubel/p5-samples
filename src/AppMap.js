@@ -59,8 +59,8 @@ const appMap = new Map([
         name: "artgenerator5",
         displayName: "Art Generator 5",
         component: ArtGenerator5App,
-        version: "0.1a",
-        description: "It generates art",
+        version: "0.2a",
+        description: "Procedural art generator, pixel by pixel",
         creationDate: "March 17, 2020 00:00:00",
     }]
 ]);

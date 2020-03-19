@@ -56,7 +56,7 @@ class MenuBar extends React.Component {
                             v{this.props.selectedApp.version}
                         </Typography>
                         <Typography variant="body1" className="SelectedDescription Grow">
-                            {this.props.selectedApp.description} - ({creationDate.getFullYear()})
+                            {this.props.selectedApp.description} ({creationDate.getFullYear()})
                         </Typography>
                         {/* <div className="Grow" /> */}
                         <Typography variant="body2" className="AppInfo">
