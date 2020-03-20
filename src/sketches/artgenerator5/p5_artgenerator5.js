@@ -10,6 +10,12 @@ const artgenerator5 = (p) => {
 
     const ROUNDS_PER_FRAME = 3;
 
+    const BORDER_THICKNESS = 10;
+
+    let BORDER_COLOR;
+    let BACKGROUND_COLOR;
+    let IMAGE_BACKGROUND_COLOR;
+
     let NORTH_CHANCE = 0.25;
     let EAST_CHANCE = 0.75;
     let SOUTH_CHANCE = 0.25;
@@ -33,10 +39,10 @@ const artgenerator5 = (p) => {
     let saturationRange = [90, 100];
     let brightnessRange = [80, 100];
 
-    let img;
+    let image;
 
-    let getWidth = () => img.width;
-    let getHeight = () => img.height;
+    let imageWidth = 1920;
+    let imageHeight = 1080;
 
     let isGenerating = false;
 
@@ -51,31 +57,35 @@ const artgenerator5 = (p) => {
         let c = p.createCanvas(w, h, p.P2D);
         p.disableRightClick(c.canvas);
 
-        let imageWidth = w;
-        let imageHeight = h;
-        img = p.createImage(imageWidth, imageHeight);
-
         p.frameRate(60);
         p.colorMode(p.HSB, 360, 100, 100, 100);
         p.imageMode(p.CENTER);
+        p.rectMode(p.CORNERS);
 
-        // set up arrays
-        // fringePixels = [];
-        // visitedPixels = [];
-        // unvisitedPixels = [];
-        // for (let i=0; i<getWidth(); i++) {
-        //     fringePixels[i] = [];
-        //     visitedPixels[i] = [];
-        //     unvisitedPixels[i] = [];
-        // }
         fringePixels = new Map();
         fringeToAdd = new Map();
         visitedPixels = new Map();
         drawPixels = new Map();
 
-        p.background(0);
+        BACKGROUND_COLOR = p.color(0, 0, 80);
+        BORDER_COLOR = p.color(0, 0, 0);
+        IMAGE_BACKGROUND_COLOR = p.color(0, 0, 100);
 
-        img.loadPixels();
+        image = p.createImage(imageWidth, imageHeight);
+        image.loadPixels();
+        p.drawImageBackground();
+
+        // set up arrays
+        // fringePixels = [];
+        // visitedPixels = [];
+        // unvisitedPixels = [];
+        // for (let i=0; i<img.width; i++) {
+        //     fringePixels[i] = [];
+        //     visitedPixels[i] = [];
+        //     unvisitedPixels[i] = [];
+        // }
+
+        p.background(BACKGROUND_COLOR);
 
         didSetup = true;
     };
@@ -85,7 +95,7 @@ const artgenerator5 = (p) => {
 
         // START SKETCH
 
-        for (let i=0; i<ROUNDS_PER_FRAME; i++) {
+        for (let i = 0; i < ROUNDS_PER_FRAME; i++) {
             // do a round
             p.updatePixelRound();
 
@@ -96,11 +106,12 @@ const artgenerator5 = (p) => {
         }
         p.drawPixels();
 
-        if (visitedPixels.size === getWidth() * getHeight()) {
+        if (visitedPixels.size === image.width * image.height) {
             isGenerating = false;
         }
 
-        p.image(img, p.width / 2, p.height / 2, getWidth(), getHeight());
+        p.drawBorder();
+        p.drawImage();
 
         // END SKETCH
 
@@ -109,6 +120,53 @@ const artgenerator5 = (p) => {
     };
 
     // helpers
+
+    p.drawImageBackground = () => {
+        for (let x=0; x<image.width; x++) {
+            for (let y=0; y<image.height; y++) {
+                image.set(x, y, IMAGE_BACKGROUND_COLOR);
+            }
+        }
+        image.updatePixels();
+    }
+
+    p.drawImage = () => {
+        let centerX = p.width / 2;
+        let centerY = p.height / 2;
+        let imageDisplayWidth = p.getImageDisplayWidth();
+        let imageDisplayHeight = p.getImageDisplayHeight();
+
+        p.image(image, centerX, centerY, imageDisplayWidth, imageDisplayHeight);
+    };
+
+    p.getImageDisplayWidth = () => {
+        let scalingFactor = p.getScalingFactor();
+        let imageDisplayWidth;
+        if (scalingFactor >= 1.0) {
+            imageDisplayWidth = image.width;
+        } else {
+            imageDisplayWidth = image.width * scalingFactor;
+        }
+        return imageDisplayWidth;
+    };
+
+    p.getImageDisplayHeight = () => {
+        let scalingFactor = p.getScalingFactor();
+        let imageDisplayHeight;
+        if (scalingFactor >= 1.0) {
+            imageDisplayHeight = image.height;
+        } else {
+            imageDisplayHeight = image.height * scalingFactor;
+        }
+        return imageDisplayHeight;
+    };
+
+    p.getScalingFactor = () => {
+        let scalingFactorX = (p.width - BORDER_THICKNESS * 2) / image.width;
+        let scalingFactorY = (p.height - BORDER_THICKNESS * 2) / image.height;
+
+        return p.min(scalingFactorX, scalingFactorY);
+    };
 
     p.updatePixelRound = () => {
         // establish delta arrays
@@ -139,7 +197,7 @@ const artgenerator5 = (p) => {
                 }
             }
             // east
-            if (p.random() < EAST_CHANCE && location[0] !== getWidth() - 1) {
+            if (p.random() < EAST_CHANCE && location[0] !== image.width - 1) {
                 let eastLocationStr = (location[0] + 1) + "," + (location[1]);
                 // if we haven't seen this location before...
                 if (!fringePixels.has(eastLocationStr) &&
@@ -151,7 +209,7 @@ const artgenerator5 = (p) => {
                 }
             }
             // south
-            if (p.random() < SOUTH_CHANCE && location[1] !== getHeight() - 1) {
+            if (p.random() < SOUTH_CHANCE && location[1] !== image.height - 1) {
                 let southLocationStr = (location[0]) + "," + (location[1] + 1);
                 // if we haven't seen this location before...
                 if (!fringePixels.has(southLocationStr) &&
@@ -247,9 +305,9 @@ const artgenerator5 = (p) => {
         drawPixels.forEach((colorArr, locationStr) => {
             let location = locationStr.split(',');
             let color = p.color(colorArr[0], colorArr[1], colorArr[2], colorArr[3]);
-            img.set(location[0], location[1], color);
+            image.set(location[0], location[1], color);
         });
-        img.updatePixels();
+        image.updatePixels();
 
         drawPixels.clear();
     };
@@ -258,7 +316,7 @@ const artgenerator5 = (p) => {
         let color;
         do {
             color = [
-                inputColor[0] + p.random(-variance[0], variance[0]), 
+                inputColor[0] + p.random(-variance[0], variance[0]),
                 inputColor[1] + p.random(-variance[1], variance[1]),
                 inputColor[2] + p.random(-variance[2], variance[2]),
                 inputColor[3] + p.random(-variance[3], variance[3]),
@@ -284,13 +342,13 @@ const artgenerator5 = (p) => {
             fringeToAdd.has(northLocationStr);
 
         let isEastVisited =
-            location[0] === getWidth() - 1 ||
+            location[0] === image.width - 1 ||
             visitedPixels.has(eastLocationStr) ||
             fringePixels.has(eastLocationStr) ||
             fringeToAdd.has(eastLocationStr);
 
         let isSouthVisited =
-            location[1] === getHeight() - 1 ||
+            location[1] === image.height - 1 ||
             visitedPixels.has(southLocationStr) ||
             fringePixels.has(southLocationStr) ||
             fringeToAdd.has(southLocationStr);
@@ -313,29 +371,93 @@ const artgenerator5 = (p) => {
     p.isBetween = (v, arr) => {
         return arr[0] < v && v < arr[1];
     }
-    
+
     p.setOrigin = (origin) => {
         let hue = p.map(p.random(), 0, 1, hueRange[0], hueRange[1]);
         let saturation = p.map(p.random(), 0, 1, saturationRange[0], saturationRange[1]);
         let brightness = p.map(p.random(), 0, 1, brightnessRange[0], brightnessRange[1]);
         let alpha = 100;
-        fringePixels.set(origin.x + "," + origin.y, [hue, saturation, brightness, alpha]);
-        drawPixels.set(origin.x + "," + origin.y, [hue, saturation, brightness, alpha]);
-        isGenerating = true;
+
+        let locationStr = origin.x + "," + origin.y;
+        let colorArr = [hue, saturation, brightness, alpha];
+
+        if (!fringePixels.has(locationStr) &&
+            !visitedPixels.has(locationStr) &&
+            !fringeToAdd.has(locationStr)) {
+            fringePixels.set(locationStr, colorArr);
+            drawPixels.set(locationStr, colorArr);
+            isGenerating = true;
+        }
     };
 
+    p.drawBorder = () => {
+        p.fill(BORDER_COLOR);
+
+        let centerX = p.width / 2;
+        let centerY = p.height / 2;
+
+        let displayWidth = p.getImageDisplayWidth();
+        let displayHeight = p.getImageDisplayHeight();
+
+        let imageNorthWest = p.createVector(centerX - displayWidth / 2, centerY - displayHeight / 2);
+        let imageSouthEast = p.createVector(centerX + displayWidth / 2, centerY + displayHeight / 2);
+
+        p.rect(
+            imageNorthWest.x - BORDER_THICKNESS,
+            imageNorthWest.y - BORDER_THICKNESS,
+            imageSouthEast.x + BORDER_THICKNESS,
+            imageSouthEast.y + BORDER_THICKNESS);
+    }
+
+    p.getLocationOnImage = (vector) => {
+        let halfWidth = p.width / 2;
+        let halfHeight = p.height / 2;
+        vector.sub(halfWidth, halfHeight);
+
+        let displayWidth = p.getImageDisplayWidth();
+        let displayHeight = p.getImageDisplayHeight();
+
+        let xLocation = p.map(vector.x, -displayWidth / 2, displayWidth / 2, 0, image.width);
+        let yLocation = p.map(vector.y, -displayHeight / 2, displayHeight / 2, 0, image.height);
+
+        return p.createVector(xLocation, yLocation);
+
+    }
+
     p.shuffleMap = (map) => new Map(p.shuffle(Array.from(map.entries())));
+
+    p.isMouseOverImage = () => {
+        let mouseVector = p.createVector(p.mouseX, p.mouseY);
+        let imageLocation = p.getLocationOnImage(mouseVector);
+
+        return (
+            imageLocation.x >= 0 && 
+            imageLocation.x < image.width && 
+            imageLocation.y >= 0 && 
+            imageLocation.y < image.height);
+    }
 
     // event and input
 
     p.mousePressed = () => {
-        let locationStr = p.mouseX + "," + p.mouseY;
-        if (p.isMouseOverCanvas() && 
-        p.mouseButton === p.LEFT && 
-        !visitedPixels.has(locationStr) && 
-        !fringePixels.has(locationStr)) {
+        // let xLoc = parseInt(p.mouseX);
+        // let yLoc = parseInt(p.mouseY);
+        let mouseVector = p.createVector(p.mouseX, p.mouseY);
+        let imageLocation = p.getLocationOnImage(mouseVector);
+
+        let xLoc = parseInt(imageLocation.x);
+        let yLoc = parseInt(imageLocation.y);
+        let locationStr = xLoc + "," + yLoc;
+        console.log(locationStr);
+        console.log(visitedPixels.get(locationStr));
+        console.log(visitedPixels.has(locationStr));
+        if (p.isMouseOverCanvas() &&
+            p.isMouseOverImage() &&
+            p.mouseButton === p.LEFT &&
+            !visitedPixels.has(locationStr) &&
+            !fringePixels.has(locationStr)) {
             // if (!isOriginSet) {
-            let origin = p.createVector(p.mouseX, p.mouseY);
+            let origin = p.createVector(xLoc, yLoc);
             p.setOrigin(origin)
             // }
         }
@@ -344,7 +466,7 @@ const artgenerator5 = (p) => {
     p.keyPressed = () => {
         if (p.key === ' ') {
             console.log("saving image...");
-            img.save("my-image", "png");
+            image.save("my-image", "png");
         }
     }
 
@@ -369,11 +491,13 @@ const artgenerator5 = (p) => {
             // }
 
             if (typeof informationCallback !== "undefined") {
-                let percentageFilled = ((visitedPixels.size / (getWidth() * getHeight())) * 100);
+                let percentageFilled = ((visitedPixels.size / (image.width * image.height)) * 100);
                 informationCallback(new Map([
                     ["instructions", "Press SPACEBAR to save image"],
                     ["separator_1", "---"],
                     ["frame_rate", "FPS: " + displayFrameRate.toFixed(0)],
+                    ["image_size", "Image Size: " + image.width + " x " + image.height],
+                    ["pixel_count", "Pixels: " + (image.width * image.height)],
                     ["fringe_count", "Fringe: " + fringePixels.size],
                     ["visited_count", "Visited: " + visitedPixels.size],
                     ["north_chance", "North Chance: " + (NORTH_CHANCE * 100).toFixed(2) + "%"],
@@ -385,8 +509,8 @@ const artgenerator5 = (p) => {
     };
 
     p.isMouseOverCanvas = function () {
-        if (p.mouseX > 0 && p.mouseX < p.width &&
-            p.mouseY > 0 && p.mouseY < p.height) {
+        if (p.mouseX >= 0 && p.mouseX < p.width &&
+            p.mouseY >= 0 && p.mouseY < p.height) {
             return true;
         }
         return false;
@@ -408,15 +532,13 @@ const artgenerator5 = (p) => {
         let h = p.select(".SketchContainer").height;
         p.resizeCanvas(w, h);
 
-        visitedPixels.clear();
-        fringePixels.clear();
+        // visitedPixels.clear();
+        // fringePixels.clear();
 
-        let imageWidth = w;
-        let imageHeight = h;
-        img = p.createImage(imageWidth, imageHeight);
-        img.loadPixels();
+        // image = p.createImage(imageWidth, imageHeight);
+        // image.loadPixels();
 
-        p.background(0);
+        p.background(BACKGROUND_COLOR);
 
         isGenerating = false;
     };

@@ -103,16 +103,14 @@ let triangles = (p) => {
         let w = p.select(".SketchContainer").width;
         let h = p.select(".SketchContainer").height;
         let c = p.createCanvas(w, h, p.P2D);
-        // let c = p.createCanvas(w, h, p.WEBGL);
         p.disableRightClick(c.canvas);
-
         p.frameRate(120);
+        p.colorMode(p.HSB, 360, 100, 100, 100);
 
         //  Initial values
         gravPoint = p.createVector(p.width / 2, p.height / 2);
         fixedPoint = p.createVector(p.width / 2, p.height / 2);
         //  Hue, Saturation, Brightness, and ranges
-        p.colorMode(p.HSB, 360, 100, 100, 100);
         //  Ellipses are drawn from centre and distances are radii
         p.ellipseMode(p.RADIUS);
         //  Background begins black
@@ -271,6 +269,7 @@ let triangles = (p) => {
         p.calculateFrameRate();
         p.updateCallbacks();
     };
+
     p.drawCrosshair = () => {
         switch (placementMode) {
             case PlacementMode.TRIANGLE:
