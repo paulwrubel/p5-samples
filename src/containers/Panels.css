@@ -9,3 +9,15 @@
 .PaperButtons {
     padding: 15px;
 }
+
+.PaperSliders {
+    padding: 15px;
+}
+
+.PaperNumberInputs {
+    padding: 15px;
+}
+
+.Grow {
+    flex-grow: 1;
+}

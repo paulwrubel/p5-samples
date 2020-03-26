@@ -71,9 +71,7 @@ const artgenerator5 = (p) => {
         BORDER_COLOR = p.color(0, 0, 0);
         IMAGE_BACKGROUND_COLOR = p.color(0, 0, 100);
 
-        image = p.createImage(imageWidth, imageHeight);
-        image.loadPixels();
-        p.drawImageBackground();
+        p.initializeImage();
 
         // set up arrays
         // fringePixels = [];
@@ -110,6 +108,7 @@ const artgenerator5 = (p) => {
             isGenerating = false;
         }
 
+        p.background(BACKGROUND_COLOR);
         p.drawBorder();
         p.drawImage();
 
@@ -120,6 +119,19 @@ const artgenerator5 = (p) => {
     };
 
     // helpers
+
+    p.resetMaps = () => {
+        fringePixels.clear();
+        fringeToAdd.clear();
+        visitedPixels.clear();
+        drawPixels.clear();
+    }
+
+    p.initializeImage = () => {
+        image = p.createImage(imageWidth, imageHeight);
+        image.loadPixels();
+        p.drawImageBackground();
+    }
 
     p.drawImageBackground = () => {
         for (let x=0; x<image.width; x++) {
@@ -448,9 +460,6 @@ const artgenerator5 = (p) => {
         let xLoc = parseInt(imageLocation.x);
         let yLoc = parseInt(imageLocation.y);
         let locationStr = xLoc + "," + yLoc;
-        console.log(locationStr);
-        console.log(visitedPixels.get(locationStr));
-        console.log(visitedPixels.has(locationStr));
         if (p.isMouseOverCanvas() &&
             p.isMouseOverImage() &&
             p.mouseButton === p.LEFT &&
@@ -554,11 +563,22 @@ const artgenerator5 = (p) => {
     p.myCustomRedrawAccordingToNewPropsHandler = (newProps) => {
         // sketch components
         if (didSetup) {
-            // if (typeof newProps.generationMode !== "undefined") {
-            //     if (generationMode !== newProps.generationMode) {
-            //         generationMode = newProps.generationMode;
-            //     }
-            // }
+            if (typeof newProps.imageWidth !== "undefined") {
+                let newImageWidth = parseInt(newProps.imageWidth);
+                if (newImageWidth > 0 && imageWidth !== newImageWidth) {
+                    imageWidth = newImageWidth;
+                    p.resetMaps();
+                    p.initializeImage();
+                }
+            }
+            if (typeof newProps.imageHeight !== "undefined") {
+                let newImageHeight = parseInt(newProps.imageHeight);
+                if (newImageHeight > 0 && imageHeight !== newImageHeight) {
+                    imageHeight = newImageHeight;
+                    p.resetMaps();
+                    p.initializeImage();
+                }
+            }
         }
         if (typeof newProps.onInformationChange !== "undefined") {
             if (typeof informationCallback === "undefined") {

@@ -10,14 +10,30 @@ class ArtGenerator5App extends React.Component {
 
         this.state = {
             information: new Map(),
+            imageWidth: 1920,
+            imageHeight: 1080,
         }
 
         this.handleInformationChange = this.handleInformationChange.bind(this);
+        this.handleImageWidthChange = this.handleImageWidthChange.bind(this);
+        this.handleImageHeightChange = this.handleImageHeightChange.bind(this);
     }
 
     handleInformationChange(newValue) {
         this.setState({
             information: newValue
+        });
+    }
+
+    handleImageWidthChange(newValue) {
+        this.setState({
+            imageWidth: newValue
+        });
+    }
+
+    handleImageHeightChange(newValue) {
+        this.setState({
+            imageHeight: newValue
         });
     }
 
@@ -33,15 +49,23 @@ class ArtGenerator5App extends React.Component {
                     <Grid container item xs>
                         <ArtGenerator5ControlsPanel
                             information={this.state.information}
-                            
+
+                            imageWidth={this.state.imageWidth}
+                            onImageWidthChange={this.handleImageWidthChange}
+                            imageHeight={this.state.imageHeight}
+                            onImageHeightChange={this.handleImageHeightChange}
+
                             isControlsPanelOpen={this.props.isControlsPanelOpen} />
                     </Grid>
                     <Grid container item xs={this.props.isControlsPanelOpen ? 9 : 12}>
                         <SketchContainer
                             sketch={p5ArtGenerator5}
-                            
+
+                            imageWidth={this.state.imageWidth}
+                            imageHeight={this.state.imageHeight}
+
                             onInformationChange={this.handleInformationChange}
-                            />
+                        />
                     </Grid>
                 </Grid>
             </div>
