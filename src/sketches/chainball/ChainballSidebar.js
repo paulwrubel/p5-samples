@@ -1,12 +1,12 @@
 import React from 'react';
 import { Grid, Paper, Drawer, Typography } from '@material-ui/core';
-import "./containers/Sidebar.css";
+import "containers/Sidebar.css";
 
-import BallCountSlider from "./sketches/chainball/panels/BallCountSlider";
-import LinkDampingSlider from "./sketches/chainball/panels/LinkDampingSlider";
-import LinkLengthSlider from "./sketches/chainball/panels/LinkLengthSlider";
-import LinkTensionSlider from "./sketches/chainball/panels/LinkTensionSlider";
-import ModeRadioButtons from "./sketches/chainball/panels/ModeRadioButtons";
+import BallCountSlider from "sketches/chainball/panels/BallCountSlider";
+import LinkDampingSlider from "sketches/chainball/panels/LinkDampingSlider";
+import LinkLengthSlider from "sketches/chainball/panels/LinkLengthSlider";
+import LinkTensionSlider from "sketches/chainball/panels/LinkTensionSlider";
+import ModeRadioButtons from "sketches/chainball/panels/ModeRadioButtons";
 
 class ChainballSidebar extends React.Component {
     // constructor(props) {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Grid, Drawer } from '@material-ui/core';
 import "containers/Sidebar.css"
-import InfoPanel from './containers/panels/InfoPanel';
-import RadioPanel from './containers/panels/RadioPanel';
-import SwitchPanel from './containers/panels/SwitchPanel';
-import ButtonPanel from './containers/panels/ButtonPanel';
+import InfoPanel from 'containers/panels/InfoPanel';
+import RadioPanel from 'containers/panels/RadioPanel';
+import SwitchPanel from 'containers/panels/SwitchPanel';
+import ButtonPanel from 'containers/panels/ButtonPanel';
 
 class TrianglesSidebar extends React.Component {
     // constructor(props) {

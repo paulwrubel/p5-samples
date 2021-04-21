@@ -1,7 +1,7 @@
 import React from 'react';
 import { Paper, Grid, Drawer } from '@material-ui/core';
-import "./containers/Sidebar.css"
-import InfoPanel from './containers/panels/InfoPanel';
+import "containers/Sidebar.css"
+import InfoPanel from 'containers/panels/InfoPanel';
 import ModeRadioButtons from './panels/ModeRadioButtons';
 import ClearButton from './panels/ClearButton';
 

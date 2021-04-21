@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Drawer } from '@material-ui/core';
-import "./containers/Sidebar.css";
-import InfoPanel from './containers/panels/InfoPanel';
+import "containers/Sidebar.css";
+import InfoPanel from 'containers/panels/InfoPanel';
 
 class ArtGenerator5ControlsPanel extends React.Component {
     render() {

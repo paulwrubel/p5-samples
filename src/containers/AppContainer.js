@@ -2,7 +2,7 @@ import React from 'react';
 // import Sidebar from 'sketches/chainball/Sidebar'
 import Grid from "@material-ui/core/Grid";
 import withStyles from "@material-ui/core/styles/withStyles";
-import SketchContainer from './containers/SketchContainer';
+import SketchContainer from 'containers/SketchContainer';
 
 const styles = theme => ({
     root: {

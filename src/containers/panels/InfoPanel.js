@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Paper } from '@material-ui/core';
-import "./containers/Panels.css"
+import "containers/Panels.css"
 
 class InfoPanel extends React.Component {
     render() {

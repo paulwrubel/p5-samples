@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from "@material-ui/core";
-import SketchContainer from './containers/SketchContainer';
-import p5InteractiveHistogram from "./sketches/interactivehistogram/p5_interactivehistogram";
+import SketchContainer from 'containers/SketchContainer';
+import p5InteractiveHistogram from "sketches/interactivehistogram/p5_interactivehistogram";
 import InteractiveHistogramSidebar from './InteractiveHistogramSidebar';
 
 class InteractiveHistogramApp extends React.Component {

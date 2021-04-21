@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from "@material-ui/core";
-import SketchContainer from './containers/SketchContainer';
+import SketchContainer from 'containers/SketchContainer';
 import p5ArtGenerator5 from "./p5_artgenerator5";
 import ArtGenerator5ControlsPanel from "./ArtGenerator5ControlsPanel"
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Paper, Grid } from '@material-ui/core';
-import "./containers/Panels.css"
+import "containers/Panels.css"
 
 class ButtonPanel extends React.Component {
     render() {

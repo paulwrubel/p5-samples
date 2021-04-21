@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from "@material-ui/core";
-import SketchContainer from './containers/SketchContainer';
-import p5Triangles from "./sketches/triangles/p5_triangles";
+import SketchContainer from 'containers/SketchContainer';
+import p5Triangles from "sketches/triangles/p5_triangles";
 import TrianglesSidebar from './TrianglesSidebar';
 
 class TrianglesApp extends React.Component {
