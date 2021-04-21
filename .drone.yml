@@ -10,23 +10,12 @@ steps:
   image: alpine/git
   commands:
   - git clone --single-branch --branch $DRONE_SOURCE_BRANCH --depth=1 $DRONE_GIT_HTTP_URL .
-  - du -sh .
-  # - git config core.sparseCheckout true
-  # - echo -e "/*\n!sample-output/\n!resources/" >> .git/info/sparse-checkout
-  # - cat .git/info/sparse-checkout
-  # - git fetch --depth=1 origin $DRONE_COMMIT
-  # - du -sh .
-  - ls -la
-  # - git checkout $DRONE_COMMIT_BRANCH
 
 - name: build-dev
-  image: golang:1.15-buster
+  image: node:latest
   commands:
-  - export GO111MODULE=on &&
-    export GOOS=linux &&
-    export GOARCH=amd64 &&
-    export CGO_ENABLED=0 &&
-    go build -o photolum cmd/main.go
+  - npm install
+  - npm run build
   when:
     branch:
     - main
@@ -35,13 +24,10 @@ steps:
     - pull_request
 
 - name: build
-  image: golang:1.15-buster
+  image: node:latest
   commands:
-  - export GO111MODULE=on &&
-    export GOOS=linux &&
-    export GOARCH=amd64 &&
-    export CGO_ENABLED=0 &&
-    go build -o photolum cmd/main.go
+  - npm install
+  - npm run build
   when:
     branch:
     - main
@@ -55,7 +41,7 @@ steps:
       from_secret: docker_username
     password: 
       from_secret: docker_password
-    repo: paulwrubel/photolum
+    repo: paulwrubel/vixuals
     tags:
     - dev
   when:
@@ -71,7 +57,7 @@ steps:
       from_secret: docker_username
     password: 
       from_secret: docker_password
-    repo: paulwrubel/photolum
+    repo: paulwrubel/vixuals
     tags:
     - latest
   when:
