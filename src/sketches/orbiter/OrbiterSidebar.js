@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, Typography, Grid, Drawer } from '@material-ui/core';
-import "containers/Sidebar.css"
+import "./containers/Sidebar.css"
 
 class OrbiterSidebar extends React.Component {
     // constructor(props) {

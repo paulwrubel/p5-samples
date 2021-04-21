@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from "@material-ui/core";
-import SketchContainer from 'containers/SketchContainer';
-import p5Chainball from "sketches/chainball/p5_chainball";
+import SketchContainer from './containers/SketchContainer';
+import p5Chainball from "./sketches/chainball/p5_chainball";
 import ChainballSidebar from "./ChainballSidebar"
 
 class ChainballApp extends React.Component {

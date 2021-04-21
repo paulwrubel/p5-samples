@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from "@material-ui/core";
-import SketchContainer from 'containers/SketchContainer';
-import p5CubeGrid from "sketches/cubegrid/p5_cubegrid";
+import SketchContainer from './containers/SketchContainer';
+import p5CubeGrid from "./sketches/cubegrid/p5_cubegrid";
 import CubeGridSidebar from './CubeGridSidebar';
 
 class CubeGridApp extends React.Component {

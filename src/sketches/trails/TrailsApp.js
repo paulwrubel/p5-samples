@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from "@material-ui/core";
-import SketchContainer from 'containers/SketchContainer';
-import p5Trails from "sketches/trails/p5_trailart";
+import SketchContainer from './containers/SketchContainer';
+import p5Trails from "./sketches/trails/p5_trailart";
 import TrailsSidebar from './TrailsSidebar';
 
 class TrailsApp extends React.Component {

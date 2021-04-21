@@ -1,10 +1,10 @@
-import ChainballApp from "sketches/chainball/ChainballApp";
-import OrbiterApp from "sketches/orbiter/OrbiterApp";
-import InteractiveHistogramApp from "sketches/interactivehistogram/InteractiveHistogramApp";
-import CubeGridApp from "sketches/cubegrid/CubeGridApp";
-import TrailsApp from "sketches/trails/TrailsApp";
-import TrianglesApp from "sketches/triangles/TrianglesApp";
-import ArtGenerator5App from "sketches/artgenerator5/ArtGenerator5App";
+import ChainballApp from "./sketches/chainball/ChainballApp";
+import OrbiterApp from "./sketches/orbiter/OrbiterApp";
+import InteractiveHistogramApp from "./sketches/interactivehistogram/InteractiveHistogramApp";
+import CubeGridApp from "./sketches/cubegrid/CubeGridApp";
+import TrailsApp from "./sketches/trails/TrailsApp";
+import TrianglesApp from "./sketches/triangles/TrianglesApp";
+import ArtGenerator5App from "./sketches/artgenerator5/ArtGenerator5App";
 
 const appMap = new Map([
     ["chainball", {

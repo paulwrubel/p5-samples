@@ -1,8 +1,8 @@
 import React from 'react';
 import { Paper, Typography, Grid, Drawer } from '@material-ui/core';
-import "containers/Sidebar.css"
+import "./containers/Sidebar.css"
 
-import BarHeightScalarSlider from "sketches/interactivehistogram/panels/BarHeightScalarSlider";
+import BarHeightScalarSlider from "./sketches/interactivehistogram/panels/BarHeightScalarSlider";
 
 class InteractiveHistogramSidebar extends React.Component {
     // constructor(props) {
