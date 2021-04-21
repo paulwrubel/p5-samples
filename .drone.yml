@@ -19,7 +19,7 @@ steps:
   - ls -la
   # - git checkout $DRONE_COMMIT_BRANCH
 
-- name: build
+- name: build-dev
   image: golang:1.15-buster
   commands:
   - export GO111MODULE=on &&
@@ -33,6 +33,36 @@ steps:
     event:
     - push
     - pull_request
+
+- name: build
+  image: golang:1.15-buster
+  commands:
+  - export GO111MODULE=on &&
+    export GOOS=linux &&
+    export GOARCH=amd64 &&
+    export CGO_ENABLED=0 &&
+    go build -o photolum cmd/main.go
+  when:
+    branch:
+    - main
+    event:
+    - tag
+
+- name: publish-dev
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password: 
+      from_secret: docker_password
+    repo: paulwrubel/photolum
+    tags:
+    - dev
+  when:
+    branch:
+    - main
+    event:
+    - push
 
 - name: publish
   image: plugins/docker
@@ -48,4 +78,4 @@ steps:
     branch:
     - main
     event:
-    - push
+    - tag
