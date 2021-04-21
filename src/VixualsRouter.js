@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
+import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import Vixuals from 'Vixuals'
 
 const DEFAULT_PARAM = "__DEFAULT_APP__"
