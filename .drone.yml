@@ -12,7 +12,7 @@ steps:
   - git clone --single-branch --branch $DRONE_SOURCE_BRANCH --depth=1 $DRONE_GIT_HTTP_URL .
 
 - name: build-dev
-  image: node:alpine
+  image: node:latest
   commands:
   - npm install
   - npm run build
@@ -24,7 +24,7 @@ steps:
     - pull_request
 
 - name: build
-  image: node:alpine
+  image: node:latest
   commands:
   - npm install
   - npm run build
