@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
-import Vixuals from 'Vixuals'
+import Vixuals from './Vixuals'
 
 const DEFAULT_PARAM = "__DEFAULT_APP__"
 
