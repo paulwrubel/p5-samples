@@ -6,6 +6,7 @@ COPY ./package-lock.json ./
 RUN npm install
 COPY ./src/ ./src/
 COPY ./public/ ./public/
+ADD jsconfig.json jsconfig.json
 # COPY ./docs/ ./docs/
 RUN npm run build
 
