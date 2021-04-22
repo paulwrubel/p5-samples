@@ -1,7 +1,7 @@
 {
   "name": "vixuals",
-  "version": "0.2.0",
-  "homepage": "https://www.vixuals.io/",
+  "version": "0.2.1",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.3",
