@@ -62,7 +62,7 @@ class MenuBar extends React.Component {
                         <Typography variant="body2" className="AppInfo">
                             {`
                             ${this.props.appName} 
-                            v${this.props.appVersion}
+                            ${this.props.appVersion}
                             `}
                         </Typography>
                         <Tooltip title="Open Menu">
