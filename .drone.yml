@@ -11,7 +11,7 @@ steps:
   commands:
   - git clone --single-branch --branch $DRONE_SOURCE_BRANCH --depth=1 $DRONE_GIT_HTTP_URL .
 
-- name: build-dev
+- name: build
   image: node:latest
   commands:
   - npm install
@@ -22,16 +22,6 @@ steps:
     event:
     - push
     - pull_request
-
-- name: build
-  image: node:latest
-  commands:
-  - npm install
-  - npm run build
-  when:
-    branch:
-    - main
-    event:
     - tag
 
 - name: publish-dev
