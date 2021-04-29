@@ -30,14 +30,30 @@ class ChainballSidebar extends React.Component {
                         <Grid item xs>
                             <Paper elevation={2}
                                 className="PaperInformation">
-                                <Typography 
+                                <Typography
                                     variant="body1"
                                     color="textSecondary">
-                                    FPS: {this.props.frameRate}
+                                    Description
                                 </Typography>
-                                <Typography 
+                                <Typography
+                                    variant="body2"
+                                    color="textSecondary">
+                                    Chainball is a fun little physics-based joint simulation tool.
+                                </Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs>
+                            <Paper elevation={2}
+                                className="PaperInformation">
+                                <Typography
                                     variant="body1"
                                     color="textSecondary">
+                                    Debug Information
+                                </Typography>
+                                <Typography
+                                    variant="body2"
+                                    color="textSecondary">
+                                    FPS: {this.props.frameRate}<br></br>
                                     Core Speed: {this.props.coreSpeed}
                                 </Typography>
                             </Paper>
@@ -87,7 +103,7 @@ class ChainballSidebar extends React.Component {
                         }
                     </Grid>
                 </Drawer>
-            </div>
+            </div >
         );
     }
 }

@@ -1,3 +1,7 @@
 .AppList {
     width: 25vw;
 }
+
+.Nested {
+    margin-left: 32px
+}

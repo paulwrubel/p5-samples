@@ -5,6 +5,7 @@ import CubeGridApp from "sketches/cubegrid/CubeGridApp";
 import TrailsApp from "sketches/trails/TrailsApp";
 import TrianglesApp from "sketches/triangles/TrianglesApp";
 import ArtGenerator5App from "sketches/artgenerator5/ArtGenerator5App";
+import LasersApp from "sketches/lasers/LasersApp";
 
 const appMap = new Map([
     ["chainball", {
@@ -62,6 +63,14 @@ const appMap = new Map([
         version: "v0.3-alpha",
         description: "Procedural art generator, pixel by pixel",
         creationDate: "March 17, 2020 00:00:00",
+    }],
+    ["lasers", {
+        name: "lasers",
+        displayName: "Lasers",
+        component: LasersApp,
+        version: "v0.1-alpha",
+        description: "Laser simulator hello",
+        creationDate: "April 27, 2021 16:11:00",
     }]
 ]);
 

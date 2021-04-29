@@ -5,8 +5,8 @@ import './Vixuals.css';
 import appMap from "./AppMap";
 import { Redirect, withRouter } from 'react-router-dom';
 
-const appName = "Vixuals"
-const appVersion = "v0.2.1"
+const name = "Vixuals"
+const version = "v0.2.2"
 
 const defaultApp = "chainball"
 
@@ -60,8 +60,8 @@ class Vixuals extends React.Component {
                     wrap='nowrap'>
                     <Grid item>
                         <MenuBar
-                            appName={appName}
-                            appVersion={appVersion}
+                            name={name}
+                            version={version}
                             selectedApp={appMap.get(this.props.match.params.app)}
                             setSelectedApp={this.handleSelectedAppChange}
                             apps={appMap}
@@ -71,6 +71,8 @@ class Vixuals extends React.Component {
                     </Grid>
                     <Grid item>
                         <App
+                            app={appMap.get(this.props.match.params.app)}
+
                             onControlsPanelToggle={this.handleControlsPanelToggle}
                             isControlsPanelOpen={this.state.isControlsPanelOpen} />
                     </Grid>

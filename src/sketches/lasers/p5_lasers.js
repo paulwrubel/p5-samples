@@ -1,10 +1,12 @@
-const template = (p) => {
+const Lasers = (p) => {
 
     // Required for all sketches
     let updateFrequency = 10;
     let frameRates = [];
     let displayFrameRate = 0;
     let didSetup = false;
+
+    let informationCallback;
 
     p.setup = () => {
         let w = p.select(".SketchContainer").width;
@@ -22,6 +24,8 @@ const template = (p) => {
         p.checkResize();
 
         // START SKETCH
+
+        p.background(0);
 
         // END SKETCH
 
@@ -82,11 +86,11 @@ const template = (p) => {
 
             // use with the "information" transmission
 
-            // if (typeof informationCallback !== "undefined") {
-            //     informationCallback(new Map([
-            //         ["info_key", "info_value_or_variable"],
-            //     ]));
-            // }
+            if (typeof informationCallback !== "undefined") {
+                informationCallback(new Map([
+                    ["framerate", "FPS: " + displayFrameRate.toFixed(0)],
+                ]));
+            }
         }
     };
 
@@ -108,13 +112,13 @@ const template = (p) => {
         // if you want to relay text-based information back to the user
         // you can uncomment the following block and utilize the "information" map and callback
 
-        // if (typeof newProps.onInformationChange !== "undefined") {
-        //     if (typeof informationCallback === "undefined") {
-        //         informationCallback = newProps.onInformationChange;
-        //     }
-        // }
+        if (typeof newProps.onInformationChange !== "undefined") {
+            if (typeof informationCallback === "undefined") {
+                informationCallback = newProps.onInformationChange;
+            }
+        }
     };
 
 };
 
-export default template;
+export default Lasers;

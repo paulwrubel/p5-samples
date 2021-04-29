@@ -50,19 +50,16 @@ class MenuBar extends React.Component {
                             </Tooltip>
                         }
                         <Typography variant="h5" className="SelectedName">
-                            {this.props.selectedApp.displayName}
+                            {this.props.selectedApp.displayName} ({creationDate.getFullYear()})
                         </Typography>
                         <Typography variant="body2" className="SelectedVersion">
-                            v{this.props.selectedApp.version}
-                        </Typography>
-                        <Typography variant="body1" className="SelectedDescription Grow">
-                            {this.props.selectedApp.description} ({creationDate.getFullYear()})
+                            {this.props.selectedApp.version}
                         </Typography>
                         {/* <div className="Grow" /> */}
-                        <Typography variant="body2" className="AppInfo">
+                        <Typography variant="body2" className="VixualsInfo Grow">
                             {`
-                            ${this.props.appName} 
-                            ${this.props.appVersion}
+                            ${this.props.name} 
+                            ${this.props.version}
                             `}
                         </Typography>
                         <Tooltip title="Open Menu">

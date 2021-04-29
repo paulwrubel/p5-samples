@@ -1,10 +1,24 @@
 import React from 'react';
-import { List, ListItem, ListItemText } from '@material-ui/core';
+import { List, ListItem, ListItemText, Collapse } from '@material-ui/core';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import "./AppList.css"
 class AppList extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    // }
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isAppListExpanded: false
+        };
+
+        this.handleAppListExpansionToggle = this.handleAppListExpansionToggle.bind(this);
+    }
+
+    handleAppListExpansionToggle(newValue) {
+        this.setState((oldState, _) => ({
+            isAppListExpanded: !oldState.isAppListExpanded
+        }));
+    }
 
     render() {
         let appArray = Array.from(this.props.apps.values());
@@ -20,18 +34,41 @@ class AppList extends React.Component {
         });
         console.log(appArray);
         return (
-            <div 
+            <div
                 className="AppList"
                 role="presentation"
-                onClick={this.props.toggleDrawer(false)}>
-                <List>
+            >
+
+                <ListItem button onClick={this.handleAppListExpansionToggle}>
+                    <ListItemText primary="Apps" />
+                    {this.state.isAppListExpanded ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                <Collapse in={this.state.isAppListExpanded} timeout="auto" unmountOnExit>
+                    <List component="div" onClick={this.props.toggleDrawer(false)} disablePadding>
+                        {appArray.map(app => (
+                            <ListItem button key={app.name} classes={{ root: "Nested" }} onClick={this.props.setSelectedApp(app.name)}>
+                                <ListItemText primary={app.displayName} />
+                            </ListItem>
+                        ))}
+                    </List>
+                    {/* <List component="div" disablePadding>
+                        <ListItem button className={classes.nested}>
+                            <ListItemIcon>
+                                <StarBorder />
+                            </ListItemIcon>
+                            <ListItemText primary="Starred" />
+                        </ListItem>
+                    </List> */}
+                </Collapse>
+
+                {/* <List>
                     {appArray.map(app => (
                         <ListItem button key={app.name} onClick={this.props.setSelectedApp(app.name)}>
-                            <ListItemText primary={app.displayName}/>
+                            <ListItemText primary={app.displayName} />
                         </ListItem>
                     ))}
-                </List>
-            </div>
+                </List> */}
+            </div >
         )
     }
 }
